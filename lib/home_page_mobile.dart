@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_training_1/mobile_home.dart';
 import 'package:form_field_validator/form_field_validator.dart';
