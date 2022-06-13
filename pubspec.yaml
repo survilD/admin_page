@@ -37,6 +37,8 @@ dependencies:
 
   form_field_validator: ^1.1.0
   responsive_builder: ^0.4.2
+  path_provider: ^2.0.11
+  sqflite: ^2.0.2+1
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +65,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/Image/
+    - assets/Json/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
