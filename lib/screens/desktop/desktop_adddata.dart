@@ -333,6 +333,7 @@ class _MobileHomeState extends State<DesktopDataAdd> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton.small(
+            heroTag: null,
             backgroundColor: Color.fromRGBO(28, 202, 210, 1),
             onPressed: () {},
             child: Icon(Icons.headset_mic),
@@ -341,6 +342,7 @@ class _MobileHomeState extends State<DesktopDataAdd> {
             height: 5,
           ),
           FloatingActionButton.small(
+            heroTag: null,
             backgroundColor: Color.fromRGBO(144, 194, 94, 1),
             onPressed: () {},
             child: Icon(Icons.shopping_cart_outlined),

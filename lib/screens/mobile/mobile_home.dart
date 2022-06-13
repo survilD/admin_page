@@ -67,6 +67,7 @@ class _MobileHomeState extends State<MobileHome> {
   }
 
   Future<List<dynamic>> getData() async {
+    await Future.delayed(Duration(milliseconds: 1000));
     var _items = [];
 
     var jsonText = await rootBundle.loadString('assets/Json/demo.json');
@@ -96,10 +97,8 @@ class _MobileHomeState extends State<MobileHome> {
                   topRight: Radius.circular(10),
                 )),
                 child: Scrollbar(
-                  controller: scrollController,
-                  isAlwaysShown: true,
-                  showTrackOnHover: true,
                   child: SingleChildScrollView(
+                    controller: scrollController,
                     child: Column(
                       children: [
                         Padding(
@@ -186,6 +185,7 @@ class _MobileHomeState extends State<MobileHome> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             FloatingActionButton.small(
+              heroTag: null,
               backgroundColor: kPrimaryColor.withAlpha(202),
               onPressed: () {},
               child: Icon(Icons.next_plan_sharp),
@@ -194,6 +194,7 @@ class _MobileHomeState extends State<MobileHome> {
               height: 5,
             ),
             FloatingActionButton.small(
+              heroTag: null,
               backgroundColor: Color.fromRGBO(28, 202, 210, 1),
               onPressed: () {},
               child: Icon(Icons.headset_mic),
@@ -202,6 +203,7 @@ class _MobileHomeState extends State<MobileHome> {
               height: 5,
             ),
             FloatingActionButton.small(
+              heroTag: null,
               backgroundColor: Color.fromRGBO(144, 194, 94, 1),
               onPressed: () {},
               child: Icon(Icons.shopping_cart_outlined),
@@ -260,111 +262,99 @@ class _MobileHomeState extends State<MobileHome> {
               Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Scrollbar(
-                    controller: scrollControllertabel,
                     scrollbarOrientation: ScrollbarOrientation.bottom,
-                    isAlwaysShown: true,
-                    showTrackOnHover: true,
-                    thickness: 6,
                     radius: Radius.circular(20),
                     trackVisibility: true,
                     child: SingleChildScrollView(
+                      controller: scrollControllertabel,
                       scrollDirection: Axis.horizontal,
                       child: FutureBuilder<List<dynamic>>(
                         future: getData(),
-                        builder: (context, snapshot) {
-                          List<dynamic>? data = snapshot.data;
-                          List<DataColumn> colm = Data.getcolume(data!);
-                          List<DataRow> row = Data.getrow(data);
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List> snapshot) {
+                          if (snapshot.hasData) {
+                            List<dynamic> data = snapshot.data as List;
+                            List<DataColumn> colm = Data.getcolume(data);
+                            List<DataRow> row = Data.getrow(data);
 
-                          return (snapshot.hasData)
-                              ? Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Column(
-                                    children: [
-                                      DataTable(
-                                        columnSpacing: 22,
-                                        dataRowHeight: 70,
-                                        dividerThickness: 1,
-                                        columns: colm,
-                                        rows: row,
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Text("Showing 1 of 9 of 9 entries"),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 20),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            OutlinedButton(
-                                                onPressed: () {},
-                                                child: Text("Previous"),
-                                                style: TextButton.styleFrom(
-                                                    primary: kPrimaryColor,
-                                                    side: BorderSide(
-                                                        color: kPrimaryColor),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        30)))),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            SizedBox(
-                                              width: 50,
-                                              child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    primary: kPrimaryColor,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        30))),
-                                                onPressed: () {},
-                                                child: Text(
-                                                  "1",
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            OutlinedButton(
-                                                onPressed: () {},
-                                                child: Text("Next"),
-                                                style: TextButton.styleFrom(
-                                                    primary: kPrimaryColor,
-                                                    side: BorderSide(
-                                                        color: kPrimaryColor),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        30)))),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      )
-                                    ],
+                            return Card(
+                              child: Column(
+                                children: [
+                                  DataTable(
+                                    columnSpacing: 22,
+                                    dataRowHeight: 70,
+                                    dividerThickness: 1,
+                                    columns: colm,
+                                    rows: row,
                                   ),
-                                )
-                              : const Text(
-                                  "No Any Data Available",
-                                  textAlign: TextAlign.center,
-                                );
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text("Showing 1 of 9 of 9 entries"),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        OutlinedButton(
+                                            onPressed: () {},
+                                            child: Text("Previous"),
+                                            style: TextButton.styleFrom(
+                                                primary: kPrimaryColor,
+                                                side: BorderSide(
+                                                    color: kPrimaryColor),
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30)))),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        SizedBox(
+                                          width: 50,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                primary: kPrimaryColor,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30))),
+                                            onPressed: () {},
+                                            child: Text(
+                                              "1",
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        OutlinedButton(
+                                            onPressed: () {},
+                                            child: Text("Next"),
+                                            style: TextButton.styleFrom(
+                                                primary: kPrimaryColor,
+                                                side: BorderSide(
+                                                    color: kPrimaryColor),
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30)))),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  )
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
                         },
                       ),
                     ),

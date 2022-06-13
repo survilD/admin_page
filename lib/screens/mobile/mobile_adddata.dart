@@ -14,6 +14,7 @@ class DataAdd extends StatefulWidget {
 
 class _DataAddState extends State<DataAdd> {
   ScrollController scrollController = ScrollController(initialScrollOffset: 5);
+  ScrollController scrollController1 = ScrollController(initialScrollOffset: 5);
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final TextEditingController _positioncontroller = TextEditingController();
   final TextEditingController _namecontroller = TextEditingController();
@@ -95,10 +96,8 @@ class _DataAddState extends State<DataAdd> {
                 topRight: Radius.circular(10),
               )),
               child: Scrollbar(
-                controller: scrollController,
-                isAlwaysShown: true,
-                showTrackOnHover: true,
                 child: SingleChildScrollView(
+                  controller: scrollController,
                   child: Column(
                     children: [
                       Padding(
@@ -185,6 +184,7 @@ class _DataAddState extends State<DataAdd> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton.small(
+            heroTag: null,
             backgroundColor: Color.fromRGBO(28, 202, 210, 1),
             onPressed: () {},
             child: Icon(Icons.headset_mic),
@@ -193,6 +193,7 @@ class _DataAddState extends State<DataAdd> {
             height: 5,
           ),
           FloatingActionButton.small(
+             heroTag: null,
             backgroundColor: Color.fromRGBO(144, 194, 94, 1),
             onPressed: () {},
             child: Icon(Icons.shopping_cart_outlined),
@@ -200,10 +201,8 @@ class _DataAddState extends State<DataAdd> {
         ],
       ),
       body: Scrollbar(
-        controller: scrollController,
-        isAlwaysShown: true,
-        showTrackOnHover: true,
         child: SingleChildScrollView(
+          controller: scrollController1,
           child: Column(
             children: [
               Padding(
@@ -249,8 +248,6 @@ class _DataAddState extends State<DataAdd> {
                           CustomWidgets.newformfield(
                               controller: _namecontroller,
                               error: "This Field Should Not Empty"),
-                          // decorationForm(
-                          //     "This Field Should Not Empty", _namecontroller),
                           const SizedBox(
                             height: 10,
                           ),
@@ -384,7 +381,6 @@ class _DataAddState extends State<DataAdd> {
                                   }
                                 },
                               )),
-
                           const SizedBox(
                             height: 10,
                           ),
