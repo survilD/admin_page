@@ -21,6 +21,8 @@ class _MobileHomeState extends State<DesktopDataAdd> {
   ScrollController scrollController = ScrollController(initialScrollOffset: 5);
   final TextEditingController _namecontroller = TextEditingController();
   final TextEditingController _positioncontroller = TextEditingController();
+  ScrollController verticalcontroller =
+      ScrollController(initialScrollOffset: 5);
 
   ScrollController scrollControllertabel =
       ScrollController(initialScrollOffset: 5);
@@ -354,9 +356,9 @@ class _MobileHomeState extends State<DesktopDataAdd> {
           Expanded(
             flex: 1,
             child: Scrollbar(
-              controller: scrollController,
               thickness: 2,
               child: SingleChildScrollView(
+                controller: scrollController,
                 child: Container(
                   color: Colors.white,
                   height: height,
@@ -461,396 +463,405 @@ class _MobileHomeState extends State<DesktopDataAdd> {
           ),
           Expanded(
             flex: 6,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        FittedBox(
-                          child: const Text(
-                            "New Job",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w900, fontSize: 20),
+            child: Scrollbar(
+              child: SingleChildScrollView(
+                controller: verticalcontroller,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          FittedBox(
+                            child: const Text(
+                              "New Job",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w900, fontSize: 20),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            children: [
-                              GestureDetector(
-                                  child: iconButtonC(
-                                      Icons.mail, width * 1.5, 15, kGreen)),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              GestureDetector(
-                                  child: iconButtonC(
-                                      Icons.call, width * 1.5, 15, kGreen)),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              GestureDetector(
-                                  child: iconButtonC(Icons.info, width * 1.5,
-                                      15, kPrimaryColor))
-                            ],
-                          ),
-                        )
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              children: [
+                                GestureDetector(
+                                    child: iconButtonC(
+                                        Icons.mail, width * 1.5, 15, kGreen)),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                GestureDetector(
+                                    child: iconButtonC(
+                                        Icons.call, width * 1.5, 15, kGreen)),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                GestureDetector(
+                                    child: iconButtonC(Icons.info, width * 1.5,
+                                        15, kPrimaryColor))
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Form(
-                      key: _key,
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                  height: height * 0.13,
-                                  width: width * 0.9,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Form(
+                        key: _key,
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                    height: height * 0.13,
+                                    width: width * 0.9,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                            child: box(
+                                                controller: _namecontroller,
+                                                error: "Please Enter Name",
+                                                title: "Company Name",
+                                                width: width)),
+                                        SizedBox(
+                                          width: width * 0.02,
+                                        ),
+                                        Expanded(
                                           child: box(
+                                              error:
+                                                  "This Field Should Not Empty",
+                                              controller: _positioncontroller,
+                                              title: "Position",
+                                              width: width),
+                                        )
+                                      ],
+                                    )),
+                                SizedBox(
+                                    height: height * 0.13,
+                                    width: width * 0.9,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                            child: Column(
+                                          children: [
+                                            header("Job Type"),
+                                            sizebox,
+                                            Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 5),
+                                                child:
+                                                    CustomWidgets.dropDownForm(
+                                                  context: context,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 20),
+                                                    child: DropdownButton(
+                                                        isExpanded: true,
+                                                        underline: SizedBox(),
+                                                        elevation: 0,
+                                                        iconSize: 0,
+                                                        value:
+                                                            categoryDropdownValue,
+                                                        items: categoryItem.map<
+                                                            DropdownMenuItem<
+                                                                String>>(
+                                                          (value) {
+                                                            return DropdownMenuItem<
+                                                                String>(
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        10.0),
+                                                                child:
+                                                                    Text(value),
+                                                              ),
+                                                              value: value,
+                                                            );
+                                                          },
+                                                        ).toList(),
+                                                        onChanged: (value) =>
+                                                            onchagecategory(value
+                                                                .toString())),
+                                                  ),
+                                                )),
+                                          ],
+                                        )),
+                                        SizedBox(
+                                          width: width * 0.02,
+                                        ),
+                                        Expanded(
+                                            child: Column(
+                                          children: [
+                                            header("Select Gender:"),
+                                            sizebox,
+                                            Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 5),
+                                                child:
+                                                    CustomWidgets.dropDownForm(
+                                                  context: context,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 20),
+                                                    child: DropdownButton(
+                                                        isExpanded: true,
+                                                        underline: Container(),
+                                                        elevation: 0,
+                                                        iconSize: 0,
+                                                        value:
+                                                            genderDropdownValue,
+                                                        items: genderItem.map<
+                                                            DropdownMenuItem<
+                                                                String>>(
+                                                          (value) {
+                                                            return DropdownMenuItem<
+                                                                String>(
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        10.0),
+                                                                child:
+                                                                    Text(value),
+                                                              ),
+                                                              value: value,
+                                                            );
+                                                          },
+                                                        ).toList(),
+                                                        onChanged: (value) =>
+                                                            setState(() {
+                                                              genderDropdownValue =
+                                                                  value
+                                                                      .toString();
+                                                            })),
+                                                  ),
+                                                )),
+                                          ],
+                                        ))
+                                      ],
+                                    )),
+                                SizedBox(
+                                    height: height * 0.13,
+                                    width: width * 0.9,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                            child: Column(
+                                          children: [
+                                            header("Posted Date"),
+                                            Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 5),
+                                                child: CustomWidgets.datepiker(
+                                                    context: context,
+                                                    onPressed: () async {
+                                                      final date =
+                                                          await pickDate(
+                                                              postedDate);
+
+                                                      if (date == null) {
+                                                        return;
+                                                      } else {
+                                                        setState(() {
+                                                          postedDate = date;
+                                                        });
+                                                      }
+                                                    },
+                                                    dateTime: postedDate)),
+                                          ],
+                                        )),
+                                        SizedBox(
+                                          width: width * 0.02,
+                                        ),
+                                        Expanded(
+                                            child: Column(
+                                          children: [
+                                            header("Last Date To Apply"),
+                                            Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 5),
+                                                child: CustomWidgets.datepiker(
+                                                  context: context,
+                                                  dateTime: lastdate,
+                                                  onPressed: () async {
+                                                    final date = await pickDate(
+                                                        lastdate);
+
+                                                    if (date == null) {
+                                                      return;
+                                                    } else {
+                                                      setState(() {
+                                                        lastdate = date;
+                                                      });
+                                                    }
+                                                  },
+                                                )),
+                                          ],
+                                        ))
+                                      ],
+                                    )),
+                                SizedBox(
+                                    height: height * 0.13,
+                                    width: width * 0.9,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                            child: Column(
+                                          children: [
+                                            header("Close Date"),
+                                            Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 5),
+                                                child: CustomWidgets.datepiker(
+                                                  context: context,
+                                                  dateTime: closedate,
+                                                  onPressed: () async {
+                                                    final date = await pickDate(
+                                                        closedate);
+
+                                                    if (date == null) {
+                                                      return;
+                                                    } else {
+                                                      setState(() {
+                                                        closedate = date;
+                                                      });
+                                                    }
+                                                  },
+                                                ))
+                                          ],
+                                        )),
+                                        SizedBox(
+                                          width: width * 0.02,
+                                        ),
+                                        Expanded(
+                                            child: Column(
+                                          children: [
+                                            header("Posted Date"),
+                                            Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 5),
+                                                child: CustomWidgets.datepiker(
+                                                    context: context,
+                                                    onPressed: () async {
+                                                      final date =
+                                                          await pickDate(
+                                                              postedDate);
+
+                                                      if (date == null) {
+                                                        return;
+                                                      } else {
+                                                        setState(() {
+                                                          postedDate = date;
+                                                        });
+                                                      }
+                                                    },
+                                                    dateTime: postedDate)),
+                                          ],
+                                        ))
+                                      ],
+                                    )),
+                                sizebox,
+                                SizedBox(
+                                    height: height * 0.13,
+                                    width: width * width,
+                                    child: Column(
+                                      children: [
+                                        header("Description:"),
+                                        SizedBox(
+                                          child: CustomWidgets.newformfield(
+                                              name: "Description",
                                               controller: _namecontroller,
-                                              error: "Please Enter Name",
-                                              title: "Company Name",
-                                              width: width)),
-                                      SizedBox(
-                                        width: width * 0.02,
-                                      ),
-                                      Expanded(
-                                        child: box(
-                                            error:
-                                                "This Field Should Not Empty",
-                                            controller: _positioncontroller,
-                                            title: "Position",
-                                            width: width),
-                                      )
-                                    ],
-                                  )),
-                              SizedBox(
-                                  height: height * 0.13,
-                                  width: width * 0.9,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                          child: Column(
-                                        children: [
-                                          header("Job Type"),
-                                          sizebox,
-                                          Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 5),
-                                              child: CustomWidgets.dropDownForm(
-                                                context: context,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 20),
-                                                  child: DropdownButton(
-                                                      isExpanded: true,
-                                                      underline: SizedBox(),
-                                                      elevation: 0,
-                                                      iconSize: 0,
-                                                      value:
-                                                          categoryDropdownValue,
-                                                      items: categoryItem.map<
-                                                          DropdownMenuItem<
-                                                              String>>(
-                                                        (value) {
-                                                          return DropdownMenuItem<
-                                                              String>(
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .all(
-                                                                      10.0),
-                                                              child:
-                                                                  Text(value),
-                                                            ),
-                                                            value: value,
-                                                          );
-                                                        },
-                                                      ).toList(),
-                                                      onChanged: (value) =>
-                                                          onchagecategory(value
-                                                              .toString())),
-                                                ),
-                                              )),
-                                        ],
-                                      )),
-                                      SizedBox(
-                                        width: width * 0.02,
-                                      ),
-                                      Expanded(
-                                          child: Column(
-                                        children: [
-                                          header("Select Gender:"),
-                                          sizebox,
-                                          Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 5),
-                                              child: CustomWidgets.dropDownForm(
-                                                context: context,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 20),
-                                                  child: DropdownButton(
-                                                      isExpanded: true,
-                                                      underline: Container(),
-                                                      elevation: 0,
-                                                      iconSize: 0,
-                                                      value:
-                                                          genderDropdownValue,
-                                                      items: genderItem.map<
-                                                          DropdownMenuItem<
-                                                              String>>(
-                                                        (value) {
-                                                          return DropdownMenuItem<
-                                                              String>(
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .all(
-                                                                      10.0),
-                                                              child:
-                                                                  Text(value),
-                                                            ),
-                                                            value: value,
-                                                          );
-                                                        },
-                                                      ).toList(),
-                                                      onChanged: (value) =>
-                                                          setState(() {
-                                                            genderDropdownValue =
-                                                                value
-                                                                    .toString();
-                                                          })),
-                                                ),
-                                              )),
-                                        ],
-                                      ))
-                                    ],
-                                  )),
-                              SizedBox(
-                                  height: height * 0.13,
-                                  width: width * 0.9,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                          child: Column(
-                                        children: [
-                                          header("Posted Date"),
-                                          Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 5),
-                                              child: CustomWidgets.datepiker(
-                                                  context: context,
-                                                  onPressed: () async {
-                                                    final date = await pickDate(
-                                                        postedDate);
-
-                                                    if (date == null) {
-                                                      return;
-                                                    } else {
-                                                      setState(() {
-                                                        postedDate = date;
-                                                      });
-                                                    }
-                                                  },
-                                                  dateTime: postedDate)),
-                                        ],
-                                      )),
-                                      SizedBox(
-                                        width: width * 0.02,
-                                      ),
-                                      Expanded(
-                                          child: Column(
-                                        children: [
-                                          header("Last Date To Apply"),
-                                          Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 5),
-                                              child: CustomWidgets.datepiker(
-                                                context: context,
-                                                dateTime: lastdate,
-                                                onPressed: () async {
-                                                  final date =
-                                                      await pickDate(lastdate);
-
-                                                  if (date == null) {
-                                                    return;
-                                                  } else {
-                                                    setState(() {
-                                                      lastdate = date;
-                                                    });
-                                                  }
-                                                },
-                                              )),
-                                        ],
-                                      ))
-                                    ],
-                                  )),
-                              SizedBox(
-                                  height: height * 0.13,
-                                  width: width * 0.9,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                          child: Column(
-                                        children: [
-                                          header("Close Date"),
-                                          Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 5),
-                                              child: CustomWidgets.datepiker(
-                                                context: context,
-                                                dateTime: closedate,
-                                                onPressed: () async {
-                                                  final date =
-                                                      await pickDate(closedate);
-
-                                                  if (date == null) {
-                                                    return;
-                                                  } else {
-                                                    setState(() {
-                                                      closedate = date;
-                                                    });
-                                                  }
-                                                },
-                                              ))
-                                        ],
-                                      )),
-                                      SizedBox(
-                                        width: width * 0.02,
-                                      ),
-                                      Expanded(
-                                          child: Column(
-                                        children: [
-                                          header("Posted Date"),
-                                          Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 5),
-                                              child: CustomWidgets.datepiker(
-                                                  context: context,
-                                                  onPressed: () async {
-                                                    final date = await pickDate(
-                                                        postedDate);
-
-                                                    if (date == null) {
-                                                      return;
-                                                    } else {
-                                                      setState(() {
-                                                        postedDate = date;
-                                                      });
-                                                    }
-                                                  },
-                                                  dateTime: postedDate)),
-                                        ],
-                                      ))
-                                    ],
-                                  )),
-                              sizebox,
-                              SizedBox(
-                                  height: height * 0.13,
-                                  width: width * width,
-                                  child: Column(
-                                    children: [
-                                      header("Description:"),
-                                      SizedBox(
-                                        child: CustomWidgets.newformfield(
-                                            name: "Description",
-                                            controller: _namecontroller,
-                                            error: "Enter Detail"),
-                                      )
-                                    ],
-                                  )),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text("Status:",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey[700])),
-                                  sizebox,
-                                  radioButton(Status.active),
-                                  sizebox,
-                                  Text("Active",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey[700])),
-                                  sizebox,
-                                  radioButton(Status.inActive),
-                                  sizebox,
-                                  Text(
-                                    "In Active",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey[700]),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: height * 0.13,
-                                width: width * 0.9,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                              error: "Enter Detail"),
+                                        )
+                                      ],
+                                    )),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    SizedBox(
-                                      width: 80,
-                                      child: CupertinoButton(
-                                        child: const Text(
-                                          ' Close ',
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        color: kPrimaryColor,
-                                        borderRadius: BorderRadius.circular(20),
-                                        padding: const EdgeInsets.all(10),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    SizedBox(
-                                      width: 80,
-                                      child: CupertinoButton(
-                                        child: const Text(
-                                          ' Submit ',
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        onPressed: () {
-                                          _key.currentState!.validate();
-                                        },
-                                        color: kGreen,
-                                        borderRadius: BorderRadius.circular(20),
-                                        padding: const EdgeInsets.all(10),
-                                      ),
+                                    Text("Status:",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey[700])),
+                                    sizebox,
+                                    radioButton(Status.active),
+                                    sizebox,
+                                    Text("Active",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey[700])),
+                                    sizebox,
+                                    radioButton(Status.inActive),
+                                    sizebox,
+                                    Text(
+                                      "In Active",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey[700]),
                                     ),
                                   ],
                                 ),
-                              )
-                            ],
+                                SizedBox(
+                                  height: height * 0.13,
+                                  width: width * 0.9,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      SizedBox(
+                                        width: 80,
+                                        child: CupertinoButton(
+                                          child: const Text(
+                                            ' Close ',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          color: kPrimaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          padding: const EdgeInsets.all(10),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      SizedBox(
+                                        width: 80,
+                                        child: CupertinoButton(
+                                          child: const Text(
+                                            ' Submit ',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          onPressed: () {
+                                            _key.currentState!.validate();
+                                          },
+                                          color: kGreen,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          padding: const EdgeInsets.all(10),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
           )

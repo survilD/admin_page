@@ -75,16 +75,7 @@ class CustomWidgets {
             height: 25,
           ),
         ),
-        leading: const Padding(
-          padding: EdgeInsets.all(12.0),
-          child: CircleAvatar(
-            backgroundColor: kPrimaryColor,
-            child: Icon(
-              Icons.person,
-              color: Colors.white,
-            ),
-          ),
-        ),
+        leading: const Padding(padding: EdgeInsets.all(12.0), child: imageLogo),
         actionsIconTheme: const IconThemeData(
           size: 28,
           color: Colors.black,
@@ -107,11 +98,7 @@ class CustomWidgets {
           const SizedBox(
             width: 10,
           ),
-          const CircleAvatar(
-            radius: 18,
-            backgroundImage: NetworkImage(
-                "https://miro.medium.com/max/554/1*Ld1KM2WSfJ9YQ4oeRf7q4Q.jpeg"),
-          ),
+          const CircleAvatar(radius: 18, backgroundImage: profile),
           const SizedBox(
             width: 15,
           )
