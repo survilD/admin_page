@@ -38,9 +38,15 @@ class CustomWidgets {
     );
   }
 
-  static newformfield(
-      {String? error, TextEditingController? controller, String? name}) {
+  static newformfield({
+    String? error,
+    TextEditingController? controller,
+    String? name,
+    FormFieldSetter<String>? onSaved,
+  }) {
     return TextFormField(
+      onChanged: onSaved,
+      onSaved: onSaved,
       validator: RequiredValidator(errorText: error!),
       controller: controller,
       cursorColor: kGrey.withAlpha(30),
@@ -159,6 +165,16 @@ class CustomWidgets {
           ],
         ),
       ),
+    );
+  }
+
+  static flotbutton(
+      {Color? color, IconData? icons, required void Function()? onPressed}) {
+    return FloatingActionButton.small(
+      heroTag: null,
+      backgroundColor: color,
+      onPressed: onPressed,
+      child: Icon(icons),
     );
   }
 }

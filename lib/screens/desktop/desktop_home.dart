@@ -1,82 +1,44 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_training_1/data.dart';
+import 'package:flutter_training_1/dbhelper/dbhelper.dart';
+import 'package:flutter_training_1/dbhelper/getdata.dart';
+import 'package:flutter_training_1/screens/desktop/desktop_adddata.dart';
+import 'package:flutter_training_1/screens/tablet/tablet_adddata.dart';
 
 import 'package:flutter_training_1/screens/utils/constants.dart';
+import 'package:flutter_training_1/screens/utils/widgets.dart';
 
 import '../../responsive.dart';
+import '../mobile/mobile_adddata.dart';
 
 class DesktopHome extends StatefulWidget {
-  const DesktopHome({Key? key, required this.name}) : super(key: key);
-  final String name;
+  const DesktopHome({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<DesktopHome> createState() => _MobileHomeState();
 }
 
 class _MobileHomeState extends State<DesktopHome> {
-  ScrollController scrollController = ScrollController(initialScrollOffset: 5);
-
-  ScrollController scrollControllertabel =
-      ScrollController(initialScrollOffset: 5);
-  ScrollController verticalcontroller =
-      ScrollController(initialScrollOffset: 5);
-
+  final dbhelper = DatabaseHelper.instance;
   Widget sizebox = const SizedBox(
     width: 5,
   );
-
-  List<IconData> icon = [
-    Icons.dashboard,
-    Icons.flag,
-    Icons.info,
-    Icons.monitor_heart,
-    Icons.star,
-    Icons.health_and_safety_rounded,
-    Icons.currency_yen_sharp,
-    Icons.print_rounded,
-    Icons.horizontal_split,
-    Icons.pages_rounded
-  ];
-
-  final List drawer = [
-    "Dashboard",
-    "Jobs",
-    "Apps",
-    "Chart",
-    "Bootstrap",
-    "Plugins",
-    "Widget",
-    "Forms",
-    "Table",
-    "Pages"
-  ];
 
   void addData() {
     Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => Responsive(
-                name: widget.name,
+                context: context,
+                mobile: DataAdd(),
+                tablet: TablateDataAdd(),
+                desktop: DesktopDataAdd(),
               )),
     );
-  }
-
-  Future<List<dynamic>> getData() async {
-    var _items = [];
-
-    try {
-      var jsonText = await rootBundle.loadString('assets/Json/demo.json');
-
-      _items = await json.decode(jsonText);
-    } catch (e) {
-      print(e);
-    }
-
-    return _items;
   }
 
   @override
@@ -234,30 +196,24 @@ class _MobileHomeState extends State<DesktopHome> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton.small(
-            heroTag: null,
-            backgroundColor: kPrimaryColor.withAlpha(202),
-            onPressed: () {},
-            child: Icon(Icons.next_plan_sharp),
-          ),
+          CustomWidgets.flotbutton(
+              onPressed: () {},
+              color: kPrimaryColor.withAlpha(202),
+              icons: Icons.next_plan_sharp),
           SizedBox(
             height: 5,
           ),
-          FloatingActionButton.small(
-            heroTag: null,
-            backgroundColor: Color.fromRGBO(28, 202, 210, 1),
-            onPressed: () {},
-            child: Icon(Icons.headset_mic),
-          ),
+          CustomWidgets.flotbutton(
+              onPressed: () {},
+              color: Color.fromRGBO(28, 202, 210, 1),
+              icons: Icons.headset_mic),
           SizedBox(
             height: 5,
           ),
-          FloatingActionButton.small(
-            heroTag: null,
-            backgroundColor: Color.fromRGBO(144, 194, 94, 1),
-            onPressed: () {},
-            child: Icon(Icons.shopping_cart_outlined),
-          )
+          CustomWidgets.flotbutton(
+              onPressed: () {},
+              color: Color.fromRGBO(144, 194, 94, 1),
+              icons: Icons.shopping_cart_outlined),
         ],
       ),
       body: Row(
@@ -265,6 +221,7 @@ class _MobileHomeState extends State<DesktopHome> {
           Expanded(
             flex: 1,
             child: Scrollbar(
+              controller: scrollController,
               thickness: 2,
               child: SingleChildScrollView(
                 controller: scrollController,
@@ -295,7 +252,7 @@ class _MobileHomeState extends State<DesktopHome> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       Text(
-                                        "Welcome  ${widget.name}",
+                                        "Welcome  ",
                                         style: TextStyle(
                                             color: Colors.grey[800],
                                             fontSize: 15,
@@ -373,9 +330,9 @@ class _MobileHomeState extends State<DesktopHome> {
           Expanded(
             flex: 6,
             child: Scrollbar(
+              controller: verticalscroll,
               child: SingleChildScrollView(
-                controller: verticalcontroller,
-                scrollDirection: Axis.vertical,
+                controller: verticalscroll,
                 child: Column(
                   children: [
                     Padding(
@@ -441,7 +398,7 @@ class _MobileHomeState extends State<DesktopHome> {
                     Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: FutureBuilder<List<dynamic>>(
-                          future: getData(),
+                          future: DataGet().getData(),
                           builder: (BuildContext context,
                               AsyncSnapshot<List> snapshot) {
                             if (snapshot.hasData) {
@@ -450,6 +407,9 @@ class _MobileHomeState extends State<DesktopHome> {
                               List<DataRow> row = Data.getrow(data);
 
                               return Scrollbar(
+                                scrollbarOrientation:
+                                    ScrollbarOrientation.bottom,
+                                controller: scrollControllertabel,
                                 thickness: 6,
                                 radius: Radius.circular(20),
                                 child: SingleChildScrollView(
@@ -544,7 +504,10 @@ class _MobileHomeState extends State<DesktopHome> {
                                 ),
                               );
                             } else {
-                              return CircularProgressIndicator();
+                              return Container(
+                                  height: height,
+                                  child: Center(
+                                      child: CircularProgressIndicator()));
                             }
                           },
                         )),

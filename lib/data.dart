@@ -16,7 +16,11 @@ class Data {
   }
 
   static List<DataRow> getrow(List<dynamic> getrow) {
-    return getrow.map((m) => DataRow(cells: _createCell(m))).toList();
+    return getrow
+        .map((m) => DataRow(
+              cells: _createCell(m),
+            ))
+        .toList();
   }
 
   static List<DataCell> _createCell(Map m) {

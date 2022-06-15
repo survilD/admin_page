@@ -10,8 +10,9 @@ import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
 
 class DesktopDataAdd extends StatefulWidget {
-  const DesktopDataAdd({Key? key, required this.name}) : super(key: key);
-  final String name;
+  const DesktopDataAdd({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<DesktopDataAdd> createState() => _MobileHomeState();
@@ -334,21 +335,17 @@ class _MobileHomeState extends State<DesktopDataAdd> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton.small(
-            heroTag: null,
-            backgroundColor: Color.fromRGBO(28, 202, 210, 1),
-            onPressed: () {},
-            child: Icon(Icons.headset_mic),
-          ),
+          CustomWidgets.flotbutton(
+              onPressed: () {},
+              color: Color.fromRGBO(28, 202, 210, 1),
+              icons: Icons.headset_mic),
           SizedBox(
             height: 5,
           ),
-          FloatingActionButton.small(
-            heroTag: null,
-            backgroundColor: Color.fromRGBO(144, 194, 94, 1),
-            onPressed: () {},
-            child: Icon(Icons.shopping_cart_outlined),
-          )
+          CustomWidgets.flotbutton(
+              onPressed: () {},
+              color: Color.fromRGBO(144, 194, 94, 1),
+              icons: Icons.shopping_cart_outlined),
         ],
       ),
       body: Row(
@@ -386,7 +383,7 @@ class _MobileHomeState extends State<DesktopDataAdd> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       Text(
-                                        "Welcome  ${widget.name}",
+                                        "Welcome  ",
                                         style: TextStyle(
                                             color: Colors.grey[800],
                                             fontSize: 15,

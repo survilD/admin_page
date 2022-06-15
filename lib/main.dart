@@ -2,10 +2,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_training_1/responsive.dart';
+import 'package:flutter_training_1/screens/desktop/desktop_home.dart';
+
+import 'package:flutter_training_1/screens/mobile/mobile_home.dart';
+import 'package:flutter_training_1/screens/tablet/tablet_home.dart';
 
 import 'package:flutter_training_1/screens/utils/constants.dart';
 
-Future<void> main() async {
+void main() {
   runApp(const MyApp());
 }
 
@@ -23,7 +27,11 @@ class MyApp extends StatelessWidget {
                 thumbColor: MaterialStateProperty.all(kPrimaryColor)),
             primaryColor: Color.fromRGBO(244, 61, 39, 5),
             backgroundColor: Colors.white),
-        home: const Home());
+        home: const Responsive(
+          mobile: MobileHome(),
+          tablet: TablateHome(),
+          desktop: DesktopHome(),
+        ));
   }
 }
 

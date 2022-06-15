@@ -1,58 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_training_1/dbhelper/dbhelper.dart';
+import 'package:flutter_training_1/model/tabel_model.dart';
 
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
 
 class DataAdd extends StatefulWidget {
-  const DataAdd({Key? key, required this.name}) : super(key: key);
-  final String name;
+  const DataAdd({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<DataAdd> createState() => _DataAddState();
 }
 
 class _DataAddState extends State<DataAdd> {
-  ScrollController scrollController = ScrollController(initialScrollOffset: 5);
-  ScrollController scrollController1 = ScrollController(initialScrollOffset: 5);
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final GlobalKey<FormState> _key1 = GlobalKey<FormState>();
+
   final TextEditingController _positioncontroller = TextEditingController();
   final TextEditingController _namecontroller = TextEditingController();
   final _drawer = GlobalKey<ScaffoldState>();
+  final Job _tableadd = Job();
   Status _status = Status.active;
-  String categoryDropdownValue = "Choose..";
-  String genderDropdownValue = "Choose..";
-  List<String> categoryItem = [
-    "Part Time",
-    "Full Time",
-    "Freelancer",
-    "Choose.."
-  ];
-  List<IconData> icon = [
-    Icons.dashboard,
-    Icons.flag,
-    Icons.info,
-    Icons.monitor_heart,
-    Icons.star,
-    Icons.health_and_safety_rounded,
-    Icons.currency_yen_sharp,
-    Icons.print_rounded,
-    Icons.horizontal_split,
-    Icons.pages_rounded
-  ];
-  final List drawer = [
-    "Dashboard",
-    "Jobs",
-    "Apps",
-    "Chart",
-    "Bootstrap",
-    "Plugins",
-    "Widget",
-    "Forms",
-    "Table",
-    "Pages"
-  ];
-  List<String> genderItem = ["Male", "Female", "Choose.."];
+
   DateTime postedDate = DateTime(2022, 01, 24);
   DateTime lastdate = DateTime(2022, 01, 24);
   DateTime closedate = DateTime(2022, 01, 24);
@@ -60,8 +32,11 @@ class _DataAddState extends State<DataAdd> {
   void onchagecategory(String value) {
     setState(() {
       categoryDropdownValue = value;
+      _tableadd.type = value;
     });
   }
+
+  void _addData() {}
 
   Future<DateTime?> pickDate(DateTime dateTime) {
     return showDatePicker(
@@ -80,6 +55,7 @@ class _DataAddState extends State<DataAdd> {
 
   @override
   Widget build(BuildContext context) {
+    _tableadd.status = _status.toString();
     double width = MediaQuery.of(context).size.width;
 
     return SafeArea(
@@ -111,12 +87,12 @@ class _DataAddState extends State<DataAdd> {
                                 "https://miro.medium.com/max/554/1*Ld1KM2WSfJ9YQ4oeRf7q4Q.jpeg",
                               ),
                             ),
-                            sizebox,
+                            sizebox5,
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Welcome  ${widget.name}",
+                                  "Welcome  ",
                                   style: TextStyle(
                                       color: Colors.grey[800],
                                       fontSize: 15,
@@ -134,7 +110,7 @@ class _DataAddState extends State<DataAdd> {
                                 ),
                               ],
                             ),
-                            sizebox,
+                            sizebox5,
                             Icon(
                               Icons.keyboard_arrow_down,
                               color: Colors.grey[800],
@@ -143,7 +119,7 @@ class _DataAddState extends State<DataAdd> {
                           ],
                         ),
                       ),
-                      sizebox,
+                      sizebox5,
                       ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
@@ -183,26 +159,20 @@ class _DataAddState extends State<DataAdd> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton.small(
-            heroTag: null,
-            backgroundColor: Color.fromRGBO(28, 202, 210, 1),
-            onPressed: () {},
-            child: Icon(Icons.headset_mic),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          FloatingActionButton.small(
-             heroTag: null,
-            backgroundColor: Color.fromRGBO(144, 194, 94, 1),
-            onPressed: () {},
-            child: Icon(Icons.shopping_cart_outlined),
-          )
+          CustomWidgets.flotbutton(
+              onPressed: () {},
+              color: Color.fromRGBO(28, 202, 210, 1),
+              icons: Icons.headset_mic),
+          sizebox5,
+          CustomWidgets.flotbutton(
+              onPressed: () {},
+              color: Color.fromRGBO(144, 194, 94, 1),
+              icons: Icons.shopping_cart_outlined),
         ],
       ),
       body: Scrollbar(
         child: SingleChildScrollView(
-          controller: scrollController1,
+          controller: verticalscroll,
           child: Column(
             children: [
               Padding(
@@ -215,17 +185,17 @@ class _DataAddState extends State<DataAdd> {
                       style:
                           TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
                     ),
-                    sizebox,
+                    sizebox5,
                     SizedBox(
                       width: 130,
                     ),
-                    sizebox,
+                    sizebox5,
                     GestureDetector(
                         child: iconButtonC(Icons.mail, kGreen, width)),
-                    sizebox,
+                    sizebox5,
                     GestureDetector(
                         child: iconButtonC(Icons.call, kGreen, width)),
-                    sizebox,
+                    sizebox5,
                     GestureDetector(
                         child: iconButtonC(Icons.info, kPrimaryColor, width)),
                   ],
@@ -244,38 +214,55 @@ class _DataAddState extends State<DataAdd> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           header("Company Name"),
-                          sizebox,
+                          sizebox5,
                           CustomWidgets.newformfield(
                               controller: _namecontroller,
+                              onSaved: (val) async {
+                                print("DOne");
+                                setState(() {
+                                  _tableadd.name = _namecontroller.text;
+                                });
+                              },
                               error: "This Field Should Not Empty"),
                           const SizedBox(
                             height: 10,
                           ),
                           header("Position"),
-                          sizebox,
+                          sizebox5,
                           CustomWidgets.newformfield(
+                              onSaved: (newValue) => setState(() {
+                                    _tableadd.position =
+                                        _positioncontroller.text;
+                                  }),
                               error: "This Field Should Not Empty",
                               controller: _positioncontroller),
                           const SizedBox(
                             height: 10,
                           ),
                           header("Job Type"),
-                          sizebox,
+                          sizebox5,
                           Padding(
                               padding: const EdgeInsets.only(top: 5),
                               child: CustomWidgets.dropDownForm(
                                 context: context,
-                                child: DropdownButton(
-                                    underline: Container(),
+                                child: DropdownButtonFormField(
+                                    key: _key1,
+                                    decoration: InputDecoration(
+                                        focusedBorder: InputBorder.none,
+                                        enabledBorder: InputBorder.none),
                                     elevation: 0,
                                     iconSize: 0,
+                                    validator: (val) => val == null
+                                        ? "Please Select Job Type"
+                                        : null,
                                     value: categoryDropdownValue,
                                     items: categoryItem
                                         .map<DropdownMenuItem<String>>(
                                       (value) {
                                         return DropdownMenuItem<String>(
                                           child: Padding(
-                                            padding: const EdgeInsets.all(10.0),
+                                            padding: const EdgeInsets.only(
+                                                left: 10.0),
                                             child: Text(value),
                                           ),
                                           value: value,
@@ -289,22 +276,27 @@ class _DataAddState extends State<DataAdd> {
                             height: 10,
                           ),
                           header("Select Gender"),
-                          sizebox,
+                          sizebox5,
                           Padding(
                               padding: const EdgeInsets.only(top: 5),
                               child: CustomWidgets.dropDownForm(
-                                  child: DropdownButton(
-                                      underline: Container(),
+                                  child: DropdownButtonFormField(
+                                      decoration: InputDecoration(
+                                          focusedBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none),
                                       elevation: 0,
                                       iconSize: 0,
+                                      validator: (val) => val == null
+                                          ? "Please Select Job Type"
+                                          : null,
                                       value: genderDropdownValue,
                                       items: genderItem
                                           .map<DropdownMenuItem<String>>(
                                         (value) {
                                           return DropdownMenuItem<String>(
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(10.0),
+                                              padding: const EdgeInsets.only(
+                                                  left: 10),
                                               child: Text(value),
                                             ),
                                             value: value,
@@ -314,13 +306,14 @@ class _DataAddState extends State<DataAdd> {
                                       onChanged: (value) => setState(() {
                                             genderDropdownValue =
                                                 value.toString();
+                                            _tableadd.gender = value.toString();
                                           })),
                                   context: context)),
                           const SizedBox(
                             height: 10,
                           ),
                           header("Posted Date"),
-                          sizebox,
+                          sizebox5,
                           Padding(
                               padding: const EdgeInsets.only(top: 5),
                               child: CustomWidgets.datepiker(
@@ -333,6 +326,7 @@ class _DataAddState extends State<DataAdd> {
                                     } else {
                                       setState(() {
                                         postedDate = date;
+                                        _tableadd.postedDate = date;
                                       });
                                     }
                                   },
@@ -341,7 +335,7 @@ class _DataAddState extends State<DataAdd> {
                             height: 10,
                           ),
                           header("Last Date To Apply"),
-                          sizebox,
+                          sizebox5,
                           Padding(
                               padding: const EdgeInsets.only(top: 5),
                               child: CustomWidgets.datepiker(
@@ -355,6 +349,7 @@ class _DataAddState extends State<DataAdd> {
                                   } else {
                                     setState(() {
                                       lastdate = date;
+                                      _tableadd.lastDateApply = date;
                                     });
                                   }
                                 },
@@ -363,7 +358,7 @@ class _DataAddState extends State<DataAdd> {
                             height: 10,
                           ),
                           header("Close Date"),
-                          sizebox,
+                          sizebox5,
                           Padding(
                               padding: const EdgeInsets.only(top: 5),
                               child: CustomWidgets.datepiker(
@@ -377,6 +372,7 @@ class _DataAddState extends State<DataAdd> {
                                   } else {
                                     setState(() {
                                       closedate = date;
+                                      _tableadd.closeDate = date;
                                     });
                                   }
                                 },
@@ -393,16 +389,16 @@ class _DataAddState extends State<DataAdd> {
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey[700])),
-                                sizebox,
+                                sizebox5,
                                 radioButton(Status.active),
-                                sizebox,
+                                sizebox5,
                                 Text("Active",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey[700])),
-                                sizebox,
+                                sizebox5,
                                 radioButton(Status.inActive),
-                                sizebox,
+                                sizebox5,
                                 Text(
                                   "In Active",
                                   style: TextStyle(
@@ -448,7 +444,17 @@ class _DataAddState extends State<DataAdd> {
                                         fontWeight: FontWeight.w600),
                                   ),
                                   onPressed: () {
-                                    _key.currentState!.validate();
+                                    if (_key.currentState!.validate() &&
+                                        _key1.currentState!.validate()) {
+                                      print(_tableadd.name);
+                                      print(_tableadd.position);
+                                      print(_tableadd.type);
+                                      print(_tableadd.gender);
+                                      print(_tableadd.postedDate);
+                                      print(_tableadd.lastDateApply);
+                                      print(_tableadd.closeDate);
+                                      print(_tableadd.status);
+                                    }
                                   },
                                   color: kGreen,
                                   borderRadius: BorderRadius.circular(20),
@@ -457,7 +463,7 @@ class _DataAddState extends State<DataAdd> {
                               ),
                             ],
                           ),
-                          sizebox,
+                          sizebox5,
                         ],
                       ),
                     ),
@@ -490,7 +496,7 @@ class _DataAddState extends State<DataAdd> {
           title,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        sizebox,
+        sizebox5,
         const Text(
           "*",
           style: TextStyle(color: kPrimaryColor, fontSize: 20),
@@ -526,13 +532,10 @@ class _DataAddState extends State<DataAdd> {
       groupValue: _status,
       onChanged: (value) => setState(() {
         _status = _value;
+        _tableadd.status = _value.toString();
       }),
     );
   }
-
-  Widget sizebox = const SizedBox(
-    width: 5,
-  );
 }
 
 enum Status { active, inActive }

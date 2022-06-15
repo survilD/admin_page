@@ -25,3 +25,53 @@ const imageLogo = CircleAvatar(
 
 const profile = NetworkImage(
     "https://miro.medium.com/max/554/1*Ld1KM2WSfJ9YQ4oeRf7q4Q.jpeg");
+
+//
+
+String categoryDropdownValue = "Choose..";
+String genderDropdownValue = "Choose..";
+List<String> categoryItem = [
+  "Part Time",
+  "Full Time",
+  "Freelancer",
+  "Choose.."
+];
+
+List<IconData> icon = [
+  Icons.dashboard,
+  Icons.flag,
+  Icons.info,
+  Icons.monitor_heart,
+  Icons.star,
+  Icons.health_and_safety_rounded,
+  Icons.currency_yen_sharp,
+  Icons.print_rounded,
+  Icons.horizontal_split,
+  Icons.pages_rounded
+];
+
+final List drawer = [
+  "Dashboard",
+  "Jobs",
+  "Apps",
+  "Chart",
+  "Bootstrap",
+  "Plugins",
+  "Widget",
+  "Forms",
+  "Table",
+  "Pages"
+];
+
+List<String> genderItem = ["Male", "Female", "Choose.."];
+
+Widget sizebox5 = const SizedBox(
+  width: 5,
+);
+
+// controller
+
+final scrollController = ScrollController(initialScrollOffset: 5);
+final verticalscroll = ScrollController(initialScrollOffset: 5);
+
+final scrollControllertabel = ScrollController(initialScrollOffset: 5);

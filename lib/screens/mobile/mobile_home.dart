@@ -1,86 +1,69 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter_training_1/data.dart';
+import 'package:flutter_training_1/dbhelper/getdata.dart';
 import 'package:flutter_training_1/responsive.dart';
+import 'package:flutter_training_1/screens/desktop/desktop_adddata.dart';
 import 'package:flutter_training_1/screens/mobile/mobile_adddata.dart';
+
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
+
+import '../../dbhelper/dbhelper.dart';
+import '../tablet/tablet_adddata.dart';
 
 class MobileHome extends StatefulWidget {
   const MobileHome({
     Key? key,
-    required this.name,
   }) : super(key: key);
-  final String name;
 
   @override
   State<MobileHome> createState() => _MobileHomeState();
 }
 
 class _MobileHomeState extends State<MobileHome> {
-  ScrollController scrollController = ScrollController(initialScrollOffset: 5);
+  final dbHelper = DatabaseHelper.instance;
 
-  ScrollController scrollControllertabel =
-      ScrollController(initialScrollOffset: 5);
   final _drawer = GlobalKey<ScaffoldState>();
-  Widget sizebox = const SizedBox(
-    width: 5,
-  );
 
-  List<IconData> icon = [
-    Icons.dashboard,
-    Icons.flag,
-    Icons.info,
-    Icons.monitor_heart,
-    Icons.star,
-    Icons.health_and_safety_rounded,
-    Icons.currency_yen_sharp,
-    Icons.print_rounded,
-    Icons.horizontal_split,
-    Icons.pages_rounded
-  ];
+  void addData() async {
+    // try {
+    //   Map<String, dynamic> row = {
+    //     DatabaseHelper.columName: "Survil",
+    //     DatabaseHelper.columnPosition: 'Network engg',
+    //     DatabaseHelper.columnjobtype: " Full-Time",
+    //     DatabaseHelper.columngender: "male",
+    //     DatabaseHelper.columnPostedDate: "12-01-2021",
+    //     DatabaseHelper.columnLastdDate: "25-01-2021",
+    //     DatabaseHelper.columnCloseDate: "30-01-2021",
+    //     DatabaseHelper.status: "Active"
+    //   };
+    //   final id1 = await dbHelper.queryAllRows();
+    //   print(id1);
+    // } on Exception catch (e) {
+    //   print(e);
+    // }
 
-  final List drawer = [
-    "Dashboard",
-    "Jobs",
-    "Apps",
-    "Chart",
-    "Bootstrap",
-    "Plugins",
-    "Widget",
-    "Forms",
-    "Table",
-    "Pages"
-  ];
+    // print('query all rows:');
+    // allRows.forEach(print);
 
-  void addData() {
     Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => Responsive(
-                name: widget.name,
+                context: context,
+                mobile: DataAdd(),
+                tablet: TablateDataAdd(),
+                desktop: DesktopDataAdd(),
               )),
     );
   }
 
-  Future<List<dynamic>> getData() async {
-    await Future.delayed(Duration(milliseconds: 1000));
-    var _items = [];
-
-    var jsonText = await rootBundle.loadString('assets/Json/demo.json');
-
-    _items = json.decode(jsonText);
-
-    return _items;
-  }
-
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    Size size = MediaQuery.of(context).size;
+
     return SafeArea(
       child: Scaffold(
         key: _drawer,
@@ -90,7 +73,7 @@ class _MobileHomeState extends State<MobileHome> {
             top: 60.0,
           ),
           child: SizedBox(
-            width: width * 0.65,
+            width: size.width * 0.65,
             child: Drawer(
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
@@ -112,12 +95,12 @@ class _MobileHomeState extends State<MobileHome> {
                                   "https://miro.medium.com/max/554/1*Ld1KM2WSfJ9YQ4oeRf7q4Q.jpeg",
                                 ),
                               ),
-                              sizebox,
+                              sizebox5,
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "Welcome  ${widget.name}",
+                                    "Welcome ",
                                     style: TextStyle(
                                         color: Colors.grey[800],
                                         fontSize: 15,
@@ -135,7 +118,7 @@ class _MobileHomeState extends State<MobileHome> {
                                   ),
                                 ],
                               ),
-                              sizebox,
+                              sizebox5,
                               Icon(
                                 Icons.keyboard_arrow_down,
                                 color: Colors.grey[800],
@@ -144,7 +127,7 @@ class _MobileHomeState extends State<MobileHome> {
                             ],
                           ),
                         ),
-                        sizebox,
+                        sizebox5,
                         ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
@@ -184,30 +167,20 @@ class _MobileHomeState extends State<MobileHome> {
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            FloatingActionButton.small(
-              heroTag: null,
-              backgroundColor: kPrimaryColor.withAlpha(202),
-              onPressed: () {},
-              child: Icon(Icons.next_plan_sharp),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            FloatingActionButton.small(
-              heroTag: null,
-              backgroundColor: Color.fromRGBO(28, 202, 210, 1),
-              onPressed: () {},
-              child: Icon(Icons.headset_mic),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            FloatingActionButton.small(
-              heroTag: null,
-              backgroundColor: Color.fromRGBO(144, 194, 94, 1),
-              onPressed: () {},
-              child: Icon(Icons.shopping_cart_outlined),
-            )
+            CustomWidgets.flotbutton(
+                onPressed: () {},
+                color: kPrimaryColor.withAlpha(202),
+                icons: Icons.next_plan_sharp),
+            sizebox5,
+            CustomWidgets.flotbutton(
+                onPressed: () {},
+                color: Color.fromRGBO(28, 202, 210, 1),
+                icons: Icons.headset_mic),
+            sizebox5,
+            CustomWidgets.flotbutton(
+                onPressed: () {},
+                color: Color.fromRGBO(144, 194, 94, 1),
+                icons: Icons.shopping_cart_outlined),
           ],
         ),
         body: SingleChildScrollView(
@@ -226,12 +199,14 @@ class _MobileHomeState extends State<MobileHome> {
                     Row(
                       children: [
                         SizedBox(
-                          width: width * 0.38,
+                          width: size.width * 0.38,
                           child: CupertinoButton(
-                            child: const Text(
-                              '+ Add New Job',
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.w600),
+                            child: FittedBox(
+                              child: const Text(
+                                '+ Add New Job',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w600),
+                              ),
                             ),
                             onPressed: addData,
                             color: kPrimaryColor,
@@ -239,18 +214,19 @@ class _MobileHomeState extends State<MobileHome> {
                             padding: const EdgeInsets.all(10),
                           ),
                         ),
+                        sizebox5,
+                        GestureDetector(
+                            child: iconButtonC(Icons.mail, size.width)),
                         const SizedBox(
                           width: 5,
                         ),
-                        GestureDetector(child: iconButtonC(Icons.mail, width)),
+                        GestureDetector(
+                            child: iconButtonC(Icons.call, size.width)),
                         const SizedBox(
                           width: 5,
                         ),
-                        GestureDetector(child: iconButtonC(Icons.call, width)),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        GestureDetector(child: iconButtonC(Icons.info, width))
+                        GestureDetector(
+                            child: iconButtonC(Icons.info, size.width))
                       ],
                     )
                   ],
@@ -269,7 +245,7 @@ class _MobileHomeState extends State<MobileHome> {
                       controller: scrollControllertabel,
                       scrollDirection: Axis.horizontal,
                       child: FutureBuilder<List<dynamic>>(
-                        future: getData(),
+                        future: DataGet().getData(),
                         builder: (BuildContext context,
                             AsyncSnapshot<List> snapshot) {
                           if (snapshot.hasData) {
@@ -283,7 +259,7 @@ class _MobileHomeState extends State<MobileHome> {
                                   DataTable(
                                     columnSpacing: 22,
                                     dataRowHeight: 70,
-                                    dividerThickness: 1,
+                                    dividerThickness: 3,
                                     columns: colm,
                                     rows: row,
                                   ),
@@ -346,9 +322,7 @@ class _MobileHomeState extends State<MobileHome> {
                                       ],
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 20,
-                                  )
+                                  sizebox5
                                 ],
                               ),
                             );

@@ -10,8 +10,8 @@ import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
 
 class TablateDataAdd extends StatefulWidget {
-  const TablateDataAdd({Key? key, required this.name}) : super(key: key);
-  final String name;
+  const TablateDataAdd({Key? key, }) : super(key: key);
+ 
 
   @override
   State<TablateDataAdd> createState() => _MobileHomeState();
@@ -109,6 +109,22 @@ class _MobileHomeState extends State<TablateDataAdd> {
     return SafeArea(
         child: LayoutBuilder(
       builder: (context, constraints) => Scaffold(
+        floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          CustomWidgets.flotbutton(
+              onPressed: () {},
+              color: Color.fromRGBO(28, 202, 210, 1),
+              icons: Icons.headset_mic),
+          SizedBox(
+            height: 5,
+          ),
+          CustomWidgets.flotbutton(
+              onPressed: () {},
+              color: Color.fromRGBO(144, 194, 94, 1),
+              icons: Icons.shopping_cart_outlined),
+        ],
+      ),
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(height * 0.14),
           child: Container(
