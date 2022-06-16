@@ -2,7 +2,6 @@
 import 'dart:convert';
 
 class Job {
-  int? id;
   String? name;
   String? position;
   String? type;
@@ -12,7 +11,6 @@ class Job {
   DateTime? closeDate;
   String? status;
   Job({
-    this.id,
     this.name,
     this.position,
     this.type,
@@ -24,7 +22,6 @@ class Job {
   });
 
   Job copyWith({
-    int? id,
     String? name,
     String? position,
     String? type,
@@ -35,7 +32,6 @@ class Job {
     String? status,
   }) {
     return Job(
-      id: id ?? this.id,
       name: name ?? this.name,
       position: position ?? this.position,
       type: type ?? this.type,
@@ -49,21 +45,19 @@ class Job {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
-      'name': name,
-      'position': position,
-      'type': type,
-      'gender': gender,
-      'postedDate': postedDate?.millisecondsSinceEpoch,
-      'lastDateApply': lastDateApply?.millisecondsSinceEpoch,
-      'closeDate': closeDate?.millisecondsSinceEpoch,
-      'status': status,
+      'Name': name,
+      'Position': position,
+      'Type': type,
+      'Gender': gender,
+      'PostedDate': postedDate?.millisecondsSinceEpoch,
+      'LastDateApply': lastDateApply?.millisecondsSinceEpoch,
+      'CloseDate': closeDate?.millisecondsSinceEpoch,
+      'Status': status,
     };
   }
 
   factory Job.fromMap(Map<String, dynamic> map) {
     return Job(
-      id: map['id'] != null ? map['id'] as int : null,
       name: map['name'] != null ? map['name'] as String : null,
       position: map['position'] != null ? map['position'] as String : null,
       type: map['type'] != null ? map['type'] as String : null,
@@ -88,7 +82,7 @@ class Job {
 
   @override
   String toString() {
-    return 'Job(id: $id, name: $name, position: $position, type: $type, gender: $gender, postedDate: $postedDate, lastDateApply: $lastDateApply, closeDate: $closeDate, status: $status)';
+    return 'Job( name: $name, position: $position, type: $type, gender: $gender, postedDate: $postedDate, lastDateApply: $lastDateApply, closeDate: $closeDate, status: $status)';
   }
 
   @override
@@ -96,7 +90,6 @@ class Job {
     if (identical(this, other)) return true;
 
     return other is Job &&
-        other.id == id &&
         other.name == name &&
         other.position == position &&
         other.type == type &&
@@ -109,8 +102,7 @@ class Job {
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        name.hashCode ^
+    return name.hashCode ^
         position.hashCode ^
         type.hashCode ^
         gender.hashCode ^

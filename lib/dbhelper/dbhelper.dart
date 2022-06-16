@@ -6,19 +6,19 @@ import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
   final _databaseName = "MyDatabse,db";
-  final _databaseversio = 1;
+  final _databaseversio = 2;
 
   final table = 'my_table';
 
-  late final columnId = "id";
-  final columName = "name";
-  final columnPosition = "position";
-  final columnjobtype = "jobtype";
-  final columngender = "gender";
-  final columnPostedDate = "postedDate";
-  final columnLastdDate = "lastdate";
-  final columnCloseDate = "closedate";
-  final status = "status";
+  late final columnId = "Id";
+  final columName = "Name";
+  final columnPosition = "Position";
+  final columnjobtype = "Jobtype";
+  final columngender = "Gender";
+  final columnPostedDate = "PostedDate";
+  final columnLastdDate = "Lastdate";
+  final columnCloseDate = "Closedate";
+  final status = "Status";
 
   late Database _database;
 

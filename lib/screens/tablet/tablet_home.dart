@@ -283,17 +283,19 @@ class _MobileHomeState extends State<TablateHome> {
                       ),
                       Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: FutureBuilder<List<dynamic>>(
+                          child: FutureBuilder<List<dynamic>?>(
                             future: DataGet().getData(),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-                                List<dynamic>? data = snapshot.data;
-                                List<DataColumn> colm = [];
-                                List<DataRow> row = [];
-                                if (data != null) {
-                                  colm = Data.getcolume(data);
-                                  row = Data.getrow(data);
-                                }
+                                // List<dynamic>? data = snapshot.data;
+                                //      List<DataColumn> colm =
+                                // Data.getcolume(data) as List<DataColumn>;
+                                // List<DataRow> row = [];
+                                // if (data != null) {
+                                //   colm =
+                                //       Data.getcolume(data) as List<DataColumn>;
+                                //   row = Data.getrow(data);
+                                // }
 
                                 return Scrollbar(
                                   controller: scrollControllertabel,
@@ -313,8 +315,8 @@ class _MobileHomeState extends State<TablateHome> {
                                             columnSpacing: width * 0.05,
                                             dataRowHeight: 70,
                                             dividerThickness: 1,
-                                            columns: colm,
-                                            rows: row,
+                                            columns: [],
+                                            rows: [],
                                           ),
                                         ),
                                         SizedBox(

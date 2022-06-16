@@ -13,6 +13,8 @@ const kpop = Color.fromRGBO(101, 228, 110, 1);
 const kpink = Color.fromRGBO(249, 40, 78, 1);
 const kpen = Color.fromRGBO(216, 246, 243, 1);
 
+const error = "This Field Should Not Empty";
+
 // Image part
 
 const imageLogo = CircleAvatar(
@@ -28,13 +30,12 @@ const profile = NetworkImage(
 
 //
 
-String categoryDropdownValue = "Choose..";
-String genderDropdownValue = "Choose..";
+String ?categoryDropdownValue;
+String? genderDropdownValue;
 List<String> categoryItem = [
   "Part Time",
   "Full Time",
   "Freelancer",
-  "Choose.."
 ];
 
 List<IconData> icon = [
@@ -63,7 +64,10 @@ final List drawer = [
   "Pages"
 ];
 
-List<String> genderItem = ["Male", "Female", "Choose.."];
+List<String> genderItem = [
+  "Male",
+  "Female",
+];
 
 Widget sizebox5 = const SizedBox(
   width: 5,

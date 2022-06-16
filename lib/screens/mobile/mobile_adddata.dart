@@ -5,6 +5,7 @@ import 'package:flutter_training_1/model/tabel_model.dart';
 
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 
 class DataAdd extends StatefulWidget {
   const DataAdd({
@@ -17,17 +18,20 @@ class DataAdd extends StatefulWidget {
 
 class _DataAddState extends State<DataAdd> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  final GlobalKey<FormState> _key1 = GlobalKey<FormState>();
 
   final TextEditingController _positioncontroller = TextEditingController();
   final TextEditingController _namecontroller = TextEditingController();
+  final TextEditingController _datePostController = TextEditingController();
+  final TextEditingController _dateLastController = TextEditingController();
+  final TextEditingController _dateCloseController = TextEditingController();
   final _drawer = GlobalKey<ScaffoldState>();
+
   final Job _tableadd = Job();
   Status _status = Status.active;
 
-  DateTime postedDate = DateTime(2022, 01, 24);
-  DateTime lastdate = DateTime(2022, 01, 24);
-  DateTime closedate = DateTime(2022, 01, 24);
+  DateTime postedDate = DateTime.now();
+  DateTime lastdate = DateTime.now();
+  DateTime closedate = DateTime.now();
 
   void onchagecategory(String value) {
     setState(() {
@@ -216,25 +220,26 @@ class _DataAddState extends State<DataAdd> {
                           header("Company Name"),
                           sizebox5,
                           CustomWidgets.newformfield(
+                              name: "Name",
                               controller: _namecontroller,
                               onSaved: (val) async {
-                                print("DOne");
                                 setState(() {
                                   _tableadd.name = _namecontroller.text;
                                 });
                               },
-                              error: "This Field Should Not Empty"),
+                              error: error),
                           const SizedBox(
                             height: 10,
                           ),
                           header("Position"),
                           sizebox5,
                           CustomWidgets.newformfield(
+                              name: "Name",
                               onSaved: (newValue) => setState(() {
                                     _tableadd.position =
                                         _positioncontroller.text;
                                   }),
-                              error: "This Field Should Not Empty",
+                              error: error,
                               controller: _positioncontroller),
                           const SizedBox(
                             height: 10,
@@ -242,73 +247,97 @@ class _DataAddState extends State<DataAdd> {
                           header("Job Type"),
                           sizebox5,
                           Padding(
-                              padding: const EdgeInsets.only(top: 5),
-                              child: CustomWidgets.dropDownForm(
-                                context: context,
-                                child: DropdownButtonFormField(
-                                    key: _key1,
-                                    decoration: InputDecoration(
-                                        focusedBorder: InputBorder.none,
-                                        enabledBorder: InputBorder.none),
-                                    elevation: 0,
-                                    iconSize: 0,
-                                    validator: (val) => val == null
-                                        ? "Please Select Job Type"
-                                        : null,
-                                    value: categoryDropdownValue,
-                                    items: categoryItem
-                                        .map<DropdownMenuItem<String>>(
-                                      (value) {
-                                        return DropdownMenuItem<String>(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10.0),
-                                            child: Text(value),
-                                          ),
-                                          value: value,
-                                        );
-                                      },
-                                    ).toList(),
-                                    onChanged: (value) =>
-                                        onchagecategory(value.toString())),
-                              )),
+                            padding: const EdgeInsets.only(top: 5),
+                            child: DropdownButtonFormField(
+                                decoration: CustomWidgets.decoration(),
+                                elevation: 0,
+                                hint: Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Text("Select Job Type"),
+                                ),
+                                iconSize: 0,
+                                validator: (val) => val == null
+                                    ? "Please Select Job Type"
+                                    : null,
+                                value: categoryDropdownValue,
+                                items:
+                                    categoryItem.map<DropdownMenuItem<String>>(
+                                  (value) {
+                                    return DropdownMenuItem<String>(
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10.0),
+                                        child: Text(value),
+                                      ),
+                                      value: value,
+                                    );
+                                  },
+                                ).toList(),
+                                onChanged: (value) =>
+                                    onchagecategory(value.toString())),
+                          ),
                           const SizedBox(
                             height: 10,
                           ),
                           header("Select Gender"),
                           sizebox5,
                           Padding(
-                              padding: const EdgeInsets.only(top: 5),
-                              child: CustomWidgets.dropDownForm(
-                                  child: DropdownButtonFormField(
-                                      decoration: InputDecoration(
-                                          focusedBorder: InputBorder.none,
-                                          enabledBorder: InputBorder.none),
-                                      elevation: 0,
-                                      iconSize: 0,
-                                      validator: (val) => val == null
-                                          ? "Please Select Job Type"
-                                          : null,
-                                      value: genderDropdownValue,
-                                      items: genderItem
-                                          .map<DropdownMenuItem<String>>(
-                                        (value) {
-                                          return DropdownMenuItem<String>(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10),
-                                              child: Text(value),
-                                            ),
-                                            value: value,
-                                          );
-                                        },
-                                      ).toList(),
-                                      onChanged: (value) => setState(() {
-                                            genderDropdownValue =
-                                                value.toString();
-                                            _tableadd.gender = value.toString();
-                                          })),
-                                  context: context)),
+                            padding: const EdgeInsets.only(top: 5),
+                            child: DropdownButtonFormField(
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: kGrey.withAlpha(30),
+                                  contentPadding: const EdgeInsets.all(10),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                          color: kGrey.withAlpha(30))),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                          color: kGrey.withAlpha(30))),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                          color: kGrey.withAlpha(30))),
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                        color: Colors.red,
+                                      )),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                        color: Colors.red,
+                                      )),
+                                ),
+                                elevation: 0,
+                                iconSize: 0,
+                                validator: (val) => val == null
+                                    ? "Please Select Gender Type"
+                                    : null,
+                                value: genderDropdownValue,
+                                hint: Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Text("Select Gender Type"),
+                                ),
+                                items: genderItem.map<DropdownMenuItem<String>>(
+                                  (value) {
+                                    return DropdownMenuItem<String>(
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
+                                        child: Text(value),
+                                      ),
+                                      value: value,
+                                    );
+                                  },
+                                ).toList(),
+                                onChanged: (value) => setState(() {
+                                      genderDropdownValue = value.toString();
+                                      _tableadd.gender = value.toString();
+                                    })),
+                          ),
                           const SizedBox(
                             height: 10,
                           ),
@@ -316,21 +345,74 @@ class _DataAddState extends State<DataAdd> {
                           sizebox5,
                           Padding(
                               padding: const EdgeInsets.only(top: 5),
-                              child: CustomWidgets.datepiker(
-                                  context: context,
-                                  onPressed: () async {
-                                    final date = await pickDate(postedDate);
+                              child: TextFormField(
+                                onTap: () async {
+                                  final date = await pickDate(postedDate);
 
-                                    if (date == null) {
-                                      return;
-                                    } else {
-                                      setState(() {
+                                  if (date == null) {
+                                    return;
+                                  } else {
+                                    setState(() {
+                                      if (date.compareTo(postedDate) > 0) {
                                         postedDate = date;
+                                        _datePostController.text =
+                                            " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
                                         _tableadd.postedDate = date;
-                                      });
-                                    }
-                                  },
-                                  dateTime: postedDate)),
+                                      } else {
+                                        _datePostController.clear();
+                                      }
+                                    });
+                                  }
+                                },
+                                readOnly: true,
+                                controller: _datePostController,
+                                validator: RequiredValidator(
+                                    errorText: "Please Select Correct Date"),
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: kGrey.withAlpha(30),
+                                  contentPadding: const EdgeInsets.all(5),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                          color: kGrey.withAlpha(30))),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                          color: kGrey.withAlpha(30))),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                          color: kGrey.withAlpha(30))),
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                        color: Colors.red,
+                                      )),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                        color: Colors.red,
+                                      )),
+                                  hintText:
+                                      "  ${postedDate.day}/${postedDate.month}/${postedDate.year}",
+                                  prefixIcon: Container(
+                                    width: 60,
+                                    height: 50,
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          bottomLeft: Radius.circular(20)),
+                                      color: Colors.grey,
+                                    ),
+                                    child: Icon(
+                                      Icons.watch_later_outlined,
+                                      color: kGrey,
+                                      size: 25,
+                                    ),
+                                  ),
+                                ),
+                              )),
                           const SizedBox(
                             height: 10,
                           ),
@@ -338,21 +420,73 @@ class _DataAddState extends State<DataAdd> {
                           sizebox5,
                           Padding(
                               padding: const EdgeInsets.only(top: 5),
-                              child: CustomWidgets.datepiker(
-                                context: context,
-                                dateTime: lastdate,
-                                onPressed: () async {
+                              child: TextFormField(
+                                onTap: () async {
                                   final date = await pickDate(lastdate);
 
                                   if (date == null) {
                                     return;
                                   } else {
                                     setState(() {
-                                      lastdate = date;
-                                      _tableadd.lastDateApply = date;
+                                      if (date.compareTo(postedDate) > 0) {
+                                        lastdate = date;
+                                        _dateLastController.text =
+                                            " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
+                                        _tableadd.lastDateApply = date;
+                                      } else {
+                                        _dateLastController.clear();
+                                      }
                                     });
                                   }
                                 },
+                                readOnly: true,
+                                controller: _dateLastController,
+                                validator: RequiredValidator(
+                                    errorText: "Please Select Correct Date"),
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: kGrey.withAlpha(30),
+                                  contentPadding: const EdgeInsets.all(5),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                          color: kGrey.withAlpha(30))),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                          color: kGrey.withAlpha(30))),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                          color: kGrey.withAlpha(30))),
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                        color: Colors.red,
+                                      )),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                        color: Colors.red,
+                                      )),
+                                  hintText:
+                                      "  ${lastdate.day}/${lastdate.month}/${lastdate.year}",
+                                  prefixIcon: Container(
+                                    width: 60,
+                                    height: 50,
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          bottomLeft: Radius.circular(20)),
+                                      color: Colors.grey,
+                                    ),
+                                    child: Icon(
+                                      Icons.watch_later_outlined,
+                                      color: kGrey,
+                                      size: 25,
+                                    ),
+                                  ),
+                                ),
                               )),
                           const SizedBox(
                             height: 10,
@@ -361,21 +495,73 @@ class _DataAddState extends State<DataAdd> {
                           sizebox5,
                           Padding(
                               padding: const EdgeInsets.only(top: 5),
-                              child: CustomWidgets.datepiker(
-                                context: context,
-                                dateTime: closedate,
-                                onPressed: () async {
+                              child: TextFormField(
+                                onTap: () async {
                                   final date = await pickDate(closedate);
 
                                   if (date == null) {
                                     return;
                                   } else {
                                     setState(() {
-                                      closedate = date;
-                                      _tableadd.closeDate = date;
+                                      if (date.compareTo(lastdate) > 0) {
+                                        closedate = date;
+                                        _dateCloseController.text =
+                                            " ${closedate.day}/${closedate.month}/${closedate.year}";
+                                        _tableadd.closeDate = date;
+                                      } else {
+                                        _dateCloseController.clear();
+                                      }
                                     });
                                   }
                                 },
+                                readOnly: true,
+                                controller: _dateCloseController,
+                                validator: RequiredValidator(
+                                    errorText: "Please Select Correct Date"),
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: kGrey.withAlpha(30),
+                                  contentPadding: const EdgeInsets.all(5),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                          color: kGrey.withAlpha(30))),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                          color: kGrey.withAlpha(30))),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                          color: kGrey.withAlpha(30))),
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                        color: Colors.red,
+                                      )),
+                                  focusedErrorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: const BorderSide(
+                                        color: Colors.red,
+                                      )),
+                                  hintText:
+                                      "  ${closedate.day}/${closedate.month}/${closedate.year}",
+                                  prefixIcon: Container(
+                                    width: 60,
+                                    height: 50,
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          bottomLeft: Radius.circular(20)),
+                                      color: Colors.grey,
+                                    ),
+                                    child: Icon(
+                                      Icons.watch_later_outlined,
+                                      color: kGrey,
+                                      size: 25,
+                                    ),
+                                  ),
+                                ),
                               )),
                           const SizedBox(
                             height: 10,
@@ -425,6 +611,9 @@ class _DataAddState extends State<DataAdd> {
                                   ),
                                   onPressed: () {
                                     Navigator.pop(context);
+                                    _key.currentState!.reset();
+                                    genderDropdownValue = null;
+                                    categoryDropdownValue = null;
                                   },
                                   color: kPrimaryColor,
                                   borderRadius: BorderRadius.circular(20),
@@ -443,9 +632,8 @@ class _DataAddState extends State<DataAdd> {
                                         fontSize: 15,
                                         fontWeight: FontWeight.w600),
                                   ),
-                                  onPressed: () {
-                                    if (_key.currentState!.validate() &&
-                                        _key1.currentState!.validate()) {
+                                  onPressed: () async {
+                                    if (_key.currentState!.validate()) {
                                       print(_tableadd.name);
                                       print(_tableadd.position);
                                       print(_tableadd.type);
@@ -454,6 +642,35 @@ class _DataAddState extends State<DataAdd> {
                                       print(_tableadd.lastDateApply);
                                       print(_tableadd.closeDate);
                                       print(_tableadd.status);
+
+                                      print(_tableadd.toMap());
+                                      final dbHelper = DatabaseHelper.instance;
+
+                                      // Map<String, dynamic> table =
+                                      //     _tableadd.toMap();
+                                      // print(table);
+                                      // print(await dbHelper.queryAllRows());
+
+                                      Map<String, dynamic> row = {
+                                        dbHelper.columName: _tableadd.name,
+                                        dbHelper.columnPosition:
+                                            _tableadd.position,
+                                        dbHelper.columnjobtype: _tableadd.type,
+                                        dbHelper.columngender: _tableadd.gender,
+                                        dbHelper.columnPostedDate:
+                                            "${postedDate.day}/${postedDate.month}/${postedDate.year}",
+                                        dbHelper.columnLastdDate:
+                                            "${lastdate.day}/${lastdate.month}/${lastdate.year}",
+                                        dbHelper.columnCloseDate:
+                                            "${lastdate.day}/${lastdate.month}/${lastdate.year}",
+                                        dbHelper.status: _tableadd.status!
+                                            .split(".")
+                                            .last
+                                            .toUpperCase()
+                                      };
+                                      await dbHelper
+                                          .insert(row)
+                                          .whenComplete(() => print("add"));
                                     }
                                   },
                                   color: kGreen,

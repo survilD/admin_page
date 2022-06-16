@@ -45,29 +45,32 @@ class CustomWidgets {
     FormFieldSetter<String>? onSaved,
   }) {
     return TextFormField(
-      onChanged: onSaved,
-      onSaved: onSaved,
-      validator: RequiredValidator(errorText: error!),
-      controller: controller,
-      cursorColor: kGrey.withAlpha(30),
-      decoration: InputDecoration(
-          filled: true,
-          fillColor: kGrey.withAlpha(30),
-          contentPadding: const EdgeInsets.all(15),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: kGrey.withAlpha(30))),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: kGrey.withAlpha(30))),
-          hintText: name ?? "Name",
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: kGrey.withAlpha(30))),
-          errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: const BorderSide(color: Colors.red, width: 1))),
-    );
+        onChanged: onSaved,
+        onSaved: onSaved,
+        validator: RequiredValidator(errorText: error!),
+        controller: controller,
+        cursorColor: kGrey.withAlpha(30),
+        decoration: decoration(name: name));
+  }
+
+  static decoration({String? name}) {
+    return InputDecoration(
+        filled: true,
+        fillColor: kGrey.withAlpha(30),
+        contentPadding: const EdgeInsets.all(15),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: kGrey.withAlpha(30))),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: kGrey.withAlpha(30))),
+        hintText: name,
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide(color: kGrey.withAlpha(30))),
+        errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(color: Colors.red, width: 1)));
   }
 
   static customAppBar(GlobalKey<ScaffoldState> _drawer) {

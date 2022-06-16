@@ -36,10 +36,12 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   form_field_validator: ^1.1.0
-  responsive_builder: ^0.4.2
+
   path_provider: ^2.0.11
   sqflite: ^2.0.2+1
   device_preview: ^1.1.0
+
+
 
 dev_dependencies:
   flutter_test:

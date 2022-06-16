@@ -397,13 +397,13 @@ class _MobileHomeState extends State<DesktopHome> {
                     ),
                     Padding(
                         padding: const EdgeInsets.all(15.0),
-                        child: FutureBuilder<List<dynamic>>(
+                        child: FutureBuilder<List<dynamic>?>(
                           future: DataGet().getData(),
                           builder: (BuildContext context,
-                              AsyncSnapshot<List> snapshot) {
+                              AsyncSnapshot<List?> snapshot) {
                             if (snapshot.hasData) {
                               List<dynamic> data = snapshot.data as List;
-                              List<DataColumn> colm = Data.getcolume(data);
+                              List<DataColumn> colm =   Data.getcolume(data) as List<DataColumn>;
                               List<DataRow> row = Data.getrow(data);
 
                               return Scrollbar(

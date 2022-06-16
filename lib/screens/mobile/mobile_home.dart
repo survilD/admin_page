@@ -23,8 +23,6 @@ class MobileHome extends StatefulWidget {
 }
 
 class _MobileHomeState extends State<MobileHome> {
-  final dbHelper = DatabaseHelper.instance;
-
   final _drawer = GlobalKey<ScaffoldState>();
 
   void addData() async {
@@ -47,6 +45,11 @@ class _MobileHomeState extends State<MobileHome> {
 
     // print('query all rows:');
     // allRows.forEach(print);
+
+    var _items;
+    final dbHelper = DatabaseHelper.instance;
+    _items = await dbHelper.queryAllRows();
+    print(_items);
 
     Navigator.push(
       context,
@@ -244,13 +247,13 @@ class _MobileHomeState extends State<MobileHome> {
                     child: SingleChildScrollView(
                       controller: scrollControllertabel,
                       scrollDirection: Axis.horizontal,
-                      child: FutureBuilder<List<dynamic>>(
+                      child: FutureBuilder<List<dynamic>?>(
                         future: DataGet().getData(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List> snapshot) {
+                        builder: (BuildContext context, snapshot) {
                           if (snapshot.hasData) {
                             List<dynamic> data = snapshot.data as List;
-                            List<DataColumn> colm = Data.getcolume(data);
+                            List<DataColumn>? colm =
+                                Data.getcolume(data) as List<DataColumn>;
                             List<DataRow> row = Data.getrow(data);
 
                             return Card(
@@ -266,7 +269,8 @@ class _MobileHomeState extends State<MobileHome> {
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  Text("Showing 1 of 9 of 9 entries"),
+                                  Text(
+                                      "Showing  1 of ${row.length} of 9 entries"),
                                   SizedBox(
                                     height: 10,
                                   ),
