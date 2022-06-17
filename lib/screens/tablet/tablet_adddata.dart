@@ -29,7 +29,7 @@ class _MobileHomeState extends State<TablateDataAdd> {
   Widget sizebox = const SizedBox(
     width: 5,
   );
-  Status _status = Status.active;
+  Status _status = Status.Active;
   String categoryDropdownValue = "Choose..";
   String genderDropdownValue = "Choose..";
   List<String> categoryItem = [
@@ -605,14 +605,14 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                             fontWeight: FontWeight.bold,
                                             color: Colors.grey[700])),
                                     sizebox,
-                                    radioButton(Status.active),
+                                    radioButton(Status.Active),
                                     sizebox,
                                     Text("Active",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.grey[700])),
                                     sizebox,
-                                    radioButton(Status.inActive),
+                                    radioButton(Status.InActive),
                                     sizebox,
                                     Text(
                                       "In Active",

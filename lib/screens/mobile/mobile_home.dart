@@ -26,31 +26,6 @@ class _MobileHomeState extends State<MobileHome> {
   final _drawer = GlobalKey<ScaffoldState>();
 
   void addData() async {
-    // try {
-    //   Map<String, dynamic> row = {
-    //     DatabaseHelper.columName: "Survil",
-    //     DatabaseHelper.columnPosition: 'Network engg',
-    //     DatabaseHelper.columnjobtype: " Full-Time",
-    //     DatabaseHelper.columngender: "male",
-    //     DatabaseHelper.columnPostedDate: "12-01-2021",
-    //     DatabaseHelper.columnLastdDate: "25-01-2021",
-    //     DatabaseHelper.columnCloseDate: "30-01-2021",
-    //     DatabaseHelper.status: "Active"
-    //   };
-    //   final id1 = await dbHelper.queryAllRows();
-    //   print(id1);
-    // } on Exception catch (e) {
-    //   print(e);
-    // }
-
-    // print('query all rows:');
-    // allRows.forEach(print);
-
-    var _items;
-    final dbHelper = DatabaseHelper.instance;
-    _items = await dbHelper.queryAllRows();
-    print(_items);
-
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -248,93 +223,11 @@ class _MobileHomeState extends State<MobileHome> {
                       controller: scrollControllertabel,
                       scrollDirection: Axis.horizontal,
                       child: FutureBuilder<List<dynamic>?>(
-                        future: DataGet().getData(),
-                        builder: (BuildContext context, snapshot) {
-                          if (snapshot.hasData) {
-                            List<dynamic> data = snapshot.data as List;
-                            List<DataColumn>? colm =
-                                Data.getcolume(data) as List<DataColumn>;
-                            List<DataRow> row = Data.getrow(data);
-
-                            return Card(
-                              child: Column(
-                                children: [
-                                  DataTable(
-                                    columnSpacing: 22,
-                                    dataRowHeight: 70,
-                                    dividerThickness: 3,
-                                    columns: colm,
-                                    rows: row,
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                      "Showing  1 of ${row.length} of 9 entries"),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 20),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        OutlinedButton(
-                                            onPressed: () {},
-                                            child: Text("Previous"),
-                                            style: TextButton.styleFrom(
-                                                primary: kPrimaryColor,
-                                                side: BorderSide(
-                                                    color: kPrimaryColor),
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            30)))),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        SizedBox(
-                                          width: 50,
-                                          child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                primary: kPrimaryColor,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            30))),
-                                            onPressed: () {},
-                                            child: Text(
-                                              "1",
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        OutlinedButton(
-                                            onPressed: () {},
-                                            child: Text("Next"),
-                                            style: TextButton.styleFrom(
-                                                primary: kPrimaryColor,
-                                                side: BorderSide(
-                                                    color: kPrimaryColor),
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            30)))),
-                                      ],
-                                    ),
-                                  ),
-                                  sizebox5
-                                ],
-                              ),
-                            );
-                          } else {
-                            return Center(child: CircularProgressIndicator());
-                          }
-                        },
-                      ),
+                          future: DataGet().getData(),
+                          builder: (BuildContext context, snapshot) =>
+                              (snapshot.hasData)
+                                  ? data(snapshot)
+                                  : CircularProgressIndicator()),
                     ),
                   )),
               SizedBox(
@@ -345,6 +238,84 @@ class _MobileHomeState extends State<MobileHome> {
         ),
       ),
     );
+  }
+
+  data(AsyncSnapshot<List<dynamic>?> snapshot) {
+    if (snapshot.data!.isNotEmpty) {
+      List<dynamic> data = snapshot.data as List;
+
+      List<DataColumn>? colm =
+          Data.getcolume(data, context) as List<DataColumn>;
+
+      List<DataRow> row = Data.getrow(data, context);
+
+      return Card(
+        child: Column(
+          children: [
+            DataTable(
+              columnSpacing: 25,
+              dataRowHeight: 70,
+              dividerThickness: 5,
+              columns: colm,
+              rows: row,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text("Showing  1 of ${row.length} of 9 entries"),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  OutlinedButton(
+                      onPressed: () {},
+                      child: Text("Previous"),
+                      style: TextButton.styleFrom(
+                          primary: kPrimaryColor,
+                          side: BorderSide(color: kPrimaryColor),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)))),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  SizedBox(
+                    width: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: kPrimaryColor,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30))),
+                      onPressed: () {},
+                      child: Text(
+                        "1",
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  OutlinedButton(
+                      onPressed: () {},
+                      child: Text("Next"),
+                      style: TextButton.styleFrom(
+                          primary: kPrimaryColor,
+                          side: BorderSide(color: kPrimaryColor),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)))),
+                ],
+              ),
+            ),
+            sizebox5
+          ],
+        ),
+      );
+    } else {
+      return Container(child: Text("No data"));
+    }
   }
 
   Widget iconButtonC(IconData icons, double width) {

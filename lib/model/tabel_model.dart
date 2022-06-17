@@ -5,10 +5,10 @@ class Job {
   String? name;
   String? position;
   String? type;
-  String? gender;
-  DateTime? postedDate;
-  DateTime? lastDateApply;
-  DateTime? closeDate;
+  String? gender; 
+  String? postedDate;
+  String? lastDateApply;
+  String? closeDate;
   String? status;
   Job({
     this.name,
@@ -26,9 +26,9 @@ class Job {
     String? position,
     String? type,
     String? gender,
-    DateTime? postedDate,
-    DateTime? lastDateApply,
-    DateTime? closeDate,
+    String? postedDate,
+    String? lastDateApply,
+    String? closeDate,
     String? status,
   }) {
     return Job(
@@ -49,9 +49,9 @@ class Job {
       'Position': position,
       'Type': type,
       'Gender': gender,
-      'PostedDate': postedDate?.millisecondsSinceEpoch,
-      'LastDateApply': lastDateApply?.millisecondsSinceEpoch,
-      'CloseDate': closeDate?.millisecondsSinceEpoch,
+      'PostedDate': postedDate,
+      'LastDateApply': lastDateApply,
+      'CloseDate': closeDate,
       'Status': status,
     };
   }
@@ -62,15 +62,11 @@ class Job {
       position: map['position'] != null ? map['position'] as String : null,
       type: map['type'] != null ? map['type'] as String : null,
       gender: map['gender'] != null ? map['gender'] as String : null,
-      postedDate: map['postedDate'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['postedDate'] as int)
-          : null,
-      lastDateApply: map['lastDateApply'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['lastDateApply'] as int)
-          : null,
-      closeDate: map['closeDate'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['closeDate'] as int)
-          : null,
+      postedDate:
+          map['postedDate'] != null ? map['postedDate'] as String : null,
+      lastDateApply:
+          map['lastDateApply'] != null ? map['lastDateApply'] as String : null,
+      closeDate: map['closeDate'] != null ? map['closeDate'] as String : null,
       status: map['status'] != null ? map['status'] as String : null,
     );
   }
@@ -82,7 +78,7 @@ class Job {
 
   @override
   String toString() {
-    return 'Job( name: $name, position: $position, type: $type, gender: $gender, postedDate: $postedDate, lastDateApply: $lastDateApply, closeDate: $closeDate, status: $status)';
+    return 'Job(name: $name, position: $position, type: $type, gender: $gender, postedDate: $postedDate, lastDateApply: $lastDateApply, closeDate: $closeDate, status: $status)';
   }
 
   @override

@@ -403,8 +403,8 @@ class _MobileHomeState extends State<DesktopHome> {
                               AsyncSnapshot<List?> snapshot) {
                             if (snapshot.hasData) {
                               List<dynamic> data = snapshot.data as List;
-                              List<DataColumn> colm =   Data.getcolume(data) as List<DataColumn>;
-                              List<DataRow> row = Data.getrow(data);
+                              List<DataColumn> colm =   Data.getcolume(data,context) as List<DataColumn>;
+                              List<DataRow> row = Data.getrow(data,context);
 
                               return Scrollbar(
                                 scrollbarOrientation:

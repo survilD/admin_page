@@ -6,18 +6,18 @@ import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
   final _databaseName = "MyDatabse,db";
-  final _databaseversio = 2;
+  final _databaseversio = 1;
 
   final table = 'my_table';
 
   late final columnId = "Id";
   final columName = "Name";
   final columnPosition = "Position";
-  final columnjobtype = "Jobtype";
+  final columnjobtype = "Type";
   final columngender = "Gender";
   final columnPostedDate = "PostedDate";
-  final columnLastdDate = "Lastdate";
-  final columnCloseDate = "Closedate";
+  final columnLastdDate = "LastDateApply";
+  final columnCloseDate = "CloseDate";
   final status = "Status";
 
   late Database _database;
@@ -87,4 +87,10 @@ class DatabaseHelper {
 
     return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
   }
+
+  // Future<int> queryRowone(int id) async {
+  //   Database? db = await instance.database;
+
+  //   return await db.rawQuery(table);
+  // }
 }

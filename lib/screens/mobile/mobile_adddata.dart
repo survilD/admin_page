@@ -2,10 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_training_1/dbhelper/dbhelper.dart';
 import 'package:flutter_training_1/model/tabel_model.dart';
+import 'package:flutter_training_1/screens/tablet/tablet_home.dart';
 
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+
+import '../../responsive.dart';
+import '../desktop/desktop_home.dart';
+import 'mobile_home.dart';
 
 class DataAdd extends StatefulWidget {
   const DataAdd({
@@ -27,7 +32,7 @@ class _DataAddState extends State<DataAdd> {
   final _drawer = GlobalKey<ScaffoldState>();
 
   final Job _tableadd = Job();
-  Status _status = Status.active;
+  Status _status = Status.Active;
 
   DateTime postedDate = DateTime.now();
   DateTime lastdate = DateTime.now();
@@ -59,7 +64,7 @@ class _DataAddState extends State<DataAdd> {
 
   @override
   Widget build(BuildContext context) {
-    _tableadd.status = _status.toString();
+    _tableadd.status = _status.name;
     double width = MediaQuery.of(context).size.width;
 
     return SafeArea(
@@ -357,7 +362,8 @@ class _DataAddState extends State<DataAdd> {
                                         postedDate = date;
                                         _datePostController.text =
                                             " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
-                                        _tableadd.postedDate = date;
+                                        _tableadd.postedDate =
+                                            " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
                                       } else {
                                         _datePostController.clear();
                                       }
@@ -432,7 +438,8 @@ class _DataAddState extends State<DataAdd> {
                                         lastdate = date;
                                         _dateLastController.text =
                                             " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
-                                        _tableadd.lastDateApply = date;
+                                        _tableadd.lastDateApply =
+                                            " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
                                       } else {
                                         _dateLastController.clear();
                                       }
@@ -507,7 +514,8 @@ class _DataAddState extends State<DataAdd> {
                                         closedate = date;
                                         _dateCloseController.text =
                                             " ${closedate.day}/${closedate.month}/${closedate.year}";
-                                        _tableadd.closeDate = date;
+                                        _tableadd.closeDate =
+                                            " ${closedate.day}/${closedate.month}/${closedate.year}";
                                       } else {
                                         _dateCloseController.clear();
                                       }
@@ -576,14 +584,14 @@ class _DataAddState extends State<DataAdd> {
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey[700])),
                                 sizebox5,
-                                radioButton(Status.active),
+                                radioButton(Status.Active),
                                 sizebox5,
                                 Text("Active",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.grey[700])),
                                 sizebox5,
-                                radioButton(Status.inActive),
+                                radioButton(Status.InActive),
                                 sizebox5,
                                 Text(
                                   "In Active",
@@ -634,43 +642,25 @@ class _DataAddState extends State<DataAdd> {
                                   ),
                                   onPressed: () async {
                                     if (_key.currentState!.validate()) {
-                                      print(_tableadd.name);
-                                      print(_tableadd.position);
-                                      print(_tableadd.type);
-                                      print(_tableadd.gender);
-                                      print(_tableadd.postedDate);
-                                      print(_tableadd.lastDateApply);
-                                      print(_tableadd.closeDate);
-                                      print(_tableadd.status);
-
-                                      print(_tableadd.toMap());
                                       final dbHelper = DatabaseHelper.instance;
 
-                                      // Map<String, dynamic> table =
-                                      //     _tableadd.toMap();
-                                      // print(table);
-                                      // print(await dbHelper.queryAllRows());
+                                      Map<String, dynamic> table =
+                                          _tableadd.toMap();
 
-                                      Map<String, dynamic> row = {
-                                        dbHelper.columName: _tableadd.name,
-                                        dbHelper.columnPosition:
-                                            _tableadd.position,
-                                        dbHelper.columnjobtype: _tableadd.type,
-                                        dbHelper.columngender: _tableadd.gender,
-                                        dbHelper.columnPostedDate:
-                                            "${postedDate.day}/${postedDate.month}/${postedDate.year}",
-                                        dbHelper.columnLastdDate:
-                                            "${lastdate.day}/${lastdate.month}/${lastdate.year}",
-                                        dbHelper.columnCloseDate:
-                                            "${lastdate.day}/${lastdate.month}/${lastdate.year}",
-                                        dbHelper.status: _tableadd.status!
-                                            .split(".")
-                                            .last
-                                            .toUpperCase()
-                                      };
                                       await dbHelper
-                                          .insert(row)
-                                          .whenComplete(() => print("add"));
+                                          .insert(table)
+                                          .whenComplete(() => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Responsive(
+                                                          context: context,
+                                                          mobile: MobileHome(),
+                                                          tablet: TablateHome(),
+                                                          desktop:
+                                                              DesktopHome(),
+                                                        )),
+                                              ));
                                     }
                                   },
                                   color: kGreen,
@@ -749,10 +739,12 @@ class _DataAddState extends State<DataAdd> {
       groupValue: _status,
       onChanged: (value) => setState(() {
         _status = _value;
-        _tableadd.status = _value.toString();
+        print(_tableadd.status);
+        _tableadd.status = _value.name;
+        print(_tableadd.status);
       }),
     );
   }
 }
 
-enum Status { active, inActive }
+enum Status { Active, InActive }
