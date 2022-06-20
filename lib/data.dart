@@ -1,32 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_training_1/dbhelper/dbhelper.dart';
-import 'package:flutter_training_1/model/tabel_model.dart';
+
 import 'package:flutter_training_1/responsive.dart';
 import 'package:flutter_training_1/screens/desktop/desktop_adddata.dart';
+
 import 'package:flutter_training_1/screens/desktop/desktop_home.dart';
 import 'package:flutter_training_1/screens/mobile/mobile_adddata.dart';
+
 import 'package:flutter_training_1/screens/mobile/mobile_home.dart';
 import 'package:flutter_training_1/screens/tablet/tablet_adddata.dart';
+
 import 'package:flutter_training_1/screens/tablet/tablet_home.dart';
 import 'package:flutter_training_1/screens/utils/constants.dart';
-import 'package:flutter_training_1/screens/viewdetail_screen.dart';
 
 class Data {
   static final dbHelper = DatabaseHelper.instance;
   static List<DataColumn?> getcolume(List<dynamic> list, BuildContext context) {
     return List.generate(
-        Responsive.isMobile(context) ? 4 : list[0].keys.toList().length + 1,
+        Responsive.isMobile(context) ? 4 : list[0].keys.toList().length,
         (index) => DataColumn(
             label: Responsive.isMobile(context)
                 ? ((3 > index)
                     ? Text(
                         list[0].keys.toList()[index],
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 17,
                         ),
                       )
-                    : Text(
+                    : const Text(
                         "Action",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -36,12 +38,12 @@ class Data {
                 : (list[0].keys.toList().length > index)
                     ? Text(
                         list[0].keys.toList()[index],
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 17,
                         ),
                       )
-                    : Text(
+                    : const Text(
                         "Action",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -59,8 +61,9 @@ class Data {
   }
 
   static List<DataCell> _createCell(Map m, int index1, BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return List.generate(
-        Responsive.isMobile(context) ? 4 : m.values.toList().length + 1,
+        Responsive.isMobile(context) ? 4 : m.values.toList().length,
         (index) => Responsive.isMobile(context)
             ? DataCell((3 == index)
                 ? Row(
@@ -80,46 +83,11 @@ class Data {
                                     map = element as Map<String, dynamic>;
                                   }
                                 });
-                                Size size = MediaQuery.of(context).size;
 
                                 showDialog(
                                     context: context,
-                                    builder: (BuildContext context) => Dialog(
-                                          child: SizedBox(
-                                              width: size.width * 0.9,
-                                              height: size.height * 0.9,
-                                              // ignore: unnecessary_null_comparison
-                                              child: (map != null)
-                                                  ? Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 25),
-                                                      child: ListView.builder(
-                                                        itemCount:
-                                                            map.length - 1,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          return Card(
-                                                            child: ListTile(
-                                                              leading: Text(map
-                                                                  .keys
-                                                                  .toList()[
-                                                                      index + 1]
-                                                                  .toString()),
-                                                              title: Text(map
-                                                                  .values
-                                                                  .toList()[
-                                                                      index + 1]
-                                                                  .toString()),
-                                                            ),
-                                                          );
-                                                        },
-                                                      ),
-                                                    )
-                                                  : Center(
-                                                      child:
-                                                          CircularProgressIndicator())),
-                                        ));
+                                    builder: (BuildContext context) =>
+                                        dialog(map, size));
                               },
                               child: Icon(Icons.remove_red_eye, color: kpop)),
                           radius: 20),
@@ -129,7 +97,33 @@ class Data {
                       CircleAvatar(
                           backgroundColor: kpen,
                           child: GestureDetector(
-                              onTap: () {},
+                              onTap: () async {
+                                final dbHelper = DatabaseHelper.instance;
+
+                                List<Map> val = await dbHelper.queryAllRows();
+                                Map<String, dynamic> map = {};
+
+                                val.forEach((element) {
+                                  if (element["Id"] == m["Id"]) {
+                                    map = element as Map<String, dynamic>;
+                                    print(map);
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Responsive(
+                                                context: context,
+                                                mobile: DataAdd(
+                                                  map: map,
+                                                  idEdit: true,
+                                                ),
+                                                tablet: TablateDataAdd(),
+                                                desktop: DesktopDataAdd(),
+                                              )),
+                                    );
+                                  }
+                                });
+                              },
                               child: Icon(Icons.edit_sharp, color: kGreen))),
                       SizedBox(
                         width: 5,
@@ -167,17 +161,14 @@ class Data {
                           fontSize: 17,
                         ),
                       )
-                    : RichText(
-                        text: TextSpan(children: [
-                        TextSpan(
-                          text: m.values.toList()[index].toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: Colors.grey[800]),
-                        )
-                      ])))
-            : DataCell((m.keys.toList().length == index)
+                    : Text(
+                        m.values.toList()[index].toString().toUpperCase(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.grey[800]),
+                      ))
+            : DataCell((m.keys.toList().length - 1 == index)
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -198,18 +189,7 @@ class Data {
                           backgroundColor: kpink.withAlpha(50),
                           child: GestureDetector(
                             onTap: () {
-                              dbHelper.delete(m["Id"]);
-
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Responsive(
-                                          context: context,
-                                          mobile: MobileHome(),
-                                          tablet: TablateHome(),
-                                          desktop: DesktopHome(),
-                                        )),
-                              );
+                              print("Tablate& windos");
                             },
                             child: Icon(
                               Icons.delete,
@@ -250,15 +230,51 @@ class Data {
                               fontSize: 17,
                             ),
                           )
-                        : RichText(
-                            text: TextSpan(children: [
-                            TextSpan(
-                              text: m.values.toList()[index].toString(),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                  color: Colors.grey[800]),
-                            )
-                          ])))).toList();
+                        : Text(
+                            m.values.toList()[index].toString().toUpperCase(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Colors.grey[800]),
+                          ))).toList();
   }
+
+  static Widget dialog(Map map, Size size) => Dialog(
+        child: SizedBox(
+            // width: size.width * 0.9,
+            // height: size.height * 0.9,
+            // ignore: unnecessary_null_comparison
+            child: (map != null)
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 25),
+                    child: ListView.builder(
+                      itemCount: map.length - 1,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: ListTile(
+                            minLeadingWidth: size.width * 0.3,
+                            leading: Text(
+                              map.keys.toList()[index + 1].toString(),
+                              style: TextStyle(
+                                  color: kPrimaryColor,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            title: Text(
+                              map.values
+                                  .toList()[index + 1]
+                                  .toString()
+                                  .toUpperCase(),
+                              style: TextStyle(
+                                  color: kGrey,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : Center(child: CircularProgressIndicator())),
+      );
 }

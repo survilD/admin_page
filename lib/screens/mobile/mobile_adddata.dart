@@ -13,9 +13,10 @@ import '../desktop/desktop_home.dart';
 import 'mobile_home.dart';
 
 class DataAdd extends StatefulWidget {
-  const DataAdd({
-    Key? key,
-  }) : super(key: key);
+  final Map<String, dynamic> map;
+  final bool idEdit;
+  const DataAdd({Key? key, required this.map, required this.idEdit})
+      : super(key: key);
 
   @override
   State<DataAdd> createState() => _DataAddState();
@@ -31,7 +32,7 @@ class _DataAddState extends State<DataAdd> {
   final TextEditingController _dateCloseController = TextEditingController();
   final _drawer = GlobalKey<ScaffoldState>();
 
-  final Job _tableadd = Job();
+  Job _tableadd = Job();
   Status _status = Status.Active;
 
   DateTime postedDate = DateTime.now();
@@ -45,125 +46,67 @@ class _DataAddState extends State<DataAdd> {
     });
   }
 
-  void _addData() {}
+  // void dateset(DateTime dateTime, TextEditingController controller) async {
+  //   final date = await pickDate(dateTime);
 
-  Future<DateTime?> pickDate(DateTime dateTime) {
-    return showDatePicker(
-        builder: (BuildContext context, child) {
-          return Theme(
-              data: ThemeData.dark().copyWith(
-                primaryColor: Color(0xFFFF3661),
-              ),
-              child: child!);
-        },
-        context: context,
-        initialDate: dateTime,
-        firstDate: DateTime(1900),
-        lastDate: DateTime(2100));
+  //   if (date == null) {
+  //     return;
+  //   } else {
+  //     setState(() {
+  //       if (date.compareTo(dateTime) > 0) {
+  //         dateTime = date;
+  //         controller.text =
+  //             " ${dateTime.day}/${dateTime.month}/${dateTime.year}";
+  //         _tableadd.postedDate =
+  //             " ${dateTime.day}/${dateTime.month}/${dateTime.year}";
+  //       } else {
+  //         controller.clear();
+  //       }
+  //     });
+  //   }
+  // }
+
+  @override
+  void initState() {
+    // List value = widget.map.values.toList();
+
+    super.initState();
+    if (widget.idEdit) {
+      _tableadd = Job.fromMap(widget.map);
+      print(_tableadd);
+      print(widget.map["Id"]);
+
+      _namecontroller.text = _tableadd.name.toString().toUpperCase();
+      _positioncontroller.text = _tableadd.position.toString().toUpperCase();
+      categoryDropdownValue = _tableadd.type.toString();
+      genderDropdownValue = _tableadd.gender.toString();
+    }
   }
+
+  Future<DateTime?> pickDate(DateTime dateTime) => showDatePicker(
+      builder: (BuildContext context, child) {
+        return Theme(
+            data: ThemeData.dark().copyWith(
+              primaryColor: Color(0xFFFF3661),
+            ),
+            child: child!);
+      },
+      context: context,
+      initialDate: dateTime,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100));
 
   @override
   Widget build(BuildContext context) {
+    //  _tableadd = widget.job;
     _tableadd.status = _status.name;
-    double width = MediaQuery.of(context).size.width;
+    Size size = MediaQuery.of(context).size;
 
     return SafeArea(
         child: Scaffold(
       key: _drawer,
       drawerEnableOpenDragGesture: false,
-      drawer: Padding(
-        padding: const EdgeInsets.only(top: 60),
-        child: SizedBox(
-          width: width * 0.65,
-          child: Drawer(
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                topRight: Radius.circular(10),
-              )),
-              child: Scrollbar(
-                child: SingleChildScrollView(
-                  controller: scrollController,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const CircleAvatar(
-                              radius: 40,
-                              backgroundImage: NetworkImage(
-                                "https://miro.medium.com/max/554/1*Ld1KM2WSfJ9YQ4oeRf7q4Q.jpeg",
-                              ),
-                            ),
-                            sizebox5,
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Welcome  ",
-                                  style: TextStyle(
-                                      color: Colors.grey[800],
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(
-                                  height: 7,
-                                ),
-                                Text(
-                                  "Superadmin",
-                                  style: TextStyle(
-                                      color: Colors.grey[800],
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ],
-                            ),
-                            sizebox5,
-                            Icon(
-                              Icons.keyboard_arrow_down,
-                              color: Colors.grey[800],
-                              size: 30,
-                            )
-                          ],
-                        ),
-                      ),
-                      sizebox5,
-                      ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            onTap: () {},
-                            horizontalTitleGap: 20,
-                            leading: Icon(
-                              icon[index],
-                              color: Colors.grey[500],
-                            ),
-                            title: Text(
-                              "${drawer[index]}",
-                              style: TextStyle(
-                                color: Colors.grey[500],
-                                fontSize: 16,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            trailing: Icon(
-                              Icons.arrow_right,
-                              size: 40,
-                              color: Colors.grey[400],
-                            ),
-                            minLeadingWidth: 25,
-                          );
-                        },
-                        itemCount: drawer.length,
-                      )
-                    ],
-                  ),
-                ),
-              )),
-        ),
-      ),
+      drawer: CustomWidgets.constDrawer(size),
       appBar: CustomWidgets.customAppBar(_drawer),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -200,13 +143,14 @@ class _DataAddState extends State<DataAdd> {
                     ),
                     sizebox5,
                     GestureDetector(
-                        child: iconButtonC(Icons.mail, kGreen, width)),
+                        child: iconButtonC(Icons.mail, kGreen, size.width)),
                     sizebox5,
                     GestureDetector(
-                        child: iconButtonC(Icons.call, kGreen, width)),
+                        child: iconButtonC(Icons.call, kGreen, size.width)),
                     sizebox5,
                     GestureDetector(
-                        child: iconButtonC(Icons.info, kPrimaryColor, width)),
+                        child:
+                            iconButtonC(Icons.info, kPrimaryColor, size.width)),
                   ],
                 ),
               ),
@@ -271,7 +215,7 @@ class _DataAddState extends State<DataAdd> {
                                     return DropdownMenuItem<String>(
                                       child: Padding(
                                         padding:
-                                            const EdgeInsets.only(left: 10.0),
+                                            const EdgeInsets.only(left: 5.0),
                                         child: Text(value),
                                       ),
                                       value: value,
@@ -289,33 +233,7 @@ class _DataAddState extends State<DataAdd> {
                           Padding(
                             padding: const EdgeInsets.only(top: 5),
                             child: DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: kGrey.withAlpha(30),
-                                  contentPadding: const EdgeInsets.all(10),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                          color: kGrey.withAlpha(30))),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                          color: kGrey.withAlpha(30))),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                          color: kGrey.withAlpha(30))),
-                                  errorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: const BorderSide(
-                                        color: Colors.red,
-                                      )),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: const BorderSide(
-                                        color: Colors.red,
-                                      )),
-                                ),
+                                decoration: CustomWidgets.decoration(),
                                 elevation: 0,
                                 iconSize: 0,
                                 validator: (val) => val == null
@@ -330,8 +248,7 @@ class _DataAddState extends State<DataAdd> {
                                   (value) {
                                     return DropdownMenuItem<String>(
                                       child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10),
+                                        padding: const EdgeInsets.only(left: 5),
                                         child: Text(value),
                                       ),
                                       value: value,
@@ -351,74 +268,34 @@ class _DataAddState extends State<DataAdd> {
                           Padding(
                               padding: const EdgeInsets.only(top: 5),
                               child: TextFormField(
-                                onTap: () async {
-                                  final date = await pickDate(postedDate);
+                                  onTap: () async {
+                                    final date = await pickDate(postedDate);
 
-                                  if (date == null) {
-                                    return;
-                                  } else {
-                                    setState(() {
-                                      if (date.compareTo(postedDate) > 0) {
-                                        postedDate = date;
-                                        _datePostController.text =
-                                            " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
-                                        _tableadd.postedDate =
-                                            " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
-                                      } else {
-                                        _datePostController.clear();
-                                      }
-                                    });
-                                  }
-                                },
-                                readOnly: true,
-                                controller: _datePostController,
-                                validator: RequiredValidator(
-                                    errorText: "Please Select Correct Date"),
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: kGrey.withAlpha(30),
-                                  contentPadding: const EdgeInsets.all(5),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                          color: kGrey.withAlpha(30))),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                          color: kGrey.withAlpha(30))),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                          color: kGrey.withAlpha(30))),
-                                  errorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: const BorderSide(
-                                        color: Colors.red,
-                                      )),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: const BorderSide(
-                                        color: Colors.red,
-                                      )),
-                                  hintText:
-                                      "  ${postedDate.day}/${postedDate.month}/${postedDate.year}",
-                                  prefixIcon: Container(
-                                    width: 60,
-                                    height: 50,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(20),
-                                          bottomLeft: Radius.circular(20)),
-                                      color: Colors.grey,
-                                    ),
-                                    child: Icon(
-                                      Icons.watch_later_outlined,
-                                      color: kGrey,
-                                      size: 25,
-                                    ),
-                                  ),
-                                ),
-                              )),
+                                    if (date == null) {
+                                      return;
+                                    } else {
+                                      setState(() {
+                                        if (date.compareTo(postedDate) > 0) {
+                                          postedDate = date;
+                                          _datePostController.text =
+                                              " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
+                                          _tableadd.postedDate =
+                                              " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
+                                        } else {
+                                          _datePostController.clear();
+                                        }
+                                      });
+                                    }
+                                  },
+                                  readOnly: true,
+                                  controller: _datePostController,
+                                  validator: RequiredValidator(
+                                      errorText: "Please Select Correct Date"),
+                                  decoration: CustomWidgets.dateDacarotion(
+                                    widget.idEdit
+                                        ? "${_tableadd.postedDate}"
+                                        : "  ${postedDate.day}/${postedDate.month}/${postedDate.year}",
+                                  ))),
                           const SizedBox(
                             height: 10,
                           ),
@@ -427,74 +304,33 @@ class _DataAddState extends State<DataAdd> {
                           Padding(
                               padding: const EdgeInsets.only(top: 5),
                               child: TextFormField(
-                                onTap: () async {
-                                  final date = await pickDate(lastdate);
+                                  onTap: () async {
+                                    final date = await pickDate(lastdate);
 
-                                  if (date == null) {
-                                    return;
-                                  } else {
-                                    setState(() {
-                                      if (date.compareTo(postedDate) > 0) {
-                                        lastdate = date;
-                                        _dateLastController.text =
-                                            " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
-                                        _tableadd.lastDateApply =
-                                            " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
-                                      } else {
-                                        _dateLastController.clear();
-                                      }
-                                    });
-                                  }
-                                },
-                                readOnly: true,
-                                controller: _dateLastController,
-                                validator: RequiredValidator(
-                                    errorText: "Please Select Correct Date"),
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: kGrey.withAlpha(30),
-                                  contentPadding: const EdgeInsets.all(5),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                          color: kGrey.withAlpha(30))),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                          color: kGrey.withAlpha(30))),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                          color: kGrey.withAlpha(30))),
-                                  errorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: const BorderSide(
-                                        color: Colors.red,
-                                      )),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: const BorderSide(
-                                        color: Colors.red,
-                                      )),
-                                  hintText:
-                                      "  ${lastdate.day}/${lastdate.month}/${lastdate.year}",
-                                  prefixIcon: Container(
-                                    width: 60,
-                                    height: 50,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(20),
-                                          bottomLeft: Radius.circular(20)),
-                                      color: Colors.grey,
-                                    ),
-                                    child: Icon(
-                                      Icons.watch_later_outlined,
-                                      color: kGrey,
-                                      size: 25,
-                                    ),
-                                  ),
-                                ),
-                              )),
+                                    if (date == null) {
+                                      return;
+                                    } else {
+                                      setState(() {
+                                        if (date.compareTo(postedDate) > 0) {
+                                          lastdate = date;
+                                          _dateLastController.text =
+                                              " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
+                                          _tableadd.lastDateApply =
+                                              " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
+                                        } else {
+                                          _dateLastController.clear();
+                                        }
+                                      });
+                                    }
+                                  },
+                                  readOnly: true,
+                                  controller: _dateLastController,
+                                  validator: RequiredValidator(
+                                      errorText: "Please Select Correct Date"),
+                                  decoration: CustomWidgets.dateDacarotion(widget
+                                          .idEdit
+                                      ? "${_tableadd.lastDateApply}"
+                                      : "  ${lastdate.day}/${lastdate.month}/${lastdate.year}"))),
                           const SizedBox(
                             height: 10,
                           ),
@@ -503,74 +339,34 @@ class _DataAddState extends State<DataAdd> {
                           Padding(
                               padding: const EdgeInsets.only(top: 5),
                               child: TextFormField(
-                                onTap: () async {
-                                  final date = await pickDate(closedate);
+                                  onTap: () async {
+                                    final date = await pickDate(closedate);
 
-                                  if (date == null) {
-                                    return;
-                                  } else {
-                                    setState(() {
-                                      if (date.compareTo(lastdate) > 0) {
-                                        closedate = date;
-                                        _dateCloseController.text =
-                                            " ${closedate.day}/${closedate.month}/${closedate.year}";
-                                        _tableadd.closeDate =
-                                            " ${closedate.day}/${closedate.month}/${closedate.year}";
-                                      } else {
-                                        _dateCloseController.clear();
-                                      }
-                                    });
-                                  }
-                                },
-                                readOnly: true,
-                                controller: _dateCloseController,
-                                validator: RequiredValidator(
-                                    errorText: "Please Select Correct Date"),
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: kGrey.withAlpha(30),
-                                  contentPadding: const EdgeInsets.all(5),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                          color: kGrey.withAlpha(30))),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                          color: kGrey.withAlpha(30))),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide(
-                                          color: kGrey.withAlpha(30))),
-                                  errorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: const BorderSide(
-                                        color: Colors.red,
-                                      )),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      borderSide: const BorderSide(
-                                        color: Colors.red,
-                                      )),
-                                  hintText:
-                                      "  ${closedate.day}/${closedate.month}/${closedate.year}",
-                                  prefixIcon: Container(
-                                    width: 60,
-                                    height: 50,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(20),
-                                          bottomLeft: Radius.circular(20)),
-                                      color: Colors.grey,
-                                    ),
-                                    child: Icon(
-                                      Icons.watch_later_outlined,
-                                      color: kGrey,
-                                      size: 25,
-                                    ),
-                                  ),
-                                ),
-                              )),
+                                    if (date == null) {
+                                      return;
+                                    } else {
+                                      setState(() {
+                                        if (date.compareTo(lastdate) > 0) {
+                                          closedate = date;
+                                          _dateCloseController.text =
+                                              " ${closedate.day}/${closedate.month}/${closedate.year}";
+                                          _tableadd.closeDate =
+                                              " ${closedate.day}/${closedate.month}/${closedate.year}";
+                                        } else {
+                                          _dateCloseController.clear();
+                                        }
+                                      });
+                                    }
+                                  },
+                                  readOnly: true,
+                                  controller: _dateCloseController,
+                                  validator: RequiredValidator(
+                                      errorText: "Please Select Correct Date"),
+                                  decoration: CustomWidgets.dateDacarotion(
+                                    widget.idEdit
+                                        ? "${_tableadd.closeDate}"
+                                        : "  ${closedate.day}/${closedate.month}/${closedate.year}",
+                                  ))),
                           const SizedBox(
                             height: 10,
                           ),
@@ -619,9 +415,11 @@ class _DataAddState extends State<DataAdd> {
                                   ),
                                   onPressed: () {
                                     Navigator.pop(context);
-                                    _key.currentState!.reset();
+
                                     genderDropdownValue = null;
                                     categoryDropdownValue = null;
+
+                                    _key.currentState!.reset();
                                   },
                                   color: kPrimaryColor,
                                   borderRadius: BorderRadius.circular(20),
@@ -640,29 +438,7 @@ class _DataAddState extends State<DataAdd> {
                                         fontSize: 15,
                                         fontWeight: FontWeight.w600),
                                   ),
-                                  onPressed: () async {
-                                    if (_key.currentState!.validate()) {
-                                      final dbHelper = DatabaseHelper.instance;
-
-                                      Map<String, dynamic> table =
-                                          _tableadd.toMap();
-
-                                      await dbHelper
-                                          .insert(table)
-                                          .whenComplete(() => Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Responsive(
-                                                          context: context,
-                                                          mobile: MobileHome(),
-                                                          tablet: TablateHome(),
-                                                          desktop:
-                                                              DesktopHome(),
-                                                        )),
-                                              ));
-                                    }
-                                  },
+                                  onPressed: (widget.idEdit) ? _edit : _new,
                                   color: kGreen,
                                   borderRadius: BorderRadius.circular(20),
                                   padding: const EdgeInsets.all(10),
@@ -677,6 +453,17 @@ class _DataAddState extends State<DataAdd> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: size.height * 0.07,
+              ),
+              Text(
+                "Copyright © Designed & Developed by Easternts ",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              sizebox5,
+              SizedBox(
+                height: size.height * 0.02,
+              ),
             ],
           ),
         ),
@@ -684,67 +471,101 @@ class _DataAddState extends State<DataAdd> {
     ));
   }
 
-  Widget iconButtonC(IconData icons, Color color, double width) {
-    return CircleAvatar(
-      radius: width * 0.048,
-      backgroundColor: color,
-      child: Icon(
-        icons,
-        size: 15,
-        color: Colors.white,
-      ),
-    );
+  void _new() async {
+    if (_key.currentState!.validate()) {
+      _key.currentState!.save();
+      final dbHelper = DatabaseHelper.instance;
+
+      Map<String, dynamic> table = _tableadd.toMap();
+      // table["Id"] = widget.map["ID"];
+
+      await dbHelper.insert(table).whenComplete(() => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Responsive(
+                      context: context,
+                      mobile: MobileHome(),
+                      tablet: TablateHome(),
+                      desktop: DesktopHome(),
+                    )),
+          ));
+    }
   }
 
-  Widget header(String title) {
-    return Row(
-      children: [
-        Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+  void _edit() async {
+    _key.currentState!.save();
+    final dbHelper = DatabaseHelper.instance;
+
+    Map<String, dynamic> table = _tableadd.toMap();
+    print(table);
+
+    table["Id"] = widget.map["Id"];
+    print(table);
+    await dbHelper.update(table).whenComplete(() => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Responsive(
+                    context: context,
+                    mobile: MobileHome(),
+                    tablet: TablateHome(),
+                    desktop: DesktopHome(),
+                  )),
+        ));
+  }
+
+  Widget iconButtonC(IconData icons, Color color, double width) => CircleAvatar(
+        radius: width * 0.048,
+        backgroundColor: color,
+        child: Icon(
+          icons,
+          size: 15,
+          color: Colors.white,
         ),
-        sizebox5,
-        const Text(
-          "*",
-          style: TextStyle(color: kPrimaryColor, fontSize: 20),
-        )
-      ],
-    );
-  }
+      );
 
-  Widget datepick(Widget child) {
-    return Container(
-      decoration: BoxDecoration(
-        color: kGrey.withAlpha(30),
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      height: 50,
-      width: MediaQuery.of(context).size.width * 70,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 0),
-        child: child,
-      ),
-    );
-  }
+  Widget header(String title) => Row(
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          sizebox5,
+          const Text(
+            "*",
+            style: TextStyle(color: kPrimaryColor, fontSize: 20),
+          )
+        ],
+      );
+
+  Widget datepick(Widget child) => Container(
+        decoration: BoxDecoration(
+          color: kGrey.withAlpha(30),
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        height: 50,
+        width: MediaQuery.of(context).size.width * 70,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 0),
+          child: child,
+        ),
+      );
 
   Widget radioButton(
     Status _value,
-  ) {
-    return Radio(
-      visualDensity: const VisualDensity(
-          horizontal: VisualDensity.minimumDensity,
-          vertical: VisualDensity.minimumDensity),
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      value: _value,
-      groupValue: _status,
-      onChanged: (value) => setState(() {
-        _status = _value;
-        print(_tableadd.status);
-        _tableadd.status = _value.name;
-        print(_tableadd.status);
-      }),
-    );
-  }
+  ) =>
+      Radio(
+        visualDensity: const VisualDensity(
+            horizontal: VisualDensity.minimumDensity,
+            vertical: VisualDensity.minimumDensity),
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        value: _value,
+        groupValue: _status,
+        onChanged: (value) => setState(() {
+          _status = _value;
+
+          _tableadd.status = _value.name;
+        }),
+      );
 }
 
 enum Status { Active, InActive }

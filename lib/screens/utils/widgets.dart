@@ -55,22 +55,70 @@ class CustomWidgets {
 
   static decoration({String? name}) {
     return InputDecoration(
-        filled: true,
-        fillColor: kGrey.withAlpha(30),
-        contentPadding: const EdgeInsets.all(15),
-        enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(color: kGrey.withAlpha(30))),
-        focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(color: kGrey.withAlpha(30))),
-        hintText: name,
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(color: kGrey.withAlpha(30))),
-        errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(color: Colors.red, width: 1)));
+      filled: true,
+      fillColor: kGrey.withAlpha(30),
+      contentPadding: const EdgeInsets.all(15),
+      enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: kGrey.withAlpha(30))),
+      focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: kGrey.withAlpha(30))),
+      hintText: name,
+      border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: kGrey.withAlpha(30))),
+      errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(color: Colors.red, width: 1)),
+      focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(
+            color: Colors.red,
+          )),
+    );
+  }
+
+  static dateDacarotion(String? hint) {
+    return InputDecoration(
+      filled: true,
+      fillColor: kGrey.withAlpha(30),
+      contentPadding: const EdgeInsets.all(5),
+      enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: kGrey.withAlpha(30))),
+      focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: kGrey.withAlpha(30))),
+      border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: kGrey.withAlpha(30))),
+      errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(
+            color: Colors.red,
+          )),
+      focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(
+            color: Colors.red,
+          )),
+      hintText:hint,
+      prefixIcon: Container(
+        width: 60,
+        height: 50,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)),
+          color: Colors.grey,
+        ),
+        child: Icon(
+          Icons.watch_later_outlined,
+          color: kGrey,
+          size: 25,
+        ),
+      ),
+    );
   }
 
   static customAppBar(GlobalKey<ScaffoldState> _drawer) {
@@ -178,6 +226,124 @@ class CustomWidgets {
       backgroundColor: color,
       onPressed: onPressed,
       child: Icon(icons),
+    );
+  }
+
+  static constDrawer(Size size) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 60),
+      child: SizedBox(
+        width: size.width * 0.65,
+        child: Drawer(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+              topRight: Radius.circular(10),
+            )),
+            child: Scrollbar(
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const CircleAvatar(
+                            radius: 40,
+                            backgroundImage: NetworkImage(
+                              "https://miro.medium.com/max/554/1*Ld1KM2WSfJ9YQ4oeRf7q4Q.jpeg",
+                            ),
+                          ),
+                          sizebox5,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Welcome  ",
+                                style: TextStyle(
+                                    color: Colors.grey[800],
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(
+                                height: 7,
+                              ),
+                              Text(
+                                "Superadmin",
+                                style: TextStyle(
+                                    color: Colors.grey[800],
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          sizebox5,
+                          Icon(
+                            Icons.keyboard_arrow_down,
+                            color: Colors.grey[800],
+                            size: 30,
+                          )
+                        ],
+                      ),
+                    ),
+                    sizebox5,
+                    ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          onTap: () {},
+                          horizontalTitleGap: 20,
+                          leading: Icon(
+                            icon[index],
+                            color: Colors.grey[500],
+                          ),
+                          title: Text(
+                            "${drawer[index]}",
+                            style: TextStyle(
+                              color: Colors.grey[500],
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_right,
+                            size: 40,
+                            color: Colors.grey[400],
+                          ),
+                          minLeadingWidth: 25,
+                        );
+                      },
+                      itemCount: drawer.length,
+                    )
+                  ],
+                ),
+              ),
+            )),
+      ),
+    );
+  }
+
+  static flotButton() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        CustomWidgets.flotbutton(
+            onPressed: () {},
+            color: kPrimaryColor.withAlpha(202),
+            icons: Icons.next_plan_sharp),
+        sizebox5,
+        CustomWidgets.flotbutton(
+            onPressed: () {},
+            color: Color.fromRGBO(28, 202, 210, 1),
+            icons: Icons.headset_mic),
+        sizebox5,
+        CustomWidgets.flotbutton(
+            onPressed: () {},
+            color: Color.fromRGBO(144, 194, 94, 1),
+            icons: Icons.shopping_cart_outlined),
+      ],
     );
   }
 }

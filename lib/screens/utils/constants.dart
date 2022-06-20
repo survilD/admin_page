@@ -14,6 +14,7 @@ const kpink = Color.fromRGBO(249, 40, 78, 1);
 const kpen = Color.fromRGBO(216, 246, 243, 1);
 
 const error = "This Field Should Not Empty";
+const copyright = "Copyright © Designed & Developed by Easternts ";
 
 // Image part
 
@@ -30,7 +31,7 @@ const profile = NetworkImage(
 
 //
 
-String ?categoryDropdownValue;
+String? categoryDropdownValue;
 String? genderDropdownValue;
 List<String> categoryItem = [
   "Part Time",

@@ -5,7 +5,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
-  final _databaseName = "MyDatabse,db";
+  final _databaseName = "MyDatabse.db";
   final _databaseversio = 1;
 
   final table = 'my_table';
@@ -48,7 +48,6 @@ class DatabaseHelper {
     } on Exception catch (e) {
       print(e);
     }
-    ;
   }
 
   Future<int> insert(Map<String, dynamic> row) async {
@@ -87,10 +86,4 @@ class DatabaseHelper {
 
     return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
   }
-
-  // Future<int> queryRowone(int id) async {
-  //   Database? db = await instance.database;
-
-  //   return await db.rawQuery(table);
-  // }
 }

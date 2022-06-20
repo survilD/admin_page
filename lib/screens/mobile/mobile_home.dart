@@ -10,7 +10,6 @@ import 'package:flutter_training_1/screens/mobile/mobile_adddata.dart';
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
 
-import '../../dbhelper/dbhelper.dart';
 import '../tablet/tablet_adddata.dart';
 
 class MobileHome extends StatefulWidget {
@@ -31,7 +30,7 @@ class _MobileHomeState extends State<MobileHome> {
       MaterialPageRoute(
           builder: (context) => Responsive(
                 context: context,
-                mobile: DataAdd(),
+                mobile: DataAdd(map: {}, idEdit: false),
                 tablet: TablateDataAdd(),
                 desktop: DesktopDataAdd(),
               )),
@@ -44,201 +43,99 @@ class _MobileHomeState extends State<MobileHome> {
 
     return SafeArea(
       child: Scaffold(
-        key: _drawer,
-        drawerEnableOpenDragGesture: false,
-        drawer: Padding(
-          padding: const EdgeInsets.only(
-            top: 60.0,
-          ),
-          child: SizedBox(
-            width: size.width * 0.65,
-            child: Drawer(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(10),
-                )),
-                child: Scrollbar(
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const CircleAvatar(
-                                radius: 40,
-                                backgroundImage: NetworkImage(
-                                  "https://miro.medium.com/max/554/1*Ld1KM2WSfJ9YQ4oeRf7q4Q.jpeg",
-                                ),
-                              ),
-                              sizebox5,
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Welcome ",
-                                    style: TextStyle(
-                                        color: Colors.grey[800],
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(
-                                    height: 7,
-                                  ),
-                                  Text(
-                                    "Superadmin",
-                                    style: TextStyle(
-                                        color: Colors.grey[800],
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              ),
-                              sizebox5,
-                              Icon(
-                                Icons.keyboard_arrow_down,
-                                color: Colors.grey[800],
-                                size: 30,
-                              )
-                            ],
-                          ),
-                        ),
-                        sizebox5,
-                        ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              onTap: () {},
-                              horizontalTitleGap: 20,
-                              leading: Icon(
-                                icon[index],
-                                color: Colors.grey[500],
-                              ),
-                              title: Text(
-                                "${drawer[index]}",
-                                style: TextStyle(
-                                  color: Colors.grey[500],
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                              trailing: Icon(
-                                Icons.arrow_right,
-                                size: 40,
-                                color: Colors.grey[400],
-                              ),
-                              minLeadingWidth: 25,
-                            );
-                          },
-                          itemCount: drawer.length,
-                        )
-                      ],
-                    ),
-                  ),
-                )),
-          ),
-        ),
-        appBar: CustomWidgets.customAppBar(_drawer),
-        floatingActionButton: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            CustomWidgets.flotbutton(
-                onPressed: () {},
-                color: kPrimaryColor.withAlpha(202),
-                icons: Icons.next_plan_sharp),
-            sizebox5,
-            CustomWidgets.flotbutton(
-                onPressed: () {},
-                color: Color.fromRGBO(28, 202, 210, 1),
-                icons: Icons.headset_mic),
-            sizebox5,
-            CustomWidgets.flotbutton(
-                onPressed: () {},
-                color: Color.fromRGBO(144, 194, 94, 1),
-                icons: Icons.shopping_cart_outlined),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Job List",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: size.width * 0.38,
-                          child: CupertinoButton(
-                            child: FittedBox(
-                              child: const Text(
-                                '+ Add New Job',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                            onPressed: addData,
-                            color: kPrimaryColor,
-                            borderRadius: BorderRadius.circular(20),
-                            padding: const EdgeInsets.all(10),
-                          ),
-                        ),
-                        sizebox5,
-                        GestureDetector(
-                            child: iconButtonC(Icons.mail, size.width)),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        GestureDetector(
-                            child: iconButtonC(Icons.call, size.width)),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        GestureDetector(
-                            child: iconButtonC(Icons.info, size.width))
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Scrollbar(
-                    scrollbarOrientation: ScrollbarOrientation.bottom,
-                    radius: Radius.circular(20),
-                    trackVisibility: true,
-                    child: SingleChildScrollView(
-                      controller: scrollControllertabel,
-                      scrollDirection: Axis.horizontal,
-                      child: FutureBuilder<List<dynamic>?>(
-                          future: DataGet().getData(),
-                          builder: (BuildContext context, snapshot) =>
-                              (snapshot.hasData)
-                                  ? data(snapshot)
-                                  : CircularProgressIndicator()),
-                    ),
-                  )),
-              SizedBox(
-                height: 30,
-              )
-            ],
-          ),
-        ),
-      ),
+          key: _drawer,
+          drawerEnableOpenDragGesture: false,
+          drawer: CustomWidgets.constDrawer(size),
+          appBar: CustomWidgets.customAppBar(_drawer),
+          floatingActionButton: CustomWidgets.flotButton(),
+          body: mainPage(size)),
     );
   }
+
+  Widget mainPage(Size size) =>
+      // Size size = MediaQuery.of(context).size;
+      SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Job List",
+                    style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: size.width * 0.38,
+                        child: CupertinoButton(
+                          child: FittedBox(
+                            child: const Text(
+                              '+ Add New Job',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                          onPressed: addData,
+                          color: kPrimaryColor,
+                          borderRadius: BorderRadius.circular(20),
+                          padding: const EdgeInsets.all(10),
+                        ),
+                      ),
+                      sizebox5,
+                      GestureDetector(
+                          child: iconButtonC(Icons.mail, size.width)),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      GestureDetector(
+                          child: iconButtonC(Icons.call, size.width)),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      GestureDetector(
+                          child: iconButtonC(Icons.info, size.width))
+                    ],
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Scrollbar(
+                  scrollbarOrientation: ScrollbarOrientation.bottom,
+                  radius: Radius.circular(20),
+                  trackVisibility: true,
+                  child: SingleChildScrollView(
+                    controller: scrollControllertabel,
+                    scrollDirection: Axis.horizontal,
+                    child: FutureBuilder<List<dynamic>?>(
+                        future: DataGet().getDataLocal(),
+                        builder: (BuildContext context, snapshot) =>
+                            (snapshot.hasData)
+                                ? data(snapshot)
+                                : CircularProgressIndicator()),
+                  ),
+                )),
+            SizedBox(
+              height: size.height * 0.07,
+            ),
+            Text(
+              copyright,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            sizebox5,
+            SizedBox(
+              height: size.height * 0.02,
+            ),
+          ],
+        ),
+      );
 
   data(AsyncSnapshot<List<dynamic>?> snapshot) {
     if (snapshot.data!.isNotEmpty) {
@@ -262,7 +159,7 @@ class _MobileHomeState extends State<MobileHome> {
             SizedBox(
               height: 20,
             ),
-            Text("Showing  1 of ${row.length} of 9 entries"),
+            Text("Showing  1 of ${row.length}  Entries"),
             SizedBox(
               height: 10,
             ),
@@ -314,7 +211,9 @@ class _MobileHomeState extends State<MobileHome> {
         ),
       );
     } else {
-      return Container(child: Text("No data"));
+      return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.6,
+          child: Center(child: Text("No Data Found")));
     }
   }
 

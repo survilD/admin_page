@@ -5,7 +5,7 @@ class Job {
   String? name;
   String? position;
   String? type;
-  String? gender; 
+  String? gender;
   String? postedDate;
   String? lastDateApply;
   String? closeDate;
@@ -58,16 +58,16 @@ class Job {
 
   factory Job.fromMap(Map<String, dynamic> map) {
     return Job(
-      name: map['name'] != null ? map['name'] as String : null,
-      position: map['position'] != null ? map['position'] as String : null,
-      type: map['type'] != null ? map['type'] as String : null,
-      gender: map['gender'] != null ? map['gender'] as String : null,
+      name: map['Name'] != null ? map['Name'] as String : null,
+      position: map['Position'] != null ? map['Position'] as String : null,
+      type: map['Type'] != null ? map['Type'] as String : null,
+      gender: map['Gender'] != null ? map['Gender'] as String : null,
       postedDate:
-          map['postedDate'] != null ? map['postedDate'] as String : null,
+          map['PostedDate'] != null ? map['PostedDate'] as String : null,
       lastDateApply:
-          map['lastDateApply'] != null ? map['lastDateApply'] as String : null,
-      closeDate: map['closeDate'] != null ? map['closeDate'] as String : null,
-      status: map['status'] != null ? map['status'] as String : null,
+          map['LastDateApply'] != null ? map['LastDateApply'] as String : null,
+      closeDate: map['CloseDate'] != null ? map['CloseDate'] as String : null,
+      status: map['Status'] != null ? map['Status'] as String : null,
     );
   }
 

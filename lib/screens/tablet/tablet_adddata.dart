@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,8 +9,9 @@ import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
 
 class TablateDataAdd extends StatefulWidget {
-  const TablateDataAdd({Key? key, }) : super(key: key);
- 
+  const TablateDataAdd({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<TablateDataAdd> createState() => _MobileHomeState();
@@ -100,8 +100,6 @@ class _MobileHomeState extends State<TablateDataAdd> {
     return _items;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -110,21 +108,21 @@ class _MobileHomeState extends State<TablateDataAdd> {
         child: LayoutBuilder(
       builder: (context, constraints) => Scaffold(
         floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          CustomWidgets.flotbutton(
-              onPressed: () {},
-              color: Color.fromRGBO(28, 202, 210, 1),
-              icons: Icons.headset_mic),
-          SizedBox(
-            height: 5,
-          ),
-          CustomWidgets.flotbutton(
-              onPressed: () {},
-              color: Color.fromRGBO(144, 194, 94, 1),
-              icons: Icons.shopping_cart_outlined),
-        ],
-      ),
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            CustomWidgets.flotbutton(
+                onPressed: () {},
+                color: Color.fromRGBO(28, 202, 210, 1),
+                icons: Icons.headset_mic),
+            SizedBox(
+              height: 5,
+            ),
+            CustomWidgets.flotbutton(
+                onPressed: () {},
+                color: Color.fromRGBO(144, 194, 94, 1),
+                icons: Icons.shopping_cart_outlined),
+          ],
+        ),
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(height * 0.14),
           child: Container(
@@ -146,7 +144,6 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                 color: Colors.white,
                               ),
                             ),
-                          
                           ],
                         ),
                       )),
@@ -179,8 +176,6 @@ class _MobileHomeState extends State<TablateDataAdd> {
                             ),
                           ),
                         ),
-
-                       
                         SizedBox(
                           width: 20,
                         ),
@@ -234,7 +229,6 @@ class _MobileHomeState extends State<TablateDataAdd> {
                 child: SingleChildScrollView(
                   child: Container(
                     color: Colors.white,
-                    height: height,
                     width: width * 0.02,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 8),
@@ -268,8 +262,6 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                   ),
                                 ),
                               );
-
-                              
                             },
                           ),
                         ],
@@ -332,7 +324,7 @@ class _MobileHomeState extends State<TablateDataAdd> {
                             child: Column(
                               children: [
                                 SizedBox(
-                                    height: height * 0.13,
+                                    // height: height * 0.13,
                                     width: width * 0.9,
                                     child: Row(
                                       children: [
@@ -356,7 +348,7 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                       ],
                                     )),
                                 SizedBox(
-                                    height: height * 0.13,
+                                    // height: height * 0.13,
                                     width: width * 0.9,
                                     child: Row(
                                       children: [
@@ -463,7 +455,7 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                       ],
                                     )),
                                 SizedBox(
-                                    height: height * 0.13,
+                                    // height: height * 0.13,
                                     width: width * 0.9,
                                     child: Row(
                                       children: [
@@ -523,7 +515,7 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                       ],
                                     )),
                                 SizedBox(
-                                    height: height * 0.13,
+                                    // height: height * 0.13,
                                     width: width * 0.9,
                                     child: Row(
                                       children: [
@@ -584,7 +576,7 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                     )),
                                 sizebox,
                                 SizedBox(
-                                    height: height * 0.13,
+                                    // height: height * 0.13,
                                     width: width * width,
                                     child: Column(
                                       children: [
@@ -623,7 +615,7 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                   ],
                                 ),
                                 SizedBox(
-                                  height: height * 0.13,
+                                  // height: height * 0.13,
                                   width: width * 0.9,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,

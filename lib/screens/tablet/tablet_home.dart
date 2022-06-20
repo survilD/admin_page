@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_training_1/data.dart';
 import 'package:flutter_training_1/dbhelper/getdata.dart';
+import 'package:flutter_training_1/model/tabel_model.dart';
 import 'package:flutter_training_1/responsive.dart';
 import 'package:flutter_training_1/screens/tablet/tablet_adddata.dart';
 
@@ -32,7 +33,10 @@ class _MobileHomeState extends State<TablateHome> {
       MaterialPageRoute(
           builder: (context) => Responsive(
                 context: context,
-                mobile: DataAdd(),
+                mobile: DataAdd(
+                  map: {},
+                  idEdit: false,
+                ),
                 tablet: TablateDataAdd(),
                 desktop: DesktopDataAdd(),
               )),
@@ -41,6 +45,7 @@ class _MobileHomeState extends State<TablateHome> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return SafeArea(
@@ -173,7 +178,6 @@ class _MobileHomeState extends State<TablateHome> {
                   controller: scrollController,
                   child: Container(
                     color: Colors.white,
-                    height: height,
                     width: width * 0.02,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 8),
@@ -228,23 +232,26 @@ class _MobileHomeState extends State<TablateHome> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              "Job List",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w900, fontSize: 20),
+                            FittedBox(
+                              child: const Text(
+                                "Job List",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w900, fontSize: 20),
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Row(
                                 children: [
                                   SizedBox(
-                                    width: width * 0.1,
+                                    width: width * 0.12,
+                                    height: height * 0.09,
                                     child: CupertinoButton(
                                       child: FittedBox(
-                                        child: const Text(
+                                        child: Text(
                                           '+ Add New Job',
                                           style: TextStyle(
-                                              fontSize: 15,
+                                              fontSize: width * 0.9,
                                               fontWeight: FontWeight.w600),
                                         ),
                                       ),
@@ -258,20 +265,20 @@ class _MobileHomeState extends State<TablateHome> {
                                     width: 10,
                                   ),
                                   GestureDetector(
-                                      child: iconButtonC(
-                                          Icons.mail, width * 1.5, 15)),
+                                      child: iconButtonC(Icons.mail,
+                                          width * 1.5, size.width * 0.015)),
                                   const SizedBox(
                                     width: 10,
                                   ),
                                   GestureDetector(
-                                      child: iconButtonC(
-                                          Icons.call, width * 1.5, 15)),
+                                      child: iconButtonC(Icons.call,
+                                          width * 1.5, size.width * 0.015)),
                                   const SizedBox(
                                     width: 10,
                                   ),
                                   GestureDetector(
-                                      child: iconButtonC(
-                                          Icons.info, width * 1.5, 15))
+                                      child: iconButtonC(Icons.info,
+                                          width * 1.5, size.width * 0.015))
                                 ],
                               ),
                             )
@@ -287,18 +294,15 @@ class _MobileHomeState extends State<TablateHome> {
                             future: DataGet().getData(),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-                                // List<dynamic>? data = snapshot.data;
-                                //      List<DataColumn> colm =
-                                // Data.getcolume(data) as List<DataColumn>;
-                                // List<DataRow> row = [];
-                                // if (data != null) {
-                                //   colm =
-                                //       Data.getcolume(data) as List<DataColumn>;
-                                //   row = Data.getrow(data);
-                                // }
+                                List<dynamic>? data = snapshot.data;
+                                List<DataColumn> colm =
+                                    Data.getcolume(data!, context)
+                                        as List<DataColumn>;
+
+                                List<DataRow> row = Data.getrow(data, context);
 
                                 return Scrollbar(
-                                  controller: scrollControllertabel,
+                                  // controller: scrollControllertabel,
                                   thickness: 6,
                                   radius: Radius.circular(20),
                                   child: SingleChildScrollView(
@@ -315,8 +319,8 @@ class _MobileHomeState extends State<TablateHome> {
                                             columnSpacing: width * 0.05,
                                             dataRowHeight: 70,
                                             dividerThickness: 1,
-                                            columns: [],
-                                            rows: [],
+                                            columns: colm,
+                                            rows: row,
                                           ),
                                         ),
                                         SizedBox(

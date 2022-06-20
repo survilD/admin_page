@@ -10,6 +10,7 @@ import 'package:flutter_training_1/screens/tablet/tablet_adddata.dart';
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
 
+import '../../model/tabel_model.dart';
 import '../../responsive.dart';
 import '../mobile/mobile_adddata.dart';
 
@@ -34,7 +35,7 @@ class _MobileHomeState extends State<DesktopHome> {
       MaterialPageRoute(
           builder: (context) => Responsive(
                 context: context,
-                mobile: DataAdd(),
+                mobile: DataAdd(map: {}, idEdit: false),
                 tablet: TablateDataAdd(),
                 desktop: DesktopDataAdd(),
               )),
@@ -353,6 +354,7 @@ class _MobileHomeState extends State<DesktopHome> {
                               children: [
                                 SizedBox(
                                   width: width * 0.1,
+                                  
                                   child: CupertinoButton(
                                     child: FittedBox(
                                       child: const Text(
@@ -403,8 +405,10 @@ class _MobileHomeState extends State<DesktopHome> {
                               AsyncSnapshot<List?> snapshot) {
                             if (snapshot.hasData) {
                               List<dynamic> data = snapshot.data as List;
-                              List<DataColumn> colm =   Data.getcolume(data,context) as List<DataColumn>;
-                              List<DataRow> row = Data.getrow(data,context);
+                              List<DataColumn> colm =
+                                  Data.getcolume(data, context)
+                                      as List<DataColumn>;
+                              List<DataRow> row = Data.getrow(data, context);
 
                               return Scrollbar(
                                 scrollbarOrientation:
