@@ -9,8 +9,10 @@ import 'package:flutter_training_1/screens/mobile/mobile_adddata.dart';
 
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../tablet/tablet_adddata.dart';
+import 'dataProvider.dart';
 
 class MobileHome extends StatefulWidget {
   const MobileHome({
@@ -23,6 +25,12 @@ class MobileHome extends StatefulWidget {
 
 class _MobileHomeState extends State<MobileHome> {
   final _drawer = GlobalKey<ScaffoldState>();
+  @override
+  void initState() {
+    super.initState();
+    final postMdl = Provider.of<DataProvider>(context, listen: false);
+    postMdl.getPostdata(context);
+  }
 
   void addData() async {
     Navigator.push(
@@ -31,7 +39,7 @@ class _MobileHomeState extends State<MobileHome> {
           builder: (context) => Responsive(
                 context: context,
                 mobile: DataAdd(map: {}, idEdit: false),
-                tablet: TablateDataAdd(),
+                tablet: TablateDataAdd(map: {}, idEdit: false),
                 desktop: DesktopDataAdd(),
               )),
     );
@@ -39,6 +47,7 @@ class _MobileHomeState extends State<MobileHome> {
 
   @override
   Widget build(BuildContext context) {
+    final postMdl = Provider.of<DataProvider>(context);
     Size size = MediaQuery.of(context).size;
 
     return SafeArea(
@@ -48,11 +57,11 @@ class _MobileHomeState extends State<MobileHome> {
           drawer: CustomWidgets.constDrawer(size),
           appBar: CustomWidgets.customAppBar(_drawer),
           floatingActionButton: CustomWidgets.flotButton(),
-          body: mainPage(size)),
+          body: mainPage(size, postMdl)),
     );
   }
 
-  Widget mainPage(Size size) =>
+  Widget mainPage(Size size, DataProvider postMdl) =>
       // Size size = MediaQuery.of(context).size;
       SingleChildScrollView(
         child: Column(
@@ -71,7 +80,7 @@ class _MobileHomeState extends State<MobileHome> {
                       SizedBox(
                         width: size.width * 0.38,
                         child: CupertinoButton(
-                          child: FittedBox(
+                          child: const FittedBox(
                             child: const Text(
                               '+ Add New Job',
                               style: TextStyle(
@@ -112,15 +121,11 @@ class _MobileHomeState extends State<MobileHome> {
                   radius: Radius.circular(20),
                   trackVisibility: true,
                   child: SingleChildScrollView(
-                    controller: scrollControllertabel,
-                    scrollDirection: Axis.horizontal,
-                    child: FutureBuilder<List<dynamic>?>(
-                        future: DataGet().getDataLocal(),
-                        builder: (BuildContext context, snapshot) =>
-                            (snapshot.hasData)
-                                ? data(snapshot)
-                                : CircularProgressIndicator()),
-                  ),
+                      controller: scrollControllertabel,
+                      scrollDirection: Axis.horizontal,
+                      child: postMdl.loading
+                          ? Center(child: CircularProgressIndicator())
+                          : data(postMdl)),
                 )),
             SizedBox(
               height: size.height * 0.07,
@@ -129,7 +134,6 @@ class _MobileHomeState extends State<MobileHome> {
               copyright,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            sizebox5,
             SizedBox(
               height: size.height * 0.02,
             ),
@@ -137,14 +141,13 @@ class _MobileHomeState extends State<MobileHome> {
         ),
       );
 
-  data(AsyncSnapshot<List<dynamic>?> snapshot) {
-    if (snapshot.data!.isNotEmpty) {
-      List<dynamic> data = snapshot.data as List;
+  Widget data(DataProvider postMdl) {
+    if (postMdl.jobnew!.isNotEmpty) {
+      List<Map<String, dynamic>> data = postMdl.jobnew!;
 
-      List<DataColumn>? colm =
-          Data.getcolume(data, context) as List<DataColumn>;
+      List<DataColumn> column = Data.getcolume(data, context);
 
-      List<DataRow> row = Data.getrow(data, context);
+      List<DataRow> row = Data.getrow(data, context,postMdl);
 
       return Card(
         child: Column(
@@ -153,7 +156,7 @@ class _MobileHomeState extends State<MobileHome> {
               columnSpacing: 25,
               dataRowHeight: 70,
               dividerThickness: 5,
-              columns: colm,
+              columns: column,
               rows: row,
             ),
             SizedBox(

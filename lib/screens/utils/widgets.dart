@@ -46,7 +46,6 @@ class CustomWidgets {
   }) {
     return TextFormField(
         onChanged: onSaved,
-        onSaved: onSaved,
         validator: RequiredValidator(errorText: error!),
         controller: controller,
         cursorColor: kGrey.withAlpha(30),
@@ -57,7 +56,7 @@ class CustomWidgets {
     return InputDecoration(
       filled: true,
       fillColor: kGrey.withAlpha(30),
-      contentPadding: const EdgeInsets.all(15),
+      contentPadding: const EdgeInsets.all(10),
       enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
           borderSide: BorderSide(color: kGrey.withAlpha(30))),
@@ -103,7 +102,7 @@ class CustomWidgets {
           borderSide: const BorderSide(
             color: Colors.red,
           )),
-      hintText:hint,
+      hintText: hint,
       prefixIcon: Container(
         width: 60,
         height: 50,

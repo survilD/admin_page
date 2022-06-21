@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_training_1/dbhelper/dbhelper.dart';
 import 'package:flutter_training_1/model/tabel_model.dart';
+import 'package:flutter_training_1/screens/mobile/dataProvider.dart';
 import 'package:flutter_training_1/screens/tablet/tablet_home.dart';
 
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:provider/provider.dart';
 
 import '../../responsive.dart';
 import '../desktop/desktop_home.dart';
@@ -41,40 +43,19 @@ class _DataAddState extends State<DataAdd> {
 
   void onchagecategory(String value) {
     setState(() {
-      categoryDropdownValue = value;
+      // categoryDropdownValue = value;
       _tableadd.type = value;
     });
   }
-
-  // void dateset(DateTime dateTime, TextEditingController controller) async {
-  //   final date = await pickDate(dateTime);
-
-  //   if (date == null) {
-  //     return;
-  //   } else {
-  //     setState(() {
-  //       if (date.compareTo(dateTime) > 0) {
-  //         dateTime = date;
-  //         controller.text =
-  //             " ${dateTime.day}/${dateTime.month}/${dateTime.year}";
-  //         _tableadd.postedDate =
-  //             " ${dateTime.day}/${dateTime.month}/${dateTime.year}";
-  //       } else {
-  //         controller.clear();
-  //       }
-  //     });
-  //   }
-  // }
 
   @override
   void initState() {
     // List value = widget.map.values.toList();
 
     super.initState();
+    final postMdl = Provider.of<DataProvider>(context, listen: false);
     if (widget.idEdit) {
       _tableadd = Job.fromMap(widget.map);
-      print(_tableadd);
-      print(widget.map["Id"]);
 
       _namecontroller.text = _tableadd.name.toString().toUpperCase();
       _positioncontroller.text = _tableadd.position.toString().toUpperCase();
@@ -98,6 +79,7 @@ class _DataAddState extends State<DataAdd> {
 
   @override
   Widget build(BuildContext context) {
+    final postMdl = Provider.of<DataProvider>(context);
     //  _tableadd = widget.job;
     _tableadd.status = _status.name;
     Size size = MediaQuery.of(context).size;
@@ -171,7 +153,7 @@ class _DataAddState extends State<DataAdd> {
                           CustomWidgets.newformfield(
                               name: "Name",
                               controller: _namecontroller,
-                              onSaved: (val) async {
+                              onSaved: (val) {
                                 setState(() {
                                   _tableadd.name = _namecontroller.text;
                                 });
@@ -256,7 +238,7 @@ class _DataAddState extends State<DataAdd> {
                                   },
                                 ).toList(),
                                 onChanged: (value) => setState(() {
-                                      genderDropdownValue = value.toString();
+                                      // genderDropdownValue = value.toString();
                                       _tableadd.gender = value.toString();
                                     })),
                           ),
@@ -438,7 +420,9 @@ class _DataAddState extends State<DataAdd> {
                                         fontSize: 15,
                                         fontWeight: FontWeight.w600),
                                   ),
-                                  onPressed: (widget.idEdit) ? _edit : _new,
+                                  onPressed: () => (widget.idEdit)
+                                      ? _edit(postMdl)
+                                      : _new(postMdl),
                                   color: kGreen,
                                   borderRadius: BorderRadius.circular(20),
                                   padding: const EdgeInsets.all(10),
@@ -471,46 +455,21 @@ class _DataAddState extends State<DataAdd> {
     ));
   }
 
-  void _new() async {
+  void _new(DataProvider dataProvider) async {
     if (_key.currentState!.validate()) {
-      _key.currentState!.save();
-      final dbHelper = DatabaseHelper.instance;
+      await dataProvider.onAdd(context, _tableadd);
 
-      Map<String, dynamic> table = _tableadd.toMap();
-      // table["Id"] = widget.map["ID"];
-
-      await dbHelper.insert(table).whenComplete(() => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Responsive(
-                      context: context,
-                      mobile: MobileHome(),
-                      tablet: TablateHome(),
-                      desktop: DesktopHome(),
-                    )),
-          ));
+      _key.currentState!.reset();
+      Navigator.of(context).pop();
     }
   }
 
-  void _edit() async {
+  void _edit(DataProvider dataProvider) async {
     _key.currentState!.save();
-    final dbHelper = DatabaseHelper.instance;
+    dataProvider.onUpdate(context, _tableadd, widget.map);
 
-    Map<String, dynamic> table = _tableadd.toMap();
-    print(table);
-
-    table["Id"] = widget.map["Id"];
-    print(table);
-    await dbHelper.update(table).whenComplete(() => Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Responsive(
-                    context: context,
-                    mobile: MobileHome(),
-                    tablet: TablateHome(),
-                    desktop: DesktopHome(),
-                  )),
-        ));
+    _key.currentState!.reset();
+    Navigator.of(context).pop();
   }
 
   Widget iconButtonC(IconData icons, Color color, double width) => CircleAvatar(

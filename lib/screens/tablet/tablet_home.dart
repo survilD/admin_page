@@ -37,7 +37,10 @@ class _MobileHomeState extends State<TablateHome> {
                   map: {},
                   idEdit: false,
                 ),
-                tablet: TablateDataAdd(),
+                tablet: TablateDataAdd(
+                  idEdit: false,
+                  map: {},
+                ),
                 desktop: DesktopDataAdd(),
               )),
     );
@@ -232,8 +235,8 @@ class _MobileHomeState extends State<TablateHome> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            FittedBox(
-                              child: const Text(
+                            const FittedBox(
+                              child: Text(
                                 "Job List",
                                 style: TextStyle(
                                     fontWeight: FontWeight.w900, fontSize: 20),
@@ -244,14 +247,13 @@ class _MobileHomeState extends State<TablateHome> {
                               child: Row(
                                 children: [
                                   SizedBox(
-                                    width: width * 0.12,
+                                    width: width * 0.15,
                                     height: height * 0.09,
                                     child: CupertinoButton(
-                                      child: FittedBox(
+                                      child: const FittedBox(
                                         child: Text(
                                           '+ Add New Job',
                                           style: TextStyle(
-                                              fontSize: width * 0.9,
                                               fontWeight: FontWeight.w600),
                                         ),
                                       ),
@@ -265,28 +267,25 @@ class _MobileHomeState extends State<TablateHome> {
                                     width: 10,
                                   ),
                                   GestureDetector(
-                                      child: iconButtonC(Icons.mail,
-                                          width * 1.5, size.width * 0.015)),
+                                      child: iconButtonC(Icons.mail, width * 2,
+                                          size.width * 0.02)),
                                   const SizedBox(
                                     width: 10,
                                   ),
                                   GestureDetector(
-                                      child: iconButtonC(Icons.call,
-                                          width * 1.5, size.width * 0.015)),
+                                      child: iconButtonC(Icons.call, width * 2,
+                                          size.width * 0.02)),
                                   const SizedBox(
                                     width: 10,
                                   ),
                                   GestureDetector(
-                                      child: iconButtonC(Icons.info,
-                                          width * 1.5, size.width * 0.015))
+                                      child: iconButtonC(Icons.info, width * 2,
+                                          size.width * 0.02))
                                 ],
                               ),
                             )
                           ],
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
                       ),
                       Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -299,7 +298,9 @@ class _MobileHomeState extends State<TablateHome> {
                                     Data.getcolume(data!, context)
                                         as List<DataColumn>;
 
-                                List<DataRow> row = Data.getrow(data, context);
+                                List<DataRow> row = [];
+
+                                // Data.getrow(data, context,[]);
 
                                 return Scrollbar(
                                   // controller: scrollControllertabel,
@@ -316,7 +317,7 @@ class _MobileHomeState extends State<TablateHome> {
                                                   BorderRadius.circular(20)),
                                           child: DataTable(
                                             sortColumnIndex: 1,
-                                            columnSpacing: width * 0.05,
+                                            columnSpacing: width * 0.09,
                                             dataRowHeight: 70,
                                             dividerThickness: 1,
                                             columns: colm,
@@ -390,8 +391,16 @@ class _MobileHomeState extends State<TablateHome> {
                                           ),
                                         ),
                                         SizedBox(
-                                          height: 20,
-                                        )
+                                          height: size.height * 0.07,
+                                        ),
+                                        Text(
+                                          copyright,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                          height: size.height * 0.02,
+                                        ),
                                       ],
                                     ),
                                   ),

@@ -3,14 +3,20 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_training_1/model/tabel_model.dart';
 
 import 'package:flutter_training_1/screens/mobile/mobile_adddata.dart';
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 
 class TablateDataAdd extends StatefulWidget {
+  final Map<String, dynamic> map;
+  final bool idEdit;
   const TablateDataAdd({
     Key? key,
+    required this.map,
+    required this.idEdit,
   }) : super(key: key);
 
   @override
@@ -19,8 +25,15 @@ class TablateDataAdd extends StatefulWidget {
 
 class _MobileHomeState extends State<TablateDataAdd> {
   ScrollController scrollController = ScrollController(initialScrollOffset: 5);
-  final TextEditingController _namecontroller = TextEditingController();
+
+  Job tableData = Job();
+
   final TextEditingController _positioncontroller = TextEditingController();
+  final TextEditingController _namecontroller = TextEditingController();
+  final TextEditingController _datePostController = TextEditingController();
+  final TextEditingController _dateLastController = TextEditingController();
+  final TextEditingController _dateCloseController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   ScrollController scrollControllertabel =
       ScrollController(initialScrollOffset: 5);
@@ -30,15 +43,7 @@ class _MobileHomeState extends State<TablateDataAdd> {
     width: 5,
   );
   Status _status = Status.Active;
-  String categoryDropdownValue = "Choose..";
-  String genderDropdownValue = "Choose..";
-  List<String> categoryItem = [
-    "Part Time",
-    "Full Time",
-    "Freelancer",
-    "Choose.."
-  ];
-  List<String> genderItem = ["Male", "Female", "Choose.."];
+
   DateTime postedDate = DateTime(2022, 01, 24);
   DateTime lastdate = DateTime(2022, 01, 24);
   DateTime closedate = DateTime(2022, 01, 24);
@@ -62,42 +67,6 @@ class _MobileHomeState extends State<TablateDataAdd> {
         initialDate: dateTime,
         firstDate: DateTime(1900),
         lastDate: DateTime(2100));
-  }
-
-  List<IconData> icon = [
-    Icons.dashboard,
-    Icons.flag,
-    Icons.info,
-    Icons.monitor_heart,
-    Icons.star,
-    Icons.health_and_safety_rounded,
-    Icons.currency_yen_sharp,
-    Icons.print_rounded,
-    Icons.horizontal_split,
-    Icons.pages_rounded
-  ];
-
-  final List drawer = [
-    "Dashboard",
-    "Jobs",
-    "Apps",
-    "Chart",
-    "Bootstrap",
-    "Plugins",
-    "Widget",
-    "Forms",
-    "Table",
-    "Pages"
-  ];
-
-  Future<List<dynamic>> getData() async {
-    var _items = [];
-
-    var jsonText = await rootBundle.loadString('assets/Json/demo.json');
-
-    _items = await json.decode(jsonText);
-
-    return _items;
   }
 
   @override
@@ -294,20 +263,20 @@ class _MobileHomeState extends State<TablateDataAdd> {
                             child: Row(
                               children: [
                                 GestureDetector(
-                                    child: iconButtonC(
-                                        Icons.mail, width * 1.5, 15, kGreen)),
+                                    child: iconButtonC(Icons.mail, width * 2,
+                                        width * 0.02, kGreen)),
                                 const SizedBox(
                                   width: 10,
                                 ),
                                 GestureDetector(
-                                    child: iconButtonC(
-                                        Icons.call, width * 1.5, 15, kGreen)),
+                                    child: iconButtonC(Icons.call, width * 2,
+                                        width * 0.02, kGreen)),
                                 const SizedBox(
                                   width: 10,
                                 ),
                                 GestureDetector(
-                                    child: iconButtonC(Icons.info, width * 1.5,
-                                        15, kPrimaryColor))
+                                    child: iconButtonC(Icons.info, width * 2,
+                                        width * 0.02, kPrimaryColor))
                               ],
                             ),
                           )
@@ -330,25 +299,39 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                       children: [
                                         Expanded(
                                             child: box(
-                                                controller: _namecontroller,
-                                                error: "Please Enter Name",
-                                                title: "Company Name",
-                                                width: width)),
+                                          controller: _namecontroller,
+                                          error: "This Field Should Not Empty",
+                                          title: "Company Name",
+                                          width: width,
+                                          onSaved: (val) async {
+                                            setState(() {
+                                              tableData.name =
+                                                  _namecontroller.text;
+                                            });
+                                          },
+                                        )),
                                         SizedBox(
                                           width: width * 0.02,
                                         ),
                                         Expanded(
                                           child: box(
-                                              error:
-                                                  "This Field Should Not Empty",
-                                              controller: _positioncontroller,
-                                              title: "Position",
-                                              width: width),
+                                            error:
+                                                "This Field Should Not Empty",
+                                            controller: _positioncontroller,
+                                            title: "Position",
+                                            width: width,
+                                            onSaved: (val) async {
+                                              setState(() {
+                                                tableData.position =
+                                                    _positioncontroller.text;
+                                              });
+                                            },
+                                          ),
                                         )
                                       ],
                                     )),
                                 SizedBox(
-                                    // height: height * 0.13,
+                                    // height: height * 0.2,
                                     width: width * 0.9,
                                     child: Row(
                                       children: [
@@ -358,45 +341,46 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                             header("Job Type"),
                                             sizebox,
                                             Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 5),
-                                                child:
-                                                    CustomWidgets.dropDownForm(
-                                                  context: context,
-                                                  child: Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 5),
+                                              child: DropdownButtonFormField(
+                                                  decoration: CustomWidgets
+                                                      .decoration(),
+                                                  elevation: 0,
+                                                  hint: Padding(
                                                     padding:
                                                         const EdgeInsets.only(
-                                                            right: 20),
-                                                    child: DropdownButton(
-                                                        isExpanded: true,
-                                                        underline: SizedBox(),
-                                                        elevation: 0,
-                                                        iconSize: 0,
-                                                        value:
-                                                            categoryDropdownValue,
-                                                        items: categoryItem.map<
-                                                            DropdownMenuItem<
-                                                                String>>(
-                                                          (value) {
-                                                            return DropdownMenuItem<
-                                                                String>(
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        10.0),
-                                                                child:
-                                                                    Text(value),
-                                                              ),
-                                                              value: value,
-                                                            );
-                                                          },
-                                                        ).toList(),
-                                                        onChanged: (value) =>
-                                                            onchagecategory(value
-                                                                .toString())),
+                                                            left: 5),
+                                                    child: Text(
+                                                      "Select Job Type",
+                                                    ),
                                                   ),
-                                                )),
+                                                  iconSize: 0,
+                                                  validator: (val) => val ==
+                                                          null
+                                                      ? "Please Select Job Type"
+                                                      : null,
+                                                  value: categoryDropdownValue,
+                                                  items: categoryItem.map<
+                                                      DropdownMenuItem<String>>(
+                                                    (value) {
+                                                      return DropdownMenuItem<
+                                                          String>(
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 5.0),
+                                                          child: Text(value),
+                                                        ),
+                                                        value: value,
+                                                      );
+                                                    },
+                                                  ).toList(),
+                                                  onChanged: (value) =>
+                                                      onchagecategory(
+                                                          value.toString())),
+                                            ),
                                           ],
                                         )),
                                         SizedBox(
@@ -408,54 +392,54 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                             header("Select Gender:"),
                                             sizebox,
                                             Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 5),
-                                                child:
-                                                    CustomWidgets.dropDownForm(
-                                                  context: context,
-                                                  child: Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 5),
+                                              child: DropdownButtonFormField(
+                                                  decoration: CustomWidgets
+                                                      .decoration(),
+                                                  elevation: 0,
+                                                  iconSize: 0,
+                                                  validator: (val) => val ==
+                                                          null
+                                                      ? "Please Select Gender Type"
+                                                      : null,
+                                                  value: genderDropdownValue,
+                                                  hint: Padding(
                                                     padding:
                                                         const EdgeInsets.only(
-                                                            right: 20),
-                                                    child: DropdownButton(
-                                                        isExpanded: true,
-                                                        underline: Container(),
-                                                        elevation: 0,
-                                                        iconSize: 0,
-                                                        value:
-                                                            genderDropdownValue,
-                                                        items: genderItem.map<
-                                                            DropdownMenuItem<
-                                                                String>>(
-                                                          (value) {
-                                                            return DropdownMenuItem<
-                                                                String>(
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        10.0),
-                                                                child:
-                                                                    Text(value),
-                                                              ),
-                                                              value: value,
-                                                            );
-                                                          },
-                                                        ).toList(),
-                                                        onChanged: (value) =>
-                                                            setState(() {
-                                                              genderDropdownValue =
-                                                                  value
-                                                                      .toString();
-                                                            })),
+                                                            left: 5),
+                                                    child: Text(
+                                                        "Select Gender Type"),
                                                   ),
-                                                )),
+                                                  items: genderItem.map<
+                                                      DropdownMenuItem<String>>(
+                                                    (value) {
+                                                      return DropdownMenuItem<
+                                                          String>(
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 5),
+                                                          child: Text(value),
+                                                        ),
+                                                        value: value,
+                                                      );
+                                                    },
+                                                  ).toList(),
+                                                  onChanged: (value) =>
+                                                      setState(() {
+                                                        genderDropdownValue =
+                                                            value.toString();
+                                                        tableData.gender =
+                                                            value.toString();
+                                                      })),
+                                            ),
                                           ],
                                         ))
                                       ],
                                     )),
                                 SizedBox(
-                                    // height: height * 0.13,
                                     width: width * 0.9,
                                     child: Row(
                                       children: [
@@ -466,9 +450,8 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                             Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 5),
-                                                child: CustomWidgets.datepiker(
-                                                    context: context,
-                                                    onPressed: () async {
+                                                child: TextFormField(
+                                                    onTap: () async {
                                                       final date =
                                                           await pickDate(
                                                               postedDate);
@@ -477,11 +460,35 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                                         return;
                                                       } else {
                                                         setState(() {
-                                                          postedDate = date;
+                                                          if (date.compareTo(
+                                                                  postedDate) >
+                                                              0) {
+                                                            postedDate = date;
+                                                            _datePostController
+                                                                    .text =
+                                                                " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
+                                                            tableData
+                                                                    .postedDate =
+                                                                " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
+                                                          } else {
+                                                            _datePostController
+                                                                .clear();
+                                                          }
                                                         });
                                                       }
                                                     },
-                                                    dateTime: postedDate)),
+                                                    readOnly: true,
+                                                    controller:
+                                                        _datePostController,
+                                                    validator: RequiredValidator(
+                                                        errorText:
+                                                            "Please Select Correct Date"),
+                                                    decoration: CustomWidgets
+                                                        .dateDacarotion(
+                                                      widget.idEdit
+                                                          ? "${tableData.postedDate}"
+                                                          : "  ${postedDate.day}/${postedDate.month}/${postedDate.year}",
+                                                    ))),
                                           ],
                                         )),
                                         SizedBox(
@@ -494,22 +501,44 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                             Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 5),
-                                                child: CustomWidgets.datepiker(
-                                                  context: context,
-                                                  dateTime: lastdate,
-                                                  onPressed: () async {
-                                                    final date = await pickDate(
-                                                        lastdate);
+                                                child: TextFormField(
+                                                    onTap: () async {
+                                                      final date =
+                                                          await pickDate(
+                                                              lastdate);
 
-                                                    if (date == null) {
-                                                      return;
-                                                    } else {
-                                                      setState(() {
-                                                        lastdate = date;
-                                                      });
-                                                    }
-                                                  },
-                                                )),
+                                                      if (date == null) {
+                                                        return;
+                                                      } else {
+                                                        setState(() {
+                                                          if (date.compareTo(
+                                                                  postedDate) >
+                                                              0) {
+                                                            lastdate = date;
+                                                            _dateLastController
+                                                                    .text =
+                                                                " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
+                                                            tableData
+                                                                    .lastDateApply =
+                                                                " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
+                                                          } else {
+                                                            _dateLastController
+                                                                .clear();
+                                                          }
+                                                        });
+                                                      }
+                                                    },
+                                                    readOnly: true,
+                                                    controller:
+                                                        _dateLastController,
+                                                    validator: RequiredValidator(
+                                                        errorText:
+                                                            "Please Select Correct Date"),
+                                                    decoration: CustomWidgets
+                                                        .dateDacarotion(widget
+                                                                .idEdit
+                                                            ? "${tableData.lastDateApply}"
+                                                            : "  ${lastdate.day}/${lastdate.month}/${lastdate.year}"))),
                                           ],
                                         ))
                                       ],
@@ -526,22 +555,45 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                             Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 5),
-                                                child: CustomWidgets.datepiker(
-                                                  context: context,
-                                                  dateTime: closedate,
-                                                  onPressed: () async {
-                                                    final date = await pickDate(
-                                                        closedate);
+                                                child: TextFormField(
+                                                    onTap: () async {
+                                                      final date =
+                                                          await pickDate(
+                                                              closedate);
 
-                                                    if (date == null) {
-                                                      return;
-                                                    } else {
-                                                      setState(() {
-                                                        closedate = date;
-                                                      });
-                                                    }
-                                                  },
-                                                ))
+                                                      if (date == null) {
+                                                        return;
+                                                      } else {
+                                                        setState(() {
+                                                          if (date.compareTo(
+                                                                  lastdate) >
+                                                              0) {
+                                                            closedate = date;
+                                                            _dateCloseController
+                                                                    .text =
+                                                                " ${closedate.day}/${closedate.month}/${closedate.year}";
+                                                            tableData
+                                                                    .closeDate =
+                                                                " ${closedate.day}/${closedate.month}/${closedate.year}";
+                                                          } else {
+                                                            _dateCloseController
+                                                                .clear();
+                                                          }
+                                                        });
+                                                      }
+                                                    },
+                                                    readOnly: true,
+                                                    controller:
+                                                        _dateCloseController,
+                                                    validator: RequiredValidator(
+                                                        errorText:
+                                                            "Please Select Correct Date"),
+                                                    decoration: CustomWidgets
+                                                        .dateDacarotion(
+                                                      widget.idEdit
+                                                          ? "${tableData.closeDate}"
+                                                          : "  ${closedate.day}/${closedate.month}/${closedate.year}",
+                                                    )))
                                           ],
                                         )),
                                         SizedBox(
@@ -550,26 +602,28 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                         Expanded(
                                             child: Column(
                                           children: [
-                                            header("Posted Date"),
+                                            // header("Posted Date"),
                                             Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 5),
-                                                child: CustomWidgets.datepiker(
-                                                    context: context,
-                                                    onPressed: () async {
-                                                      final date =
-                                                          await pickDate(
-                                                              postedDate);
+                                              padding:
+                                                  const EdgeInsets.only(top: 5),
+                                              // child: CustomWidgets.datepiker(
+                                              //     context: context,
+                                              //     onPressed: () async {
+                                              //       final date =
+                                              //           await pickDate(
+                                              //               postedDate);
 
-                                                      if (date == null) {
-                                                        return;
-                                                      } else {
-                                                        setState(() {
-                                                          postedDate = date;
-                                                        });
-                                                      }
-                                                    },
-                                                    dateTime: postedDate)),
+                                              //       if (date == null) {
+                                              //         return;
+                                              //       } else {
+                                              //         setState(() {
+                                              //           postedDate = date;
+                                              //         });
+                                              //       }
+                                              //     },
+
+                                              //     dateTime: postedDate)
+                                            ),
                                           ],
                                         ))
                                       ],
@@ -584,7 +638,8 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                         SizedBox(
                                           child: CustomWidgets.newformfield(
                                               name: "Description",
-                                              controller: _namecontroller,
+                                              controller:
+                                                  _descriptionController,
                                               error: "Enter Detail"),
                                         )
                                       ],
@@ -615,7 +670,6 @@ class _MobileHomeState extends State<TablateDataAdd> {
                                   ],
                                 ),
                                 SizedBox(
-                                  // height: height * 0.13,
                                   width: width * 0.9,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
@@ -667,7 +721,18 @@ class _MobileHomeState extends State<TablateDataAdd> {
                           ),
                         ),
                       ),
-                    )
+                    ),
+                    SizedBox(
+                      height: height * 0.07,
+                    ),
+                    Text(
+                      "Copyright © Designed & Developed by Easternts ",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    sizebox5,
+                    SizedBox(
+                      height: height * 0.02,
+                    ),
                   ],
                 ),
               ),
@@ -694,25 +759,17 @@ class _MobileHomeState extends State<TablateDataAdd> {
       {String? title,
       TextEditingController? controller,
       String? error,
+      FormFieldSetter<String>? onSaved,
       double? width}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            sizebox,
-            Text(
-              title!,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            sizebox,
-            const Text(
-              "*",
-              style: TextStyle(color: kPrimaryColor, fontSize: 20),
-            )
-          ],
-        ),
-        CustomWidgets.newformfield(controller: controller, error: error)
+        header(title!),
+        CustomWidgets.newformfield(
+            onSaved: onSaved,
+            controller: controller,
+            error: error,
+            name: "Name")
       ],
     );
   }

@@ -36,7 +36,7 @@ class _MobileHomeState extends State<DesktopHome> {
           builder: (context) => Responsive(
                 context: context,
                 mobile: DataAdd(map: {}, idEdit: false),
-                tablet: TablateDataAdd(),
+                tablet: TablateDataAdd(map: {}, idEdit: false),
                 desktop: DesktopDataAdd(),
               )),
     );
@@ -354,7 +354,6 @@ class _MobileHomeState extends State<DesktopHome> {
                               children: [
                                 SizedBox(
                                   width: width * 0.1,
-                                  
                                   child: CupertinoButton(
                                     child: FittedBox(
                                       child: const Text(
@@ -408,7 +407,8 @@ class _MobileHomeState extends State<DesktopHome> {
                               List<DataColumn> colm =
                                   Data.getcolume(data, context)
                                       as List<DataColumn>;
-                              List<DataRow> row = Data.getrow(data, context);
+                              List<DataRow> row = [];
+                              // Data.getrow(data, context);
 
                               return Scrollbar(
                                 scrollbarOrientation:

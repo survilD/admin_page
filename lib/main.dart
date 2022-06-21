@@ -1,16 +1,26 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_training_1/dbhelper/getdata.dart';
 import 'package:flutter_training_1/responsive.dart';
 import 'package:flutter_training_1/screens/desktop/desktop_home.dart';
+import 'package:flutter_training_1/screens/mobile/dataProvider.dart';
 
 import 'package:flutter_training_1/screens/mobile/mobile_home.dart';
 import 'package:flutter_training_1/screens/tablet/tablet_home.dart';
 
 import 'package:flutter_training_1/screens/utils/constants.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  
+
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<DataProvider>(
+      create: (context) => DataProvider(),
+    )
+  ],
+  child: MyApp(),) );
 }
 
 class MyApp extends StatelessWidget {
