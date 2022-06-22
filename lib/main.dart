@@ -1,26 +1,25 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_training_1/dbhelper/getdata.dart';
+
 import 'package:flutter_training_1/responsive.dart';
 import 'package:flutter_training_1/screens/desktop/desktop_home.dart';
-import 'package:flutter_training_1/screens/mobile/dataProvider.dart';
+import 'package:flutter_training_1/provider/dataProvider.dart';
 
 import 'package:flutter_training_1/screens/mobile/mobile_home.dart';
-import 'package:flutter_training_1/screens/tablet/tablet_home.dart';
 
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  
-
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider<DataProvider>(
-      create: (context) => DataProvider(),
-    )
-  ],
-  child: MyApp(),) );
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<DataProvider>(
+        create: (context) => DataProvider(),
+      )
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -39,7 +38,6 @@ class MyApp extends StatelessWidget {
             backgroundColor: Colors.white),
         home: const Responsive(
           mobile: MobileHome(),
-          tablet: TablateHome(),
           desktop: DesktopHome(),
         ));
   }

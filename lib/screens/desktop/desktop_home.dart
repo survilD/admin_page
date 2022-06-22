@@ -1,16 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_training_1/data.dart';
+import 'package:flutter_training_1/screens/utils/data.dart';
 import 'package:flutter_training_1/dbhelper/dbhelper.dart';
 import 'package:flutter_training_1/dbhelper/getdata.dart';
 import 'package:flutter_training_1/screens/desktop/desktop_adddata.dart';
-import 'package:flutter_training_1/screens/tablet/tablet_adddata.dart';
-
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
-
-import '../../model/tabel_model.dart';
 import '../../responsive.dart';
 import '../mobile/mobile_adddata.dart';
 
@@ -25,9 +20,6 @@ class DesktopHome extends StatefulWidget {
 
 class _MobileHomeState extends State<DesktopHome> {
   final dbhelper = DatabaseHelper.instance;
-  Widget sizebox = const SizedBox(
-    width: 5,
-  );
 
   void addData() {
     Navigator.push(
@@ -35,8 +27,7 @@ class _MobileHomeState extends State<DesktopHome> {
       MaterialPageRoute(
           builder: (context) => Responsive(
                 context: context,
-                mobile: DataAdd(map: {}, idEdit: false),
-                tablet: TablateDataAdd(map: {}, idEdit: false),
+                mobile: DataAdd(map: {}, isEdit: false),
                 desktop: DesktopDataAdd(),
               )),
     );
@@ -44,15 +35,15 @@ class _MobileHomeState extends State<DesktopHome> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    Size size = MediaQuery.of(context).size;
+ 
     return SafeArea(
         child: Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(height * 0.14),
+        preferredSize: Size.fromHeight(size.height * 0.14),
         child: Container(
             color: Colors.white,
-            height: height,
+            height: size.height,
             child: Row(
               children: [
                 Expanded(
@@ -62,7 +53,7 @@ class _MobileHomeState extends State<DesktopHome> {
                         Padding(
                           padding: const EdgeInsets.all(15),
                           child: CircleAvatar(
-                            radius: width * 0.02,
+                            radius: size.width * 0.02,
                             backgroundColor: kPrimaryColor,
                             child: Icon(
                               Icons.person,
@@ -78,14 +69,15 @@ class _MobileHomeState extends State<DesktopHome> {
                               Text(
                                 "Jobick",
                                 style: TextStyle(
-                                    fontSize: width * 0.019,
+                                    fontSize: size.width * 0.019,
                                     fontWeight: FontWeight.bold),
                               ),
                               FittedBox(
                                 child: Text(
                                   "Job Admin Dashboard",
                                   style: TextStyle(
-                                      fontSize: width * 0.01, color: kGrey),
+                                      fontSize: size.width * 0.01,
+                                      color: kGrey),
                                 ),
                               )
                             ],
@@ -116,11 +108,11 @@ class _MobileHomeState extends State<DesktopHome> {
                         ),
                       ),
                       SizedBox(
-                        width: width * 0.07,
+                        width: size.width * 0.07,
                       ),
                       FittedBox(
                         child: SizedBox(
-                          width: width * 0.18,
+                          width: size.width * 0.18,
                           child: TextField(
                             cursorHeight: 20,
                             cursorColor: Colors.grey,
@@ -155,7 +147,7 @@ class _MobileHomeState extends State<DesktopHome> {
                       SizedBox(
                         width: 20,
                       ),
-                      iconButtonC(Icons.add, width * 1.9, 30),
+                      iconButtonC(Icons.add, size.width * 1.9, 30),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
@@ -180,7 +172,7 @@ class _MobileHomeState extends State<DesktopHome> {
                                 onPressed: () {},
                               ),
                               CircleAvatar(
-                                radius: width * 0.03,
+                                radius: size.width * 0.03,
                                 backgroundImage: NetworkImage(
                                     "https://miro.medium.com/max/554/1*Ld1KM2WSfJ9YQ4oeRf7q4Q.jpeg"),
                               ),
@@ -228,13 +220,13 @@ class _MobileHomeState extends State<DesktopHome> {
                 controller: scrollController,
                 child: Container(
                   color: Colors.white,
-                  height: height,
+                  height: size.height,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: Column(
                       children: [
                         SizedBox(
-                          height: height * 0.12,
+                          height: size.height * 0.12,
                           child: FittedBox(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -279,7 +271,7 @@ class _MobileHomeState extends State<DesktopHome> {
                           ),
                         ),
                         SizedBox(
-                          width: width,
+                          width: size.width,
                           child: ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
@@ -295,14 +287,14 @@ class _MobileHomeState extends State<DesktopHome> {
                                         color: Colors.grey[500],
                                       ),
                                       SizedBox(
-                                        width: width * 0.08,
+                                        width: size.width * 0.08,
                                         child: Padding(
                                           padding:
                                               const EdgeInsets.only(left: 15),
                                           child: Text(
                                             "${drawer[index]}",
                                             style: TextStyle(
-                                              fontSize: width * 0.01,
+                                              fontSize: size.width * 0.01,
                                               color: Colors.grey[500],
                                               fontWeight: FontWeight.w800,
                                             ),
@@ -353,7 +345,7 @@ class _MobileHomeState extends State<DesktopHome> {
                             child: Row(
                               children: [
                                 SizedBox(
-                                  width: width * 0.1,
+                                  width: size.width * 0.1,
                                   child: CupertinoButton(
                                     child: FittedBox(
                                       child: const Text(
@@ -374,19 +366,19 @@ class _MobileHomeState extends State<DesktopHome> {
                                 ),
                                 GestureDetector(
                                     child: iconButtonC(
-                                        Icons.mail, width * 1.5, 15)),
+                                        Icons.mail, size.width * 1.5, 15)),
                                 const SizedBox(
                                   width: 10,
                                 ),
                                 GestureDetector(
                                     child: iconButtonC(
-                                        Icons.call, width * 1.5, 15)),
+                                        Icons.call, size.width * 1.5, 15)),
                                 const SizedBox(
                                   width: 10,
                                 ),
                                 GestureDetector(
                                     child: iconButtonC(
-                                        Icons.info, width * 1.5, 15))
+                                        Icons.info, size.width * 1.5, 15))
                               ],
                             ),
                           )
@@ -407,8 +399,7 @@ class _MobileHomeState extends State<DesktopHome> {
                               List<DataColumn> colm =
                                   Data.getcolume(data, context)
                                       as List<DataColumn>;
-                              List<DataRow> row = [];
-                              // Data.getrow(data, context);
+                              List<DataRow> row = Data.getrow(data, context);
 
                               return Scrollbar(
                                 scrollbarOrientation:
@@ -427,7 +418,7 @@ class _MobileHomeState extends State<DesktopHome> {
                                                 BorderRadius.circular(20)),
                                         child: DataTable(
                                           sortColumnIndex: 1,
-                                          columnSpacing: width * 0.05,
+                                          columnSpacing: size.width * 0.05,
                                           dataRowHeight: 70,
                                           dividerThickness: 1,
                                           columns: colm,
@@ -509,7 +500,7 @@ class _MobileHomeState extends State<DesktopHome> {
                               );
                             } else {
                               return Container(
-                                  height: height,
+                                  height: size.height,
                                   child: Center(
                                       child: CircularProgressIndicator()));
                             }

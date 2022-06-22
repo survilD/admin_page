@@ -9,6 +9,8 @@ import 'package:flutter_training_1/screens/mobile/mobile_adddata.dart';
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
 
+import '../utils/enum.dart';
+
 class DesktopDataAdd extends StatefulWidget {
   const DesktopDataAdd({
     Key? key,

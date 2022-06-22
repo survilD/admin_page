@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_training_1/screens/utils/widgets.dart';
 
 // const colors
 
@@ -72,6 +73,16 @@ List<String> genderItem = [
 
 Widget sizebox5 = const SizedBox(
   width: 5,
+  height: 5,
+);
+
+Widget titel = const Text(
+  "Job List",
+  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
+);
+Widget titel2 = const Text(
+  "New Job",
+  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
 );
 
 // controller
@@ -80,5 +91,3 @@ final scrollController = ScrollController(initialScrollOffset: 5);
 final verticalscroll = ScrollController(initialScrollOffset: 5);
 
 final scrollControllertabel = ScrollController(initialScrollOffset: 5);
-
-

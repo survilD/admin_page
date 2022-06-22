@@ -4,16 +4,11 @@ import 'package:flutter_training_1/dbhelper/dbhelper.dart';
 import 'package:flutter_training_1/responsive.dart';
 import 'package:flutter_training_1/screens/desktop/desktop_adddata.dart';
 
-import 'package:flutter_training_1/screens/desktop/desktop_home.dart';
 import 'package:flutter_training_1/screens/mobile/mobile_adddata.dart';
 
-import 'package:flutter_training_1/screens/mobile/mobile_home.dart';
-import 'package:flutter_training_1/screens/tablet/tablet_adddata.dart';
-
-import 'package:flutter_training_1/screens/tablet/tablet_home.dart';
 import 'package:flutter_training_1/screens/utils/constants.dart';
 
-import 'screens/mobile/dataProvider.dart';
+import '../../provider/dataProvider.dart';
 
 class Data {
   static final dbHelper = DatabaseHelper.instance;
@@ -60,17 +55,18 @@ class Data {
                           ))).toList();
   }
 
-  static List<DataRow> getrow(
-      List<dynamic> getrow, BuildContext context, DataProvider postMdl) {
+  static List<DataRow> getrow(List<dynamic> getrow, BuildContext context,
+      {DataProvider? postMdl}) {
     return List.generate(
         getrow.length,
         (index1) => DataRow(
-              cells: _createCell(getrow[index1], index1 + 1, context, postMdl),
+              cells: _createCell(getrow[index1], index1 + 1, context,
+                  postMdl: postMdl),
             )).toList();
   }
 
-  static List<DataCell> _createCell(
-      Map m, int index1, BuildContext context, DataProvider postMdl) {
+  static List<DataCell> _createCell(Map m, int index1, BuildContext context,
+      {DataProvider? postMdl}) {
     Size size = MediaQuery.of(context).size;
     return List.generate(
         (Responsive.isMobile(context) || Responsive.isTablet(context))
@@ -87,7 +83,7 @@ class Data {
                           child: GestureDetector(
                               onTap: () async {
                                 List<Map<String, dynamic>> val =
-                                    postMdl.jobnew!;
+                                    postMdl!.jobnew!;
                                 Map<String, dynamic> map = {};
 
                                 val.forEach((element) {
@@ -111,7 +107,7 @@ class Data {
                           child: GestureDetector(
                               onTap: () async {
                                 List<Map<String, dynamic>> val =
-                                    postMdl.jobnew!;
+                                    postMdl!.jobnew!;
                                 Map<String, dynamic> map = {};
 
                                 val.forEach((element) {
@@ -125,11 +121,7 @@ class Data {
                                                 context: context,
                                                 mobile: DataAdd(
                                                   map: map,
-                                                  idEdit: true,
-                                                ),
-                                                tablet: TablateDataAdd(
-                                                  map: map,
-                                                  idEdit: true,
+                                                  isEdit: true,
                                                 ),
                                                 desktop: DesktopDataAdd(),
                                               )),
@@ -147,7 +139,7 @@ class Data {
                             onTap: () async {
                               final dbHelper = DatabaseHelper.instance;
                               await dbHelper.delete(m["Id"]);
-                              postMdl.getPostdata(context);
+                              postMdl!.getPostdata(context);
                             },
                             child: Icon(
                               Icons.delete,

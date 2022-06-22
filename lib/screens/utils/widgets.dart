@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_training_1/responsive.dart';
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
@@ -120,18 +122,44 @@ class CustomWidgets {
     );
   }
 
-  static customAppBar(GlobalKey<ScaffoldState> _drawer) {
+  static customAppBar(GlobalKey<ScaffoldState> _drawer, BuildContext context,
+      Size size, bool isFirst) {
     return PreferredSize(
       preferredSize: const Size.fromHeight(70.0),
       child: AppBar(
-        title: GestureDetector(
-          onTap: () => _drawer.currentState!.openDrawer(),
-          child: Image.asset(
-            "assets/Image/drawer.png",
-            height: 25,
-          ),
+        title: Responsive.isMobile(context)
+            ? GestureDetector(
+                onTap: () => _drawer.currentState!.openDrawer(),
+                child: Image.asset(
+                  "assets/Image/drawer.png",
+                  height: 25,
+                ),
+              )
+            : Row(
+                children: [
+                  FittedBox(
+                    fit: BoxFit.cover,
+                    child: Text(
+                      !isFirst ? "New Job" : "Job List",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 27,
+                          color: Colors.black),
+                    ),
+                  ),
+                  SizedBox(
+                    width: size.width * 0.03,
+                  ),
+                  iconButtonC(Icons.add, size.width * 0.6, kGreen),
+                ],
+              ),
+        leadingWidth: size.width * 0.14,
+        leading: Padding(
+          padding: Responsive.isMobile(context)
+              ? EdgeInsets.all(10)
+              : EdgeInsets.all(4.0),
+          child: imageLogo,
         ),
-        leading: const Padding(padding: EdgeInsets.all(12.0), child: imageLogo),
         actionsIconTheme: const IconThemeData(
           size: 28,
           color: Colors.black,
@@ -228,7 +256,9 @@ class CustomWidgets {
     );
   }
 
-  static constDrawer(Size size) {
+  static constDrawer(
+    Size size,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(top: 60),
       child: SizedBox(
@@ -250,9 +280,7 @@ class CustomWidgets {
                         children: [
                           const CircleAvatar(
                             radius: 40,
-                            backgroundImage: NetworkImage(
-                              "https://miro.medium.com/max/554/1*Ld1KM2WSfJ9YQ4oeRf7q4Q.jpeg",
-                            ),
+                            backgroundImage: profile,
                           ),
                           sizebox5,
                           Column(
@@ -311,7 +339,8 @@ class CustomWidgets {
                             size: 40,
                             color: Colors.grey[400],
                           ),
-                          minLeadingWidth: 25,
+                          minLeadingWidth:
+                              Responsive.isMobile(context) ? 25 : 50,
                         );
                       },
                       itemCount: drawer.length,
@@ -324,14 +353,34 @@ class CustomWidgets {
     );
   }
 
-  static flotButton() {
+  static Widget iconButtonC(
+    IconData icons,
+    double width,
+    Color? kGreen,
+  ) =>
+      GestureDetector(
+        child: CircleAvatar(
+          radius: width * 0.04,
+          backgroundColor: kGreen,
+          child: Icon(
+            icons,
+            size: 20,
+            color: Colors.white,
+          ),
+        ),
+      );
+
+  static flotButton(bool isFirst) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        CustomWidgets.flotbutton(
-            onPressed: () {},
-            color: kPrimaryColor.withAlpha(202),
-            icons: Icons.next_plan_sharp),
+        Visibility(
+          visible: isFirst,
+          child: CustomWidgets.flotbutton(
+              onPressed: () {},
+              color: kPrimaryColor.withAlpha(202),
+              icons: Icons.next_plan_sharp),
+        ),
         sizebox5,
         CustomWidgets.flotbutton(
             onPressed: () {},
@@ -345,4 +394,20 @@ class CustomWidgets {
       ],
     );
   }
+
+  static addButton({
+    required void Function()? onPressed,
+  }) =>
+      CupertinoButton(
+        child: const FittedBox(
+          child: const Text(
+            '+ Add New Job',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+          ),
+        ),
+        onPressed: onPressed,
+        color: kPrimaryColor,
+        borderRadius: BorderRadius.circular(20),
+        padding: const EdgeInsets.all(10),
+      );
 }

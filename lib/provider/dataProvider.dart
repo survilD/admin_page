@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_training_1/model/tabel_model.dart';
 
-import '../../dbhelper/dbhelper.dart';
+import '../dbhelper/dbhelper.dart';
 
 class DataProvider with ChangeNotifier {
   final dbHelper = DatabaseHelper.instance;
