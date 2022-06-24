@@ -1,17 +1,30 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+// import 'package:flutter_training_1/dbhelper/database/moor_database.dart';
+
 
 import 'package:flutter_training_1/responsive.dart';
 import 'package:flutter_training_1/screens/desktop/desktop_home.dart';
 import 'package:flutter_training_1/provider/dataProvider.dart';
-
 import 'package:flutter_training_1/screens/mobile/mobile_home.dart';
 
 import 'package:flutter_training_1/screens/utils/constants.dart';
+
+import 'package:hive_flutter/hive_flutter.dart';
+
 import 'package:provider/provider.dart';
 
-void main() {
+import 'dbhelper/database/hive.dart';
+
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  Hive.initFlutter();
+
+  Hive.registerAdapter(ModelAdapter());
+  await Hive.openBox<Model>("model");
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<DataProvider>(
@@ -36,7 +49,7 @@ class MyApp extends StatelessWidget {
                 thumbColor: MaterialStateProperty.all(kPrimaryColor)),
             primaryColor: Color.fromRGBO(244, 61, 39, 5),
             backgroundColor: Colors.white),
-        home: const Responsive(
+        home: Responsive(
           mobile: MobileHome(),
           desktop: DesktopHome(),
         ));

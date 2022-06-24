@@ -1,9 +1,11 @@
 {
     "cSpell.words": [
         "Formvalue",
+        "mobileui",
         "namecontroller",
         "positioncontroller",
         "sizebox",
         "titel"
-    ]
+    ],
+    "dart.sdkPath": "/Users/imac/Documents/flutter/bin/cache/dart-sdk"
 }

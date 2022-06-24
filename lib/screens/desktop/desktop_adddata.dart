@@ -4,16 +4,24 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_training_1/dbhelper/database/boxes.dart';
+import 'package:flutter_training_1/dbhelper/database/hive.dart';
+import 'package:flutter_training_1/dbhelper/database/moor_database.dart';
 import 'package:flutter_training_1/screens/desktop/desktop_adddata.dart';
 import 'package:flutter_training_1/screens/mobile/mobile_adddata.dart';
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
+import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 
+import '../../provider/dataProvider.dart';
 import '../utils/enum.dart';
 
 class DesktopDataAdd extends StatefulWidget {
+  final bool isEdit;
   const DesktopDataAdd({
     Key? key,
+    required this.isEdit,
   }) : super(key: key);
 
   @override
@@ -29,21 +37,9 @@ class _MobileHomeState extends State<DesktopDataAdd> {
 
   ScrollController scrollControllertabel =
       ScrollController(initialScrollOffset: 5);
+  Status _status = Status.Active;
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
-  Widget sizebox = const SizedBox(
-    width: 5,
-  );
-  Status _status = Status.Active;
-  String categoryDropdownValue = "Choose..";
-  String genderDropdownValue = "Choose..";
-  List<String> categoryItem = [
-    "Part Time",
-    "Full Time",
-    "Freelancer",
-    "Choose.."
-  ];
-  List<String> genderItem = ["Male", "Female", "Choose.."];
   DateTime postedDate = DateTime(2022, 01, 24);
   DateTime lastdate = DateTime(2022, 01, 24);
   DateTime closedate = DateTime(2022, 01, 24);
@@ -52,6 +48,12 @@ class _MobileHomeState extends State<DesktopDataAdd> {
     setState(() {
       categoryDropdownValue = value;
     });
+  }
+
+  @override
+  void dispose() {
+    Hive.box("model").close();
+    super.dispose();
   }
 
   Future<DateTime?> pickDate(DateTime dateTime) {
@@ -69,44 +71,35 @@ class _MobileHomeState extends State<DesktopDataAdd> {
         lastDate: DateTime(2100));
   }
 
-  List<IconData> icon = [
-    Icons.dashboard,
-    Icons.flag,
-    Icons.info,
-    Icons.monitor_heart,
-    Icons.star,
-    Icons.health_and_safety_rounded,
-    Icons.currency_yen_sharp,
-    Icons.print_rounded,
-    Icons.horizontal_split,
-    Icons.pages_rounded
-  ];
+  // Future<List<dynamic>> getData() async {
+  //   var _items = [];
 
-  final List drawer = [
-    "Dashboard",
-    "Jobs",
-    "Apps",
-    "Chart",
-    "Bootstrap",
-    "Plugins",
-    "Widget",
-    "Forms",
-    "Table",
-    "Pages"
-  ];
+  //   var jsonText = await rootBundle.loadString('assets/Json/demo.json');
 
-  Future<List<dynamic>> getData() async {
-    var _items = [];
+  //   _items = await json.decode(jsonText);
 
-    var jsonText = await rootBundle.loadString('assets/Json/demo.json');
+  //   return _items;
+  // }
 
-    _items = await json.decode(jsonText);
+  // ModelCompanion model = ModelCompanion();
 
-    return _items;
+  @override
+  void initState() {
+    super.initState();
+    // final mdlDta = Provider.of<AppDatabse>(context, listen: false);
+    // if (widget.isEdit) {
+    //   _tableadd = Job.fromMap(widget.map);
+
+    //   _namecontroller.text = postMdl.name.toString().toUpperCase();
+    //   _positioncontroller.text = _tableadd.position.toString().toUpperCase();
+    //   categoryDropdownValue = _tableadd.type.toString();
+    //   genderDropdownValue = _tableadd.gender.toString();
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
+    // final mdlDta = Provider.of<AppDatabse>(context, listen: false);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return SafeArea(
@@ -444,6 +437,10 @@ class _MobileHomeState extends State<DesktopDataAdd> {
                                       children: [
                                         Expanded(
                                             child: box(
+                                                // onSaved:
+
+                                                //  ((newValue) =>
+                                                //     model.name),
                                                 controller: _namecontroller,
                                                 error: "Please Enter Name",
                                                 title: "Company Name",
@@ -470,7 +467,7 @@ class _MobileHomeState extends State<DesktopDataAdd> {
                                             child: Column(
                                           children: [
                                             header("Job Type"),
-                                            sizebox,
+                                            sizebox5,
                                             Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 5),
@@ -520,7 +517,7 @@ class _MobileHomeState extends State<DesktopDataAdd> {
                                             child: Column(
                                           children: [
                                             header("Select Gender:"),
-                                            sizebox,
+                                            sizebox5,
                                             Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 5),
@@ -688,7 +685,7 @@ class _MobileHomeState extends State<DesktopDataAdd> {
                                         ))
                                       ],
                                     )),
-                                sizebox,
+                                sizebox5,
                                 SizedBox(
                                     height: height * 0.13,
                                     width: width * width,
@@ -710,16 +707,16 @@ class _MobileHomeState extends State<DesktopDataAdd> {
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.grey[700])),
-                                    sizebox,
+                                    sizebox5,
                                     radioButton(Status.Active),
-                                    sizebox,
+                                    sizebox5,
                                     Text("Active",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.grey[700])),
-                                    sizebox,
+                                    sizebox5,
                                     radioButton(Status.InActive),
-                                    sizebox,
+                                    sizebox5,
                                     Text(
                                       "In Active",
                                       style: TextStyle(
@@ -764,8 +761,30 @@ class _MobileHomeState extends State<DesktopDataAdd> {
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                          onPressed: () {
-                                            _key.currentState!.validate();
+                                          onPressed: () async {
+                                            if (_key.currentState!.validate()) {
+                                              final model = Model()
+                                                ..name = _namecontroller.text
+                                                ..position =
+                                                    _positioncontroller.text
+                                                ..type = categoryDropdownValue
+                                                    .toString()
+                                                ..gender = genderDropdownValue
+                                                    .toString()
+                                                ..postedDate = postedDate
+                                                ..lastDateApply = lastdate
+                                                ..closeDate = closedate
+                                                ..active =
+                                                    (_status == Status.Active)
+                                                        ? true
+                                                        : false;
+
+                                              final box = Boxes.getModel();
+                                              await box.add(model);
+                                              Navigator.pop(context);
+                                            }
+
+                                            // mdlDta.insert(modelCompanion)
                                           },
                                           color: kGreen,
                                           borderRadius:
@@ -805,31 +824,22 @@ class _MobileHomeState extends State<DesktopDataAdd> {
   }
 
   Widget box(
-      {String? title,
-      TextEditingController? controller,
-      String? error,
-      double? width}) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            sizebox,
-            Text(
-              title!,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            sizebox,
-            const Text(
-              "*",
-              style: TextStyle(color: kPrimaryColor, fontSize: 20),
-            )
-          ],
-        ),
-        CustomWidgets.newformfield(controller: controller, error: error)
-      ],
-    );
-  }
+          {String? title,
+          TextEditingController? controller,
+          String? error,
+          FormFieldSetter<String>? onSaved,
+          double? width}) =>
+      Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          header(title!),
+          CustomWidgets.newformfield(
+              onSaved: onSaved,
+              controller: controller,
+              error: error,
+              name: "Name")
+        ],
+      );
 
   Widget radioButton(
     Status _value,
@@ -850,12 +860,12 @@ class _MobileHomeState extends State<DesktopDataAdd> {
   Widget header(String title) {
     return Row(
       children: [
-        sizebox,
+        sizebox5,
         Text(
           title,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        sizebox,
+        sizebox5,
         const Text(
           "*",
           style: TextStyle(color: kPrimaryColor, fontSize: 20),

@@ -1,11 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_training_1/dbhelper/database/boxes.dart';
+import 'package:flutter_training_1/dbhelper/database/hive.dart';
+import 'package:flutter_training_1/dbhelper/database/moor_database.dart';
+import 'package:flutter_training_1/dbhelper/getdata.dart';
 import 'package:flutter_training_1/screens/utils/data.dart';
 import 'package:flutter_training_1/dbhelper/dbhelper.dart';
-import 'package:flutter_training_1/dbhelper/getdata.dart';
+
 import 'package:flutter_training_1/screens/desktop/desktop_adddata.dart';
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 import '../../responsive.dart';
 import '../mobile/mobile_adddata.dart';
 
@@ -19,7 +26,22 @@ class DesktopHome extends StatefulWidget {
 }
 
 class _MobileHomeState extends State<DesktopHome> {
-  final dbhelper = DatabaseHelper.instance;
+  final List<Model> data = [];
+  // final dbhelper = DatabaseHelper.instance;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // final mdlDta = Provider.of<AppDatabse>(context, listen: false);
+    // mdlDta.getdatalist;
+  }
+
+  // @override
+  // void dispose() {
+  //   Hive.box("model").close();
+  //   super.dispose();
+  // }
 
   void addData() {
     Navigator.push(
@@ -28,15 +50,18 @@ class _MobileHomeState extends State<DesktopHome> {
           builder: (context) => Responsive(
                 context: context,
                 mobile: DataAdd(map: {}, isEdit: false),
-                desktop: DesktopDataAdd(),
+                desktop: DesktopDataAdd(
+                  isEdit: false,
+                ),
               )),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    // final mdlDta = Provider.of<AppDatabse>(context);
     Size size = MediaQuery.of(context).size;
- 
+
     return SafeArea(
         child: Scaffold(
       appBar: PreferredSize(
@@ -390,12 +415,13 @@ class _MobileHomeState extends State<DesktopHome> {
                     ),
                     Padding(
                         padding: const EdgeInsets.all(15.0),
-                        child: FutureBuilder<List<dynamic>?>(
-                          future: DataGet().getData(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List?> snapshot) {
-                            if (snapshot.hasData) {
-                              List<dynamic> data = snapshot.data as List;
+                        child: ValueListenableBuilder<Box<Model>>(
+                          valueListenable: Boxes.getModel().listenable(),
+                          builder: (BuildContext context, box, _) {
+                            if (box.isNotEmpty) {
+                              final data = box.values.toList().cast<Model>();
+                              print(data[0].toMap().runtimeType);
+                              //  List<dynamic> maplist=List.generate(data.length, (index) => null)
                               List<DataColumn> colm =
                                   Data.getcolume(data, context)
                                       as List<DataColumn>;
@@ -418,7 +444,7 @@ class _MobileHomeState extends State<DesktopHome> {
                                                 BorderRadius.circular(20)),
                                         child: DataTable(
                                           sortColumnIndex: 1,
-                                          columnSpacing: size.width * 0.05,
+                                          columnSpacing: size.width * 0.02,
                                           dataRowHeight: 70,
                                           dividerThickness: 1,
                                           columns: colm,
@@ -500,9 +526,8 @@ class _MobileHomeState extends State<DesktopHome> {
                               );
                             } else {
                               return Container(
-                                  height: size.height,
-                                  child: Center(
-                                      child: CircularProgressIndicator()));
+                                child: Text("No data"),
+                              );
                             }
                           },
                         )),

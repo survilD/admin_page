@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_training_1/screens/utils/data.dart';
 import 'package:flutter_training_1/responsive.dart';
 import 'package:flutter_training_1/screens/desktop/desktop_adddata.dart';
@@ -34,7 +35,7 @@ class _MobileHomeState extends State<MobileHome> {
           builder: (context) => Responsive(
                 context: context,
                 mobile: DataAdd(map: {}, isEdit: false),
-                desktop: DesktopDataAdd(),
+                desktop: DesktopDataAdd(isEdit: false,),
               )),
     );
   }
@@ -226,7 +227,7 @@ class _MobileHomeState extends State<MobileHome> {
         child: Column(
           children: [
             DataTable(
-              columnSpacing: Responsive.isMobile(context) ? 25 : 70,
+              columnSpacing: Responsive.isMobile(context) ? 20 : 70,
               dataRowHeight: 70,
               dividerThickness: 5,
               columns: column,

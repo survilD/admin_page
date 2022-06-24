@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_training_1/dbhelper/dbhelper.dart';
-import 'package:flutter_training_1/model/tabel_model.dart';
 
 class DataGet extends ChangeNotifier {
   Future<List<dynamic>?> getData() async {
