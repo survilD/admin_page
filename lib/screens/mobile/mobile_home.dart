@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_training_1/dbhelper/database/hive.dart';
 
 import 'package:flutter_training_1/screens/utils/data.dart';
 import 'package:flutter_training_1/responsive.dart';
@@ -18,7 +19,7 @@ class MobileHome extends StatefulWidget {
   @override
   State<MobileHome> createState() => _MobileHomeState();
 }
-
+ 
 class _MobileHomeState extends State<MobileHome> {
   final _drawer = GlobalKey<ScaffoldState>();
   @override
@@ -35,7 +36,10 @@ class _MobileHomeState extends State<MobileHome> {
           builder: (context) => Responsive(
                 context: context,
                 mobile: DataAdd(map: {}, isEdit: false),
-                desktop: DesktopDataAdd(isEdit: false,),
+                desktop: DesktopDataAdd(
+                  isEdit: false,
+                  model: Model(),
+                ),
               )),
     );
   }
@@ -61,6 +65,7 @@ class _MobileHomeState extends State<MobileHome> {
   }
 
   Widget mainPage(Size size, DataProvider postMdl) => Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Visibility(
             visible: !Responsive.isMobile(context),
@@ -135,23 +140,8 @@ class _MobileHomeState extends State<MobileHome> {
                               width: Responsive.isMobile(context)
                                   ? size.width * 0.3
                                   : size.width * 0.18,
-                              child: CustomWidgets.addButton(onPressed: addData)
-
-                              // CupertinoButton(
-                              //   child: const FittedBox(
-                              //     child: const Text(
-                              //       '+ Add New Job',
-                              //       style: TextStyle(
-                              //           fontSize: 15,
-                              //           fontWeight: FontWeight.w600),
-                              //     ),
-                              //   ),
-                              //   onPressed: addData,
-                              //   color: kPrimaryColor,
-                              //   borderRadius: BorderRadius.circular(20),
-                              //   padding: const EdgeInsets.all(10),
-                              // ),
-                              ),
+                              child:
+                                  CustomWidgets.addButton(onPressed: addData)),
                           sizebox5,
                           CustomWidgets.iconButtonC(
                               Icons.mail,

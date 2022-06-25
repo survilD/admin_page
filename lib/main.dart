@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_training_1/dbhelper/database/moor_database.dart';
-
 
 import 'package:flutter_training_1/responsive.dart';
 import 'package:flutter_training_1/screens/desktop/desktop_home.dart';
@@ -19,12 +19,14 @@ import 'package:provider/provider.dart';
 import 'dbhelper/database/hive.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
-  Hive.initFlutter();
+  if (kIsWeb) {
+    Hive.initFlutter();
 
-  Hive.registerAdapter(ModelAdapter());
-  await Hive.openBox<Model>("model");
+    Hive.registerAdapter(ModelAdapter());
+
+    await Hive.openBox<Model>("model");
+  }
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<DataProvider>(
@@ -45,8 +47,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Demo 1",
         theme: ThemeData(
-            scrollbarTheme: ScrollbarThemeData(
-                thumbColor: MaterialStateProperty.all(kPrimaryColor)),
+            scrollbarTheme: ScrollbarThemeData(thumbColor: MaterialStateProperty.all(kPrimaryColor)),
             primaryColor: Color.fromRGBO(244, 61, 39, 5),
             backgroundColor: Colors.white),
         home: Responsive(

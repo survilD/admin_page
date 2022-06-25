@@ -62,10 +62,8 @@ class Job {
       position: map['Position'] != null ? map['Position'] as String : null,
       type: map['Type'] != null ? map['Type'] as String : null,
       gender: map['Gender'] != null ? map['Gender'] as String : null,
-      postedDate:
-          map['PostedDate'] != null ? map['PostedDate'] as String : null,
-      lastDateApply:
-          map['LastDateApply'] != null ? map['LastDateApply'] as String : null,
+      postedDate: map['PostedDate'] != null ? map['PostedDate'] as String : null,
+      lastDateApply: map['LastDateApply'] != null ? map['LastDateApply'] as String : null,
       closeDate: map['CloseDate'] != null ? map['CloseDate'] as String : null,
       status: map['Status'] != null ? map['Status'] as String : null,
     );
@@ -73,8 +71,7 @@ class Job {
 
   String toJson() => json.encode(toMap());
 
-  factory Job.fromJson(String source) =>
-      Job.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Job.fromJson(String source) => Job.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {

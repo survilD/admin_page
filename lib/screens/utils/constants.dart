@@ -85,6 +85,14 @@ Widget titel2 = const Text(
   style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
 );
 
+Widget webtitel1 = const FittedBox(
+  fit: BoxFit.cover,
+  child:  Text(
+    "Job List",
+    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+  ),
+);
+
 // controller
 
 final scrollController = ScrollController(initialScrollOffset: 5);

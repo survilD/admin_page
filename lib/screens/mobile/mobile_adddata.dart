@@ -844,7 +844,7 @@ class _DataAddState extends State<DataAdd> {
 
   void _edit(DataProvider dataProvider) async {
     _key.currentState!.save();
-    dataProvider.onUpdate(context, _tableadd, widget.map);
+    await dataProvider.onUpdate(context, _tableadd, widget.map);
 
     _key.currentState!.reset();
     Navigator.of(context).pop();

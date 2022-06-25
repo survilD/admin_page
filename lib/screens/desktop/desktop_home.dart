@@ -1,18 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_training_1/dbhelper/database/boxes.dart';
 import 'package:flutter_training_1/dbhelper/database/hive.dart';
-import 'package:flutter_training_1/dbhelper/database/moor_database.dart';
-import 'package:flutter_training_1/dbhelper/getdata.dart';
+
 import 'package:flutter_training_1/screens/utils/data.dart';
-import 'package:flutter_training_1/dbhelper/dbhelper.dart';
 
 import 'package:flutter_training_1/screens/desktop/desktop_adddata.dart';
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
-import 'package:hive/hive.dart';
+
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:provider/provider.dart';
+
 import '../../responsive.dart';
 import '../mobile/mobile_adddata.dart';
 
@@ -26,22 +23,11 @@ class DesktopHome extends StatefulWidget {
 }
 
 class _MobileHomeState extends State<DesktopHome> {
-  final List<Model> data = [];
-  // final dbhelper = DatabaseHelper.instance;
-
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // final mdlDta = Provider.of<AppDatabse>(context, listen: false);
-    // mdlDta.getdatalist;
+  void dispose() {
+    Hive.box("model").close();
+    super.dispose();
   }
-
-  // @override
-  // void dispose() {
-  //   Hive.box("model").close();
-  //   super.dispose();
-  // }
 
   void addData() {
     Navigator.push(
@@ -51,6 +37,7 @@ class _MobileHomeState extends State<DesktopHome> {
                 context: context,
                 mobile: DataAdd(map: {}, isEdit: false),
                 desktop: DesktopDataAdd(
+                  model: Model(),
                   isEdit: false,
                 ),
               )),
@@ -59,291 +46,18 @@ class _MobileHomeState extends State<DesktopHome> {
 
   @override
   Widget build(BuildContext context) {
-    // final mdlDta = Provider.of<AppDatabse>(context);
     Size size = MediaQuery.of(context).size;
 
     return SafeArea(
         child: Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(size.height * 0.14),
-        child: Container(
-            color: Colors.white,
-            height: size.height,
-            child: Row(
-              children: [
-                Expanded(
-                    flex: 1,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: CircleAvatar(
-                            radius: size.width * 0.02,
-                            backgroundColor: kPrimaryColor,
-                            child: Icon(
-                              Icons.person,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Jobick",
-                                style: TextStyle(
-                                    fontSize: size.width * 0.019,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              FittedBox(
-                                child: Text(
-                                  "Job Admin Dashboard",
-                                  style: TextStyle(
-                                      fontSize: size.width * 0.01,
-                                      color: kGrey),
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    )),
-                Expanded(
-                  flex: 6,
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 15,
-                      ),
-                      Image.asset(
-                        "assets/Image/drawer.png",
-                        height: 40,
-                      ),
-                      SizedBox(
-                        width: 30,
-                      ),
-                      FittedBox(
-                        fit: BoxFit.cover,
-                        child: const Text(
-                          "Job List",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 25),
-                        ),
-                      ),
-                      SizedBox(
-                        width: size.width * 0.07,
-                      ),
-                      FittedBox(
-                        child: SizedBox(
-                          width: size.width * 0.18,
-                          child: TextField(
-                            cursorHeight: 20,
-                            cursorColor: Colors.grey,
-                            decoration: InputDecoration(
-                              suffixIcon: Icon(
-                                Icons.search,
-                                size: 35,
-                                color: Colors.black,
-                              ),
-                              hintStyle: const TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.bold),
-                              filled: true,
-                              fillColor: kGrey.withAlpha(30),
-                              contentPadding: const EdgeInsets.all(15),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(color: Colors.white)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide:
-                                      BorderSide(color: kGrey.withAlpha(30))),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide:
-                                      BorderSide(color: kGrey.withAlpha(30))),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      iconButtonC(Icons.add, size.width * 1.9, 30),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                iconSize: 30,
-                                icon: const Icon(Icons.chat_outlined),
-                                onPressed: () {},
-                              ),
-                              IconButton(
-                                iconSize: 30,
-                                icon: const Icon(
-                                  Icons.notifications_none_outlined,
-                                ),
-                                onPressed: () {},
-                              ),
-                              IconButton(
-                                iconSize: 30,
-                                icon: const Icon(Icons.settings_outlined),
-                                onPressed: () {},
-                              ),
-                              CircleAvatar(
-                                radius: size.width * 0.03,
-                                backgroundImage: NetworkImage(
-                                    "https://miro.medium.com/max/554/1*Ld1KM2WSfJ9YQ4oeRf7q4Q.jpeg"),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            )),
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          CustomWidgets.flotbutton(
-              onPressed: () {},
-              color: kPrimaryColor.withAlpha(202),
-              icons: Icons.next_plan_sharp),
-          SizedBox(
-            height: 5,
-          ),
-          CustomWidgets.flotbutton(
-              onPressed: () {},
-              color: Color.fromRGBO(28, 202, 210, 1),
-              icons: Icons.headset_mic),
-          SizedBox(
-            height: 5,
-          ),
-          CustomWidgets.flotbutton(
-              onPressed: () {},
-              color: Color.fromRGBO(144, 194, 94, 1),
-              icons: Icons.shopping_cart_outlined),
-        ],
-      ),
+      appBar: CustomWidgets.webAppBar(size),
+      floatingActionButton: CustomWidgets.flotButton(true),
       body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             flex: 1,
-            child: Scrollbar(
-              controller: scrollController,
-              thickness: 2,
-              child: SingleChildScrollView(
-                controller: scrollController,
-                child: Container(
-                  color: Colors.white,
-                  height: size.height,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: size.height * 0.12,
-                          child: FittedBox(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const CircleAvatar(
-                                  radius: 40,
-                                  backgroundImage: NetworkImage(
-                                    "https://miro.medium.com/max/554/1*Ld1KM2WSfJ9YQ4oeRf7q4Q.jpeg",
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 30, left: 5),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Welcome  ",
-                                        style: TextStyle(
-                                            color: Colors.grey[800],
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        "Superadmin",
-                                        style: TextStyle(
-                                            color: Colors.grey[800],
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.keyboard_arrow_down,
-                                  color: Colors.grey[800],
-                                  size: 30,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: size.width,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: drawer.length,
-                            itemBuilder: (context, index) {
-                              return FittedBox(
-                                child: GestureDetector(
-                                  onTap: () => print(index),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        icon[index],
-                                        color: Colors.grey[500],
-                                      ),
-                                      SizedBox(
-                                        width: size.width * 0.08,
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 15),
-                                          child: Text(
-                                            "${drawer[index]}",
-                                            style: TextStyle(
-                                              fontSize: size.width * 0.01,
-                                              color: Colors.grey[500],
-                                              fontWeight: FontWeight.w800,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.arrow_right,
-                                        size: 40,
-                                        color: Colors.grey[400],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            child: CustomWidgets.webDrower(size)
           ),
           Expanded(
             flex: 6,
@@ -355,60 +69,7 @@ class _MobileHomeState extends State<DesktopHome> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          FittedBox(
-                            child: const Text(
-                              "Job List",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w900, fontSize: 20),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: size.width * 0.1,
-                                  child: CupertinoButton(
-                                    child: FittedBox(
-                                      child: const Text(
-                                        '+ Add New Job',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
-                                    onPressed: addData,
-                                    color: kPrimaryColor,
-                                    borderRadius: BorderRadius.circular(20),
-                                    padding: const EdgeInsets.all(10),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                GestureDetector(
-                                    child: iconButtonC(
-                                        Icons.mail, size.width * 1.5, 15)),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                GestureDetector(
-                                    child: iconButtonC(
-                                        Icons.call, size.width * 1.5, 15)),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                GestureDetector(
-                                    child: iconButtonC(
-                                        Icons.info, size.width * 1.5, 15))
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
+                      child: CustomWidgets.webBar(size,true, onPressed: addData,),
                     ),
                     const SizedBox(
                       height: 10,
@@ -420,8 +81,7 @@ class _MobileHomeState extends State<DesktopHome> {
                           builder: (BuildContext context, box, _) {
                             if (box.isNotEmpty) {
                               final data = box.values.toList().cast<Model>();
-                              print(data[0].toMap().runtimeType);
-                              //  List<dynamic> maplist=List.generate(data.length, (index) => null)
+
                               List<DataColumn> colm =
                                   Data.getcolume(data, context)
                                       as List<DataColumn>;
@@ -442,14 +102,10 @@ class _MobileHomeState extends State<DesktopHome> {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(20)),
-                                        child: DataTable(
-                                          sortColumnIndex: 1,
-                                          columnSpacing: size.width * 0.02,
-                                          dataRowHeight: 70,
-                                          dividerThickness: 1,
-                                          columns: colm,
-                                          rows: row,
-                                        ),
+                                        child: table(
+                                            columns: colm,
+                                            rows: row,
+                                            size: size),
                                       ),
                                       SizedBox(
                                         height: 20,
@@ -544,15 +200,18 @@ class _MobileHomeState extends State<DesktopHome> {
     ));
   }
 
-  Widget iconButtonC(IconData icons, double width, double size) {
-    return CircleAvatar(
-      radius: width * 0.01,
-      backgroundColor: kGreen,
-      child: Icon(
-        icons,
-        size: size,
-        color: Colors.white,
-      ),
-    );
-  }
+  Widget table(
+          {required List<DataColumn> columns,
+          required List<DataRow> rows,
+          required Size size}) =>
+      DataTable(
+        sortColumnIndex: 1,
+        columnSpacing: size.width * 0.02,
+        dataRowHeight: 70,
+        dividerThickness: 1,
+        columns: columns,
+        rows: rows,
+      );
+
+  
 }

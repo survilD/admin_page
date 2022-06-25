@@ -8,32 +8,32 @@ part 'hive.g.dart';
 @HiveType(typeId: 0)
 class Model extends HiveObject {
   @HiveField(0)
-  late String name;
+  late String? name;
   @HiveField(1)
-  late String position;
+  late String? position;
   @HiveField(2)
-  late String type;
+  late String? type;
   @HiveField(3)
-  late String gender;
+  late String? gender;
   @HiveField(4)
   late DateTime? postedDate;
   @HiveField(5)
-  late DateTime lastDateApply;
+  late DateTime? lastDateApply;
   @HiveField(6)
-  late DateTime closeDate;
+  late DateTime? closeDate;
   @HiveField(7)
-  late bool active = true;
+  late bool? active = true;
 
-  //   Model({
-  //   required this.name,
-  //   required this.position,
-  //   required this.type,
-  //   required this.gender,
-  //   this.postedDate,
-  //   required this.lastDateApply,
-  //   required this.closeDate,
-  //   required this.active,
-  // });
+  Model({
+    this.name,
+    this.position,
+    this.type,
+    this.gender,
+    this.postedDate,
+    this.lastDateApply,
+    this.closeDate,
+    this.active,
+  });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -48,22 +48,22 @@ class Model extends HiveObject {
     };
   }
 
-  // factory Model.fromMap(Map<String, dynamic> map) {
-  //   return Model(
-  //     name:  map['Name'] ,
-  //     position: map['Position'] ,
-  //     type: map['Type'] ,
-  //     gender: map['Gender'] ,
-  //     postedDate: map['PostedDate'] != null ? map['postedDate']: null,
-  //     lastDateApply: map['LastDateApply'] ,
-  //     closeDate:map['CloseDate'] ,
-  //     active: map['Status'],
-  //   );
-  // }
+  factory Model.fromMap(Map<String, dynamic> map) {
+    return Model(
+      name: map['Name'],
+      position: map['Position'],
+      type: map['Type'],
+      gender: map['Gender'],
+      postedDate: map['PostedDate'] != null ? map['postedDate'] : null,
+      lastDateApply: map['LastDateApply'],
+      closeDate: map['CloseDate'],
+      active: map['Status'],
+    );
+  }
 
   String toJson() => json.encode(toMap());
 
-  // factory Model.fromJson(String source) => Model.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Model.fromJson(String source) => Model.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {

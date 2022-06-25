@@ -7,5 +7,14 @@
         "sizebox",
         "titel"
     ],
-    "dart.sdkPath": "/Users/imac/Documents/flutter/bin/cache/dart-sdk"
+    "dart.sdkPath": "/Users/imac/Documents/flutter/bin/cache/dart-sdk",
+    "[dart]": {
+        "editor.defaultFormatter": "Dart-Code.dart-code",
+        "editor.formatOnSave": true,
+    },
+    "dart.flutterCreateOrganization": null,
+    "dart.previewBazelWorkspaceCustomScripts": true,
+    "dart.previewFlutterUiGuides": true,
+    "dart.previewSdkDaps": true,
+    "dart.previewFlutterUiGuidesCustomTracking": true
 }

@@ -59,6 +59,7 @@ class CustomWidgets {
       filled: true,
       fillColor: kGrey.withAlpha(30),
       contentPadding: const EdgeInsets.all(10),
+   
       enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
           borderSide: BorderSide(color: kGrey.withAlpha(30))),
@@ -409,5 +410,283 @@ class CustomWidgets {
         color: kPrimaryColor,
         borderRadius: BorderRadius.circular(20),
         padding: const EdgeInsets.all(10),
+      );
+
+  static PreferredSize webAppBar(Size size) => PreferredSize(
+        preferredSize: Size.fromHeight(size.height * 0.14),
+        child: Container(
+            color: Colors.white,
+            height: size.height,
+            child: Row(
+              children: [
+                Expanded(
+                    flex: 1,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: CircleAvatar(
+                            radius: size.width * 0.02,
+                            backgroundColor: kPrimaryColor,
+                            child: const Icon(
+                              Icons.person,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Jobick",
+                                style: TextStyle(
+                                    fontSize: size.width * 0.019,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              FittedBox(
+                                child: Text(
+                                  "Job Admin Dashboard",
+                                  style: TextStyle(
+                                      fontSize: size.width * 0.01,
+                                      color: kGrey),
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    )),
+                Expanded(
+                  flex: 6,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Image.asset(
+                        "assets/Image/drawer.png",
+                        height: 40,
+                      ),
+                      SizedBox(
+                        width: 30,
+                      ),
+                      webtitel1,
+                      SizedBox(
+                        width: size.width * 0.07,
+                      ),
+                      FittedBox(
+                        child: SizedBox(
+                          width: size.width * 0.18,
+                          child: TextField(
+                            cursorHeight: 20,
+                            cursorColor: Colors.grey,
+                            decoration: InputDecoration(
+                              suffixIcon: const Icon(
+                                Icons.search,
+                                size: 35,
+                                color: Colors.black,
+                              ),
+                              hintStyle: const TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.bold),
+                              filled: true,
+                              fillColor: kGrey.withAlpha(30),
+                              contentPadding: const EdgeInsets.all(15),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide:
+                                      BorderSide(color: kGrey.withAlpha(30))),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide:
+                                      BorderSide(color: kGrey.withAlpha(30))),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      CustomWidgets.iconButtonC(
+                          Icons.add, size.width * 0.5, kGreen),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                iconSize: 30,
+                                icon: const Icon(Icons.chat_outlined),
+                                onPressed: () {},
+                              ),
+                              IconButton(
+                                iconSize: 30,
+                                icon: const Icon(
+                                  Icons.notifications_none_outlined,
+                                ),
+                                onPressed: () {},
+                              ),
+                              IconButton(
+                                iconSize: 30,
+                                icon: const Icon(Icons.settings_outlined),
+                                onPressed: () {},
+                              ),
+                              CircleAvatar(
+                                radius: size.width * 0.03,
+                                backgroundImage: profile,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )),
+      );
+
+  static Widget webDrower(Size size) => Scrollbar(
+        thickness: 2,
+        child: SingleChildScrollView(
+          controller: scrollController,
+          child: Container(
+            color: Colors.white,
+            height: size.height,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: size.height * 0.12,
+                    child: FittedBox(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const CircleAvatar(
+                            radius: 40,
+                            backgroundImage: profile,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 30, left: 5),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Welcome  ",
+                                  style: TextStyle(
+                                      color: Colors.grey[800],
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "Superadmin",
+                                  style: TextStyle(
+                                      color: Colors.grey[800],
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Icon(
+                            Icons.keyboard_arrow_down,
+                            color: Colors.grey[800],
+                            size: 30,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: size.width,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: drawer.length,
+                      itemBuilder: (context, index) {
+                        return FittedBox(
+                          child: GestureDetector(
+                            onTap: () => print(index),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  icon[index],
+                                  color: Colors.grey[500],
+                                ),
+                                SizedBox(
+                                  width: size.width * 0.08,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 15),
+                                    child: Text(
+                                      "${drawer[index]}",
+                                      style: TextStyle(
+                                        fontSize: size.width * 0.01,
+                                        color: Colors.grey[500],
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_right,
+                                  size: 40,
+                                  color: Colors.grey[400],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+
+ static Widget webBar(Size size, bool isFirst,{ void Function()? onPressed}) => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+         isFirst ?titel:titel2,
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              children: [
+               isFirst? SizedBox(
+                    width: size.width * 0.1,
+                    child: CustomWidgets.addButton(onPressed: onPressed)):sizebox5,
+                const SizedBox(
+                  width: 10,
+                ),
+                GestureDetector(
+                    child: CustomWidgets.iconButtonC(
+                        Icons.mail, size.width * 0.4, kGreen)),
+                const SizedBox(
+                  width: 10,
+                ),
+                GestureDetector(
+                    child: CustomWidgets.iconButtonC(
+                        Icons.call, size.width * 0.4, kGreen)),
+                const SizedBox(
+                  width: 10,
+                ),
+                GestureDetector(
+                    child: CustomWidgets.iconButtonC(
+                        Icons.info, size.width * 0.4, isFirst? kGreen:kPrimaryColor))
+              ],
+            ),
+          )
+        ],
       );
 }
