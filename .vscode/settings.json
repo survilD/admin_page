@@ -16,5 +16,6 @@
     "dart.previewBazelWorkspaceCustomScripts": true,
     "dart.previewFlutterUiGuides": true,
     "dart.previewSdkDaps": true,
-    "dart.previewFlutterUiGuidesCustomTracking": true
+    "dart.previewFlutterUiGuidesCustomTracking": true,
+    "bitbucket-pull-requests.serverURL": "https://Survil@bitbucket.org/survil/admin_page.git"
 }
