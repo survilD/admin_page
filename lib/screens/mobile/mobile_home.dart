@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_training_1/dbhelper/database/hive.dart';
 
-import 'package:flutter_training_1/screens/utils/data.dart';
+
+import 'package:flutter_training_1/screens/utils/row_clumngenerator.dart';
 import 'package:flutter_training_1/responsive.dart';
 import 'package:flutter_training_1/screens/desktop/desktop_adddata.dart';
 import 'package:flutter_training_1/screens/mobile/mobile_adddata.dart';
@@ -9,6 +9,7 @@ import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/hive.dart';
 import '../../provider/dataProvider.dart';
 
 class MobileHome extends StatefulWidget {

@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_training_1/responsive.dart';
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+
+
 
 class CustomWidgets {
   static loginForm({
@@ -58,8 +61,7 @@ class CustomWidgets {
     return InputDecoration(
       filled: true,
       fillColor: kGrey.withAlpha(30),
-      contentPadding: const EdgeInsets.all(10),
-   
+      contentPadding: const EdgeInsets.only(left: 10, right: 20),
       enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
           borderSide: BorderSide(color: kGrey.withAlpha(30))),
@@ -106,18 +108,21 @@ class CustomWidgets {
             color: Colors.red,
           )),
       hintText: hint,
-      prefixIcon: Container(
-        width: 60,
-        height: 50,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)),
-          color: Colors.grey,
-        ),
-        child: Icon(
-          Icons.watch_later_outlined,
-          color: kGrey,
-          size: 25,
+      prefixIcon: Padding(
+        padding: const EdgeInsets.only(right: 10),
+        child: Container(
+          width: 60,
+          height: 50,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)),
+            color: Colors.grey,
+          ),
+          child: const Icon(
+            Icons.watch_later_outlined,
+            color: kGrey,
+            size: 25,
+          ),
         ),
       ),
     );
@@ -412,7 +417,7 @@ class CustomWidgets {
         padding: const EdgeInsets.all(10),
       );
 
-  static PreferredSize webAppBar(Size size) => PreferredSize(
+  static PreferredSize webAppBar(Size size,bool isFirst) => PreferredSize(
         preferredSize: Size.fromHeight(size.height * 0.14),
         child: Container(
             color: Colors.white,
@@ -472,7 +477,7 @@ class CustomWidgets {
                       SizedBox(
                         width: 30,
                       ),
-                      webtitel1,
+                      isFirst? webtitel:webtitel2,
                       SizedBox(
                         width: size.width * 0.07,
                       ),
@@ -655,17 +660,20 @@ class CustomWidgets {
         ),
       );
 
- static Widget webBar(Size size, bool isFirst,{ void Function()? onPressed}) => Row(
+  static Widget webBar(Size size, bool isFirst, {void Function()? onPressed}) =>
+      Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-         isFirst ?titel:titel2,
+          isFirst ? titel : titel2,
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Row(
               children: [
-               isFirst? SizedBox(
-                    width: size.width * 0.1,
-                    child: CustomWidgets.addButton(onPressed: onPressed)):sizebox5,
+                isFirst
+                    ? SizedBox(
+                        width: size.width * 0.1,
+                        child: CustomWidgets.addButton(onPressed: onPressed))
+                    : sizebox5,
                 const SizedBox(
                   width: 10,
                 ),
@@ -682,11 +690,33 @@ class CustomWidgets {
                   width: 10,
                 ),
                 GestureDetector(
-                    child: CustomWidgets.iconButtonC(
-                        Icons.info, size.width * 0.4, isFirst? kGreen:kPrimaryColor))
+                    child: CustomWidgets.iconButtonC(Icons.info,
+                        size.width * 0.4, isFirst ? kGreen : kPrimaryColor))
               ],
             ),
           )
+        ],
+      );
+
+  static Widget box({String? title, Widget? widget}) => Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              sizebox5,
+              Text(
+                title!,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              sizebox5,
+              const Text(
+                "*",
+                style: TextStyle(color: kPrimaryColor, fontSize: 20),
+              )
+            ],
+          ),
+          sizebox5,
+          widget!,
         ],
       );
 }

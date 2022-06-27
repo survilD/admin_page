@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_training_1/dbhelper/database/hive.dart';
+
 import 'package:flutter_training_1/dbhelper/dbhelper.dart';
+import 'package:flutter_training_1/model/hive.dart';
 
 import 'package:flutter_training_1/responsive.dart';
 import 'package:flutter_training_1/screens/desktop/desktop_adddata.dart';
@@ -13,25 +14,22 @@ import '../../dbhelper/database/boxes.dart';
 import '../../provider/dataProvider.dart';
 
 class Data {
-  // static final dbHelper = DatabaseHelper.instance;
   static List<DataColumn> getcolume(
     List<dynamic> list,
     BuildContext context,
   ) {
     if (Responsive.isDesktop(context)) {
       final box = Boxes.getModel();
-      List<Model>? webclmname = box.values.toList();
-
-      print(box.values.toList()[0].toMap().length);
+      List<Model>? webclmname = box.values.cast<Model>().toList();
 
       return List.generate(
           webclmname[0].toMap().length + 2,
           (index) => DataColumn(
               label: (webclmname[0].toMap().length + 1 > index)
                   ? (index == 0)
-                      ? Text(
+                      ? const Text(
                           "ID",
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 17,
                           ),
@@ -66,35 +64,39 @@ class Data {
     }
   }
 
-  static List<DataRow> getrow(List<dynamic> getrow, BuildContext context, {DataProvider? postMdl}) {
+  static List<DataRow> getrow(List<dynamic> getrow, BuildContext context,
+      {DataProvider? postMdl}) {
     if (Responsive.isDesktop(context)) {
-      final box = Boxes.getModel();
+      // final box = Boxes.getModel();
 
       List<Model>? webclmname = getrow.cast<Model>();
-      List<Map> newmap = webclmname.map((e) => e.toMap()).toList();
-
-      // Map map = webclmname[0].toMap();
-      // print(map.keys);
+    
 
       return List.generate(
           webclmname.length,
           (index1) => DataRow(
-                cells: _createCell(webclmname[index1], index1, context, postMdl: postMdl),
+                cells: _createCell(webclmname[index1], index1, context,
+                    ),
               )).toList();
     } else {
       return List.generate(
           getrow.length,
           (index1) => DataRow(
-                cells: _createCell(getrow[index1], index1 + 1, context, postMdl: postMdl),
+                cells: _createCell(getrow[index1], index1 + 1, context,
+                    postMdl: postMdl),
               )).toList();
     }
   }
 
-  static List<DataCell> _createCell(m, int index1, BuildContext context, {DataProvider? postMdl}) {
+  static List<DataCell> _createCell(m, int index1, BuildContext context,
+      {DataProvider? postMdl}) {
     Size size = MediaQuery.of(context).size;
     return List.generate(
-        (Responsive.isMobile(context) || Responsive.isTablet(context)) ? 4 : m.toMap().length + 2,
-        (index) => (Responsive.isMobile(context) || Responsive.isTablet(context))
+        (Responsive.isMobile(context) || Responsive.isTablet(context))
+            ? 4
+            : m.toMap().length + 2,
+        (index) => (Responsive.isMobile(context) ||
+                Responsive.isTablet(context))
             ? DataCell((3 == index)
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -103,7 +105,8 @@ class Data {
                           backgroundColor: kpop.withAlpha(30),
                           child: GestureDetector(
                               onTap: () async {
-                                List<Map<String, dynamic>> val = postMdl!.jobnew!;
+                                List<Map<String, dynamic>> val =
+                                    postMdl!.jobnew!;
                                 Map<String, dynamic> map = {};
 
                                 val.forEach((element) {
@@ -113,7 +116,9 @@ class Data {
                                 });
 
                                 showDialog(
-                                    context: context, builder: (BuildContext context) => dialog(map, size, context));
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        dialog(map, size, context));
                               },
                               child: Icon(Icons.remove_red_eye, color: kpop)),
                           radius: 20),
@@ -124,7 +129,8 @@ class Data {
                           backgroundColor: kpen,
                           child: GestureDetector(
                               onTap: () async {
-                                List<Map<String, dynamic>> val = postMdl!.jobnew!;
+                                List<Map<String, dynamic>> val =
+                                    postMdl!.jobnew!;
                                 Map<String, dynamic> map = {};
 
                                 val.forEach((element) {
@@ -172,7 +178,10 @@ class Data {
                       )
                     : Text(
                         m.values.toList()[index].toString().toUpperCase(),
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.grey[800]),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.grey[800]),
                       ))
             : DataCell((m.toMap().values.toList().length + 1 > index)
                 ? (index == 0)
@@ -183,49 +192,97 @@ class Data {
                           fontSize: 17,
                         ),
                       )
-                    : (m.toMap().values.toList()[index - 1].toString().toUpperCase() == "TRUE" ||
-                            m.toMap().values.toList()[index - 1].toString() == "FALSE")
+                    : (m
+                                    .toMap()
+                                    .values
+                                    .toList()[index - 1]
+                                    .toString()
+                                    .toUpperCase() ==
+                                "TRUE" ||
+                            m.toMap().values.toList()[index - 1].toString() ==
+                                "FALSE")
                         ? Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              color: (m.toMap().values.toList()[index - 1].toString().toUpperCase() == "TRUE")
+                              color: (m
+                                          .toMap()
+                                          .values
+                                          .toList()[index - 1]
+                                          .toString()
+                                          .toUpperCase() ==
+                                      "TRUE")
                                   ? kpop.withAlpha(30)
                                   : kpink.withAlpha(30),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Text(
-                                (m.toMap().values.toList()[index - 1].toString().toUpperCase() == "TRUE")
+                                (m
+                                            .toMap()
+                                            .values
+                                            .toList()[index - 1]
+                                            .toString()
+                                            .toUpperCase() ==
+                                        "TRUE")
                                     ? "ACTIVE"
                                     : "InActive",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
-                                    color: (m.toMap().values.toList()[index - 1].toString().toUpperCase() == "TRUE")
+                                    color: (m
+                                                .toMap()
+                                                .values
+                                                .toList()[index - 1]
+                                                .toString()
+                                                .toUpperCase() ==
+                                            "TRUE")
                                         ? kpop
                                         : kpink),
                               ),
                             ),
                           )
-                        : (m.toMap().values.toList()[index - 1].toString().toUpperCase() == "FALSE")
+                        : (m
+                                    .toMap()
+                                    .values
+                                    .toList()[index - 1]
+                                    .toString()
+                                    .toUpperCase() ==
+                                "FALSE")
                             ? Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
-                                  color: (m.toMap().values.toList()[index - 1].toString().toUpperCase() == "FALSE")
+                                  color: (m
+                                              .toMap()
+                                              .values
+                                              .toList()[index - 1]
+                                              .toString()
+                                              .toUpperCase() ==
+                                          "FALSE")
                                       ? kpink.withAlpha(30)
                                       : kpink.withAlpha(30),
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: const Text(
+                                child:const Padding(
+                                  padding:  EdgeInsets.all(10.0),
+                                  child:  Text(
                                     "InActive",
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: kpink),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: kpink),
                                   ),
                                 ),
                               )
                             : Text(
-                                m.toMap().values.toList()[index - 1].toString().toUpperCase(),
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.grey[800]),
+                                m
+                                    .toMap()
+                                    .values
+                                    .toList()[index - 1]
+                                    .toString()
+                                    .toUpperCase(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                    color: Colors.grey[800]),
                               )
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -235,14 +292,16 @@ class Data {
                           child: GestureDetector(
                               onTap: () => showDialog(
                                   context: context,
-                                  builder: (BuildContext context) => dialog(m.toMap(), size, context)),
+                                  builder: (BuildContext context) =>
+                                      dialog(m.toMap(), size, context)),
                               child: Icon(Icons.remove_red_eye, color: kpop)),
                           radius: 20),
                       sizebox5,
                       CircleAvatar(
                           backgroundColor: kpen,
                           child: GestureDetector(
-                              onTap: () => onEditWeb(m, context), child: Icon(Icons.edit_sharp, color: kGreen))),
+                              onTap: () => onEditWeb(m, context),
+                              child: Icon(Icons.edit_sharp, color: kGreen))),
                       SizedBox(
                         width: 5,
                       ),
@@ -264,10 +323,14 @@ class Data {
   static Widget dialog(Map map, Size size, BuildContext context) => Dialog(
         child: (map.isNotEmpty)
             ? SizedBox(
-                width: Responsive.isDesktop(context) ? size.width * 0.5 : size.width,
+                width: Responsive.isDesktop(context)
+                    ? size.width * 0.5
+                    : size.width,
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: Responsive.isDesktop(context) ? map.length : map.length - 1,
+                  itemCount: Responsive.isDesktop(context)
+                      ? map.length
+                      : map.length - 1,
                   itemBuilder: (context, index) {
                     return Card(
                       elevation: 3,
@@ -275,20 +338,44 @@ class Data {
                       child: ListTile(
                         minLeadingWidth: size.width * 0.3,
                         leading: Text(
-                          map.keys.toList()[Responsive.isDesktop(context) ? index : index + 1].toString(),
-                          style: const TextStyle(color: kPrimaryColor, fontSize: 18, fontWeight: FontWeight.bold),
+                          map.keys
+                              .toList()[Responsive.isDesktop(context)
+                                  ? index
+                                  : index + 1]
+                              .toString(),
+                          style: const TextStyle(
+                              color: kPrimaryColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
                         ),
                         title: Text(
-                          (map.values.toList()[index].toString().toUpperCase() == "TRUE" ||
-                                  map.values.toList()[index].toString().toUpperCase() == "FALSE")
-                              ? (map.values.toList()[index].toString().toUpperCase() == "TRUE")
+                          (map.values
+                                          .toList()[index]
+                                          .toString()
+                                          .toUpperCase() ==
+                                      "TRUE" ||
+                                  map.values
+                                          .toList()[index]
+                                          .toString()
+                                          .toUpperCase() ==
+                                      "FALSE")
+                              ? (map.values
+                                          .toList()[index]
+                                          .toString()
+                                          .toUpperCase() ==
+                                      "TRUE")
                                   ? "ACTIVE"
                                   : "InACTIVE"
                               : map.values
-                                  .toList()[Responsive.isDesktop(context) ? index : index + 1]
+                                  .toList()[Responsive.isDesktop(context)
+                                      ? index
+                                      : index + 1]
                                   .toString()
                                   .toUpperCase(),
-                          style: TextStyle(color: kGrey, fontSize: 15, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              color: kGrey,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     );

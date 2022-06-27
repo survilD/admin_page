@@ -1,5 +1,12 @@
+
+
 import 'package:flutter/material.dart';
-import 'package:flutter_training_1/screens/utils/widgets.dart';
+
+
+import '../../model/hive.dart';
+import '../../responsive.dart';
+import '../desktop/desktop_adddata.dart';
+import '../mobile/mobile_adddata.dart';
 
 // const colors
 
@@ -85,17 +92,43 @@ Widget titel2 = const Text(
   style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
 );
 
-Widget webtitel1 = const FittedBox(
+Widget webtitel = const FittedBox(
   fit: BoxFit.cover,
   child:  Text(
-    "Job List",
+     "Job List",
     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
   ),
 );
-
+Widget webtitel2 = const FittedBox(
+  fit: BoxFit.cover,
+  child: Text(
+    "New Job",
+    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+  ),
+);
 // controller
 
 final scrollController = ScrollController(initialScrollOffset: 5);
 final verticalscroll = ScrollController(initialScrollOffset: 5);
 
 final scrollControllertabel = ScrollController(initialScrollOffset: 5);
+ScrollController verticalcontroller = ScrollController(initialScrollOffset: 5);
+
+DateTime? postedDate = DateTime(2022, 01, 24);
+DateTime? lastdate = DateTime(2022, 01, 24);
+DateTime? closedate = DateTime(2022, 01, 24);
+
+// Navigation const
+
+ addDetailpageRoute(BuildContext context) => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => Responsive(
+                context: context,
+                mobile: const DataAdd(map: {}, isEdit: false),
+                desktop: DesktopDataAdd(
+                  model: Model(),
+                  isEdit: false,
+                ),
+              )),
+    );

@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_training_1/dbhelper/database/boxes.dart';
-import 'package:flutter_training_1/dbhelper/database/hive.dart';
 
-import 'package:flutter_training_1/screens/utils/data.dart';
-
-import 'package:flutter_training_1/screens/desktop/desktop_adddata.dart';
 import 'package:flutter_training_1/screens/utils/constants.dart';
-import 'package:flutter_training_1/screens/utils/widgets.dart';
 
+import 'package:flutter_training_1/screens/utils/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../../responsive.dart';
-import '../mobile/mobile_adddata.dart';
+import '../../logicpart/logictable.dart';
+import '../../model/hive.dart';
 
 class DesktopHome extends StatefulWidget {
   const DesktopHome({
@@ -29,36 +25,19 @@ class _MobileHomeState extends State<DesktopHome> {
     super.dispose();
   }
 
-  void addData() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => Responsive(
-                context: context,
-                mobile: DataAdd(map: {}, isEdit: false),
-                desktop: DesktopDataAdd(
-                  model: Model(),
-                  isEdit: false,
-                ),
-              )),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final boxes = Boxes.getModel().listenable();
 
     return SafeArea(
         child: Scaffold(
-      appBar: CustomWidgets.webAppBar(size),
+      appBar: CustomWidgets.webAppBar(size,true),
       floatingActionButton: CustomWidgets.flotButton(true),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            flex: 1,
-            child: CustomWidgets.webDrower(size)
-          ),
+          Expanded(flex: 1, child: CustomWidgets.webDrower(size)),
           Expanded(
             flex: 6,
             child: Scrollbar(
@@ -66,10 +45,15 @@ class _MobileHomeState extends State<DesktopHome> {
               child: SingleChildScrollView(
                 controller: verticalscroll,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: CustomWidgets.webBar(size,true, onPressed: addData,),
+                      child: CustomWidgets.webBar(
+                        size,
+                        true,
+                        onPressed: () => addDetailpageRoute(context),
+                      ),
                     ),
                     const SizedBox(
                       height: 10,
@@ -77,41 +61,31 @@ class _MobileHomeState extends State<DesktopHome> {
                     Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: ValueListenableBuilder<Box<Model>>(
-                          valueListenable: Boxes.getModel().listenable(),
+                          valueListenable: boxes,
                           builder: (BuildContext context, box, _) {
                             if (box.isNotEmpty) {
-                              final data = box.values.toList().cast<Model>();
-
-                              List<DataColumn> colm =
-                                  Data.getcolume(data, context)
-                                      as List<DataColumn>;
-                              List<DataRow> row = Data.getrow(data, context);
-
                               return Scrollbar(
                                 scrollbarOrientation:
                                     ScrollbarOrientation.bottom,
                                 controller: scrollControllertabel,
                                 thickness: 6,
-                                radius: Radius.circular(20),
+                                radius: const Radius.circular(20),
                                 child: SingleChildScrollView(
                                   controller: scrollControllertabel,
                                   scrollDirection: Axis.horizontal,
                                   child: Column(
                                     children: [
                                       Card(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        child: table(
-                                            columns: colm,
-                                            rows: row,
-                                            size: size),
-                                      ),
-                                      SizedBox(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          child: TableGanrate.tableFetch(
+                                              box, context, size)),
+                                      const SizedBox(
                                         height: 20,
                                       ),
-                                      Text("Showing 1 of 9 of 9 entries"),
-                                      SizedBox(
+                                      const Text("Showing 1 of 9 of 9 entries"),
+                                      const SizedBox(
                                         height: 10,
                                       ),
                                       Padding(
@@ -123,10 +97,10 @@ class _MobileHomeState extends State<DesktopHome> {
                                           children: [
                                             OutlinedButton(
                                                 onPressed: () {},
-                                                child: Text("Previous"),
+                                                child: const Text("Previous"),
                                                 style: TextButton.styleFrom(
                                                     primary: kPrimaryColor,
-                                                    side: BorderSide(
+                                                    side: const BorderSide(
                                                         color: kPrimaryColor),
                                                     shape:
                                                         RoundedRectangleBorder(
@@ -134,7 +108,7 @@ class _MobileHomeState extends State<DesktopHome> {
                                                                 BorderRadius
                                                                     .circular(
                                                                         30)))),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 10,
                                             ),
                                             SizedBox(
@@ -149,20 +123,20 @@ class _MobileHomeState extends State<DesktopHome> {
                                                                     .circular(
                                                                         30))),
                                                 onPressed: () {},
-                                                child: Text(
+                                                child: const Text(
                                                   "1",
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 10,
                                             ),
                                             OutlinedButton(
                                                 onPressed: () {},
-                                                child: Text("Next"),
+                                                child: const Text("Next"),
                                                 style: TextButton.styleFrom(
                                                     primary: kPrimaryColor,
-                                                    side: BorderSide(
+                                                    side: const BorderSide(
                                                         color: kPrimaryColor),
                                                     shape:
                                                         RoundedRectangleBorder(
@@ -173,7 +147,7 @@ class _MobileHomeState extends State<DesktopHome> {
                                           ],
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 20,
                                       )
                                     ],
@@ -181,13 +155,11 @@ class _MobileHomeState extends State<DesktopHome> {
                                 ),
                               );
                             } else {
-                              return Container(
-                                child: Text("No data"),
-                              );
+                              return const Center(child:  Text("No data"));
                             }
                           },
                         )),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     )
                   ],
@@ -199,19 +171,4 @@ class _MobileHomeState extends State<DesktopHome> {
       ),
     ));
   }
-
-  Widget table(
-          {required List<DataColumn> columns,
-          required List<DataRow> rows,
-          required Size size}) =>
-      DataTable(
-        sortColumnIndex: 1,
-        columnSpacing: size.width * 0.02,
-        dataRowHeight: 70,
-        dividerThickness: 1,
-        columns: columns,
-        rows: rows,
-      );
-
-  
 }

@@ -21,9 +21,9 @@ class ModelAdapter extends TypeAdapter<Model> {
       ..position = fields[1] as String
       ..type = fields[2] as String
       ..gender = fields[3] as String
-      ..postedDate = fields[4] as DateTime?
-      ..lastDateApply = fields[5] as DateTime
-      ..closeDate = fields[6] as DateTime
+      ..postedDate = fields[4] as String?
+      ..lastDateApply = fields[5] as String
+      ..closeDate = fields[6] as String
       ..active = fields[7] as bool;
   }
 

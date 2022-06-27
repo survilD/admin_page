@@ -103,9 +103,7 @@ class _DataAddState extends State<DataAdd> {
                               padding: const EdgeInsets.only(bottom: 15),
                               child: CircleAvatar(
                                 radius: size.width * 0.045,
-                                backgroundImage: const NetworkImage(
-                                  "https://miro.medium.com/max/554/1*Ld1KM2WSfJ9YQ4oeRf7q4Q.jpeg",
-                                ),
+                                backgroundImage: profile,
                               ),
                             ),
                           ),

@@ -16,11 +16,11 @@ class Model extends HiveObject {
   @HiveField(3)
   late String? gender;
   @HiveField(4)
-  late DateTime? postedDate;
+  late String? postedDate;
   @HiveField(5)
-  late DateTime? lastDateApply;
+  late String? lastDateApply;
   @HiveField(6)
-  late DateTime? closeDate;
+  late String? closeDate;
   @HiveField(7)
   late bool? active = true;
 
