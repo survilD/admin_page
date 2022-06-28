@@ -223,7 +223,7 @@ class _MobileHomeState extends State<DesktopDataAdd> {
                           widget: TextFormField(
                               onTap: () async => model.postedDate =
                                   await DatePick.date(context,
-                                      _datePostController, model, postedDate!),
+                                      _datePostController, model, postedDate),
                               readOnly: true,
                               controller: _datePostController,
                               validator: RequiredValidator(
@@ -231,7 +231,7 @@ class _MobileHomeState extends State<DesktopDataAdd> {
                               decoration: CustomWidgets.dateDacarotion(
                                 widget.isEdit
                                     ? model.postedDate
-                                    : "${postedDate!.day}/${postedDate!.month}/${postedDate!.year}",
+                                    : "${postedDate.day}/${postedDate.month}/${postedDate.year}",
                               )))),
                   SizedBox(
                     width: size.width * 0.02,
@@ -242,7 +242,7 @@ class _MobileHomeState extends State<DesktopDataAdd> {
                           widget: TextFormField(
                               onTap: () async => model.lastDateApply =
                                   await DatePick.date(context,
-                                      _dateLastController, model, lastdate!),
+                                      _dateLastController, model, lastdate),
 
                               readOnly: true,
                               controller: _dateLastController,
@@ -251,7 +251,7 @@ class _MobileHomeState extends State<DesktopDataAdd> {
                               decoration: CustomWidgets.dateDacarotion(widget
                                       .isEdit
                                   ? model.lastDateApply
-                                  : "${lastdate!.day}/${lastdate!.month}/${lastdate!.year}"))))
+                                  : "${lastdate.day}/${lastdate.month}/${lastdate.year}"))))
                 ],
               )),
           SizedBox(
@@ -265,7 +265,7 @@ class _MobileHomeState extends State<DesktopDataAdd> {
                           widget: TextFormField(
                               onTap: () async => model.closeDate =
                                   await DatePick.date(context,
-                                      _dateCloseController, model, closedate!),
+                                      _dateCloseController, model, closedate),
                               readOnly: true,
                               controller: _dateCloseController,
                               validator: RequiredValidator(
@@ -273,7 +273,7 @@ class _MobileHomeState extends State<DesktopDataAdd> {
                               decoration: CustomWidgets.dateDacarotion(
                                 widget.isEdit
                                     ? model.closeDate
-                                    : "${closedate!.day}/${closedate!.month}/${closedate!.year}",
+                                    : "${closedate.day}/${closedate.month}/${closedate.year}",
                               )))),
                   SizedBox(
                     width: size.width * 0.02,

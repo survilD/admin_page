@@ -12,6 +12,7 @@ import 'package:flutter_training_1/screens/desktop/desktop_home.dart';
 import 'package:flutter_training_1/provider/dataProvider.dart';
 import 'package:flutter_training_1/screens/mobile/mobile_adddata.dart';
 import 'package:flutter_training_1/screens/mobile/mobile_home.dart';
+import 'package:flutter_training_1/screens/mobile/mobile_mobx.dart';
 
 import 'package:flutter_training_1/screens/utils/constants.dart';
 
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
             primaryColor: const Color.fromRGBO(244, 61, 39, 5),
             backgroundColor: Colors.white),
         home: const Responsive(
-          mobile: MobileHome(),
+          mobile: MobileHomemobx(),
           desktop: DesktopHome(),
         )
         

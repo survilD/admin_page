@@ -7,6 +7,7 @@ import 'package:flutter_training_1/responsive.dart';
 import 'package:flutter_training_1/screens/desktop/desktop_adddata.dart';
 
 import 'package:flutter_training_1/screens/mobile/mobile_adddata.dart';
+import 'package:flutter_training_1/screens/mobile/mobile_mobxadd.dart';
 
 import 'package:flutter_training_1/screens/utils/constants.dart';
 
@@ -65,7 +66,7 @@ class Data {
   }
 
   static List<DataRow> getrow(List<dynamic> getrow, BuildContext context,
-      {DataProvider? postMdl}) {
+      { postMdl}) {
     if (Responsive.isDesktop(context)) {
       // final box = Boxes.getModel();
 
@@ -89,7 +90,7 @@ class Data {
   }
 
   static List<DataCell> _createCell(m, int index1, BuildContext context,
-      {DataProvider? postMdl}) {
+      { postMdl}) {
     Size size = MediaQuery.of(context).size;
     return List.generate(
         (Responsive.isMobile(context) || Responsive.isTablet(context))
@@ -140,7 +141,7 @@ class Data {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => DataAdd(
+                                        builder: (context) => DataAddmobx(
                                           map: map,
                                           isEdit: true,
                                         ),
@@ -159,7 +160,7 @@ class Data {
                             onTap: () async {
                               final dbHelper = DatabaseHelper.instance;
                               await dbHelper.delete(m["Id"]);
-                              postMdl!.getPostdata(context);
+                              postMdl!.getPostdata();
                             },
                             child: Icon(
                               Icons.delete,

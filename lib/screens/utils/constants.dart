@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_training_1/screens/mobile/mobile_mobxadd.dart';
 
 
 import '../../model/hive.dart';
@@ -114,9 +115,9 @@ final verticalscroll = ScrollController(initialScrollOffset: 5);
 final scrollControllertabel = ScrollController(initialScrollOffset: 5);
 ScrollController verticalcontroller = ScrollController(initialScrollOffset: 5);
 
-DateTime? postedDate = DateTime(2022, 01, 24);
-DateTime? lastdate = DateTime(2022, 01, 24);
-DateTime? closedate = DateTime(2022, 01, 24);
+DateTime postedDate = DateTime.now();
+DateTime lastdate = DateTime.now();
+DateTime closedate = DateTime.now();
 
 // Navigation const
 
@@ -125,7 +126,7 @@ DateTime? closedate = DateTime(2022, 01, 24);
       MaterialPageRoute(
           builder: (context) => Responsive(
                 context: context,
-                mobile: const DataAdd(map: {}, isEdit: false),
+                mobile: const DataAddmobx(map: {}, isEdit: false),
                 desktop: DesktopDataAdd(
                   model: Model(),
                   isEdit: false,

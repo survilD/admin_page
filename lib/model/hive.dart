@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:hive/hive.dart';
 
-part 'hive.g.dart';
+part 'hive.gb.dart';
 
 @HiveType(typeId: 0)
 class Model extends HiveObject {

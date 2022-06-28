@@ -19,6 +19,7 @@ class DesktopHome extends StatefulWidget {
 }
 
 class _MobileHomeState extends State<DesktopHome> {
+  // close box of hive
   @override
   void dispose() {
     Hive.box("model").close();
@@ -28,11 +29,12 @@ class _MobileHomeState extends State<DesktopHome> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    //fetch table of local data
     final boxes = Boxes.getModel().listenable();
 
     return SafeArea(
         child: Scaffold(
-      appBar: CustomWidgets.webAppBar(size,true),
+      appBar: CustomWidgets.webAppBar(size, true),
       floatingActionButton: CustomWidgets.flotButton(true),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +81,7 @@ class _MobileHomeState extends State<DesktopHome> {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(20)),
-                                          child: TableGanrate.tableFetch(
+                                          child: TableGanrate.tableFetchDesktop(
                                               box, context, size)),
                                       const SizedBox(
                                         height: 20,
@@ -155,7 +157,7 @@ class _MobileHomeState extends State<DesktopHome> {
                                 ),
                               );
                             } else {
-                              return const Center(child:  Text("No data"));
+                              return const Center(child: Text("No data"));
                             }
                           },
                         )),
