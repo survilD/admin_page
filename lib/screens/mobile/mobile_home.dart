@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_training_1/logicpart/logictable.dart';
 
 import 'package:flutter_training_1/responsive.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
 import 'package:provider/provider.dart';
 
+import '../../mobx/table_mobx.dart';
 import '../../provider/dataProvider.dart';
 
 class MobileHome extends StatefulWidget {
@@ -18,37 +20,44 @@ class MobileHome extends StatefulWidget {
 }
 
 class _MobileHomeState extends State<MobileHome> {
-  final _drawer = GlobalKey<ScaffoldState>(); 
+  final _drawer = GlobalKey<ScaffoldState>();
+
+  final MxTable mxtable = MxTable();
   @override
   void initState() {
+    getPost();
     super.initState();
-    final postMdl = Provider.of<DataProvider>(context, listen: false);
-    postMdl.getPostdata();
   }
 
-
+  Future<void> getPost() async {
+    await mxtable.getPostdata();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final postMdl = Provider.of<DataProvider>(context);
     Size size = MediaQuery.of(context).size;
 
     return SafeArea(
       child: Scaffold(
           key: _drawer,
           drawerEnableOpenDragGesture: false,
-          drawer: Responsive.isMobile(context)               
+          drawer: Responsive.isMobile(context)
               ? CustomWidgets.constDrawer(
                   size,
                 )
               : null,
           appBar: CustomWidgets.customAppBar(_drawer, context, size, true),
           floatingActionButton: CustomWidgets.flotButton(true),
-          body: mainPage(size, postMdl)),
+          body: mainPage(
+            size,
+          )),
     );
   }
 
-  Widget mainPage(Size size, DataProvider postMdl) => Row(
+  Widget mainPage(
+    Size size,
+  ) =>
+      Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Visibility(
@@ -166,9 +175,7 @@ class _MobileHomeState extends State<MobileHome> {
                           child: SingleChildScrollView(
                               controller: scrollControllertabel,
                               scrollDirection: Axis.horizontal,
-                              child: postMdl.loading
-                                  ? const Center(child: CircularProgressIndicator())
-                                  : data(postMdl,size)),
+                              child: data(size)),
                         )),
                   ),
                 ),
@@ -188,74 +195,78 @@ class _MobileHomeState extends State<MobileHome> {
         ],
       );
 
-  Widget data(DataProvider postMdl,Size size) {
-    if (postMdl.jobnew!.isNotEmpty) {
-  
+  Widget data(Size size) {
+   
 
-      return Card(
-        child: Column(
-          children: [
-
-            TableGanrate.tableFetchDesktop(postMdl,context, size),
-
-         const   SizedBox(
-              height: 20,
-            ),
-            Text("Showing  1 of ${postMdl.jobnew!.length}  Entries"),
-           const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  OutlinedButton(
-                      onPressed: () {},
-                      child:const Text("Previous"),
-                      style: TextButton.styleFrom(
-                          primary: kPrimaryColor,
-                          side: const BorderSide(color: kPrimaryColor),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30)))),
-                 const SizedBox(
-                    width: 10,
-                  ),
-                  SizedBox(
-                    width: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: kPrimaryColor,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30))),
-                      onPressed: () {},
-                      child: const Text(
-                        "1",
+    return Observer(
+      builder: (_) => (!mxtable.loading)
+          ? (mxtable.jobnew.isNotEmpty)
+              ? Card(
+                  child: Column(
+                    children: [
+          
+                      TableGanrate.tableFetchDesktop(mxtable, context, size),
+                      const SizedBox(
+                        height: 20,
                       ),
-                    ),
+                      Text("Showing  1 of ${mxtable.jobnew.length}  Entries"),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            OutlinedButton(
+                                onPressed: () {},
+                                child: const Text("Previous"),
+                                style: TextButton.styleFrom(
+                                    primary: kPrimaryColor,
+                                    side:
+                                        const BorderSide(color: kPrimaryColor),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30)))),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            SizedBox(
+                              width: 50,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: kPrimaryColor,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30))),
+                                onPressed: () {},
+                                child: const Text(
+                                  "1",
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            OutlinedButton(
+                                onPressed: () {},
+                                child: const Text("Next"),
+                                style: TextButton.styleFrom(
+                                    primary: kPrimaryColor,
+                                    side:
+                                        const BorderSide(color: kPrimaryColor),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30)))),
+                          ],
+                        ),
+                      ),
+                      sizebox5
+                    ],
                   ),
-                const  SizedBox(
-                    width: 10,
-                  ),
-                  OutlinedButton(
-                      onPressed: () {},
-                      child: const Text("Next"),
-                      style: TextButton.styleFrom(
-                          primary: kPrimaryColor,
-                          side: const BorderSide(color: kPrimaryColor),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30)))),
-                ],
-              ),
-            ),
-            sizebox5
-          ],
-        ),
-      );
-    } else {
-      return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.6,
-          child: const Center(child: Text("No Data Found")));
-    }
+                )
+              : Center(child: Text("No Data"))
+          : CircularProgressIndicator(),
+    );
   }
 }

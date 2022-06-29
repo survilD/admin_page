@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -7,12 +6,9 @@ import 'package:flutter_training_1/model/hive.dart';
 // import 'package:flutter_training_1/dbhelper/database/moor_database.dart';
 
 import 'package:flutter_training_1/responsive.dart';
-import 'package:flutter_training_1/screens/desktop/desktop_adddata.dart';
 import 'package:flutter_training_1/screens/desktop/desktop_home.dart';
 import 'package:flutter_training_1/provider/dataProvider.dart';
-import 'package:flutter_training_1/screens/mobile/mobile_adddata.dart';
 import 'package:flutter_training_1/screens/mobile/mobile_home.dart';
-import 'package:flutter_training_1/screens/mobile/mobile_mobx.dart';
 
 import 'package:flutter_training_1/screens/utils/constants.dart';
 
@@ -31,14 +27,7 @@ void main() async {
 
     await Hive.openBox<Model>("model");
   }
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider<DataProvider>(
-        create: (context) => DataProvider(),
-      )
-    ],
-    child: const MyApp(),
-  ));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

@@ -121,7 +121,7 @@ DateTime closedate = DateTime.now();
 
 // Navigation const
 
- addDetailpageRoute(BuildContext context) => Navigator.push(
+ addDetailpageRoute(BuildContext context) => Navigator.pushReplacement(
       context,
       MaterialPageRoute(
           builder: (context) => Responsive(

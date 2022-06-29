@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_training_1/model/tabel_model.dart';
 import 'package:flutter_training_1/provider/dataProvider.dart';
+import 'package:flutter_training_1/screens/mobile/mobile_home.dart';
 
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
 
+import '../../mobx/table_mobx.dart';
 import '../../responsive.dart';
 import '../utils/enum.dart';
 
@@ -28,7 +30,7 @@ class _DataAddState extends State<DataAdd> {
 
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final _drawer = GlobalKey<ScaffoldState>();
-
+  final MxTable mxtable = MxTable();
   final TextEditingController _positioncontroller = TextEditingController();
   final TextEditingController _namecontroller = TextEditingController();
   final TextEditingController _datePostController = TextEditingController();
@@ -39,7 +41,7 @@ class _DataAddState extends State<DataAdd> {
   @override
   void initState() {
     super.initState();
-    final postMdl = Provider.of<DataProvider>(context, listen: false);
+
     if (widget.isEdit) {
       _tableadd = Job.fromMap(widget.map);
 
@@ -61,13 +63,11 @@ class _DataAddState extends State<DataAdd> {
 
   @override
   Widget build(BuildContext context) {
-    final postMdl = Provider.of<DataProvider>(context);
-
     _tableadd.status = _status.name;
     Size size = MediaQuery.of(context).size;
 
     return SafeArea(
-        child: postMdl.loading
+        child: mxtable.loading
             ? CircularProgressIndicator()
             : Scaffold(
                 key: _drawer,
@@ -191,17 +191,17 @@ class _DataAddState extends State<DataAdd> {
                                         padding: const EdgeInsets.all(15.0),
                                         child: Responsive.isMobile(context)
                                             ? mobileBody(
-                                                postMdl,
+                                                mxtable,
                                                 () => (widget.isEdit)
-                                                    ? _edit(postMdl)
-                                                    : _new(postMdl),
+                                                    ? _edit(mxtable)
+                                                    : _new(mxtable),
                                               )
                                             : otherBody(
-                                                postMdl,
+                                                mxtable,
                                                 size,
                                                 () => (widget.isEdit)
-                                                    ? _edit(postMdl)
-                                                    : _new(postMdl),
+                                                    ? _edit(mxtable)
+                                                    : _new(mxtable),
                                               )),
                                   ),
                                 ),
@@ -227,7 +227,7 @@ class _DataAddState extends State<DataAdd> {
               ));
   }
 
-  mobileBody(DataProvider postMdl, void Function()? onPressed) => Column(
+  mobileBody(MxTable postMdl, void Function()? onPressed) => Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           header("Company Name"),
@@ -236,9 +236,7 @@ class _DataAddState extends State<DataAdd> {
               name: "Name",
               controller: _namecontroller,
               onSaved: (val) {
-                setState(() {
-                  _tableadd.name = _namecontroller.text;
-                });
+                _tableadd.name = _namecontroller.text;
               },
               error: error),
           const SizedBox(
@@ -248,9 +246,8 @@ class _DataAddState extends State<DataAdd> {
           sizebox5,
           CustomWidgets.newformfield(
               name: "Name",
-              onSaved: (newValue) => setState(() {
-                    _tableadd.position = _positioncontroller.text;
-                  }),
+              onSaved: (newValue) =>
+                  _tableadd.position = _positioncontroller.text,
               error: error,
               controller: _positioncontroller),
           const SizedBox(
@@ -329,17 +326,15 @@ class _DataAddState extends State<DataAdd> {
                     if (date == null) {
                       return;
                     } else {
-                      setState(() {
-                        if (date.compareTo(postedDate) > 0) {
-                          postedDate = date;
-                          _datePostController.text =
-                              " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
-                          _tableadd.postedDate =
-                              " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
-                        } else {
-                          _datePostController.clear();
-                        }
-                      });
+                      if (date.compareTo(postedDate) > 0) {
+                        postedDate = date;
+                        _datePostController.text =
+                            " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
+                        _tableadd.postedDate =
+                            " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
+                      } else {
+                        _datePostController.clear();
+                      }
                     }
                   },
                   readOnly: true,
@@ -365,17 +360,15 @@ class _DataAddState extends State<DataAdd> {
                     if (date == null) {
                       return;
                     } else {
-                      setState(() {
-                        if (date.compareTo(postedDate) > 0) {
-                          lastdate = date;
-                          _dateLastController.text =
-                              " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
-                          _tableadd.lastDateApply =
-                              " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
-                        } else {
-                          _dateLastController.clear();
-                        }
-                      });
+                      if (date.compareTo(postedDate) > 0) {
+                        lastdate = date;
+                        _dateLastController.text =
+                            " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
+                        _tableadd.lastDateApply =
+                            " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
+                      } else {
+                        _dateLastController.clear();
+                      }
                     }
                   },
                   readOnly: true,
@@ -399,17 +392,15 @@ class _DataAddState extends State<DataAdd> {
                     if (date == null) {
                       return;
                     } else {
-                      setState(() {
-                        if (date.compareTo(lastdate) > 0) {
-                          closedate = date;
-                          _dateCloseController.text =
-                              " ${closedate.day}/${closedate.month}/${closedate.year}";
-                          _tableadd.closeDate =
-                              " ${closedate.day}/${closedate.month}/${closedate.year}";
-                        } else {
-                          _dateCloseController.clear();
-                        }
-                      });
+                      if (date.compareTo(lastdate) > 0) {
+                        closedate = date;
+                        _dateCloseController.text =
+                            " ${closedate.day}/${closedate.month}/${closedate.year}";
+                        _tableadd.closeDate =
+                            " ${closedate.day}/${closedate.month}/${closedate.year}";
+                      } else {
+                        _dateCloseController.clear();
+                      }
                     }
                   },
                   readOnly: true,
@@ -497,8 +488,7 @@ class _DataAddState extends State<DataAdd> {
         ],
       );
 
-  otherBody(DataProvider postMdl, Size size, void Function()? onPressed) =>
-      Column(
+  otherBody(MxTable postMdl, Size size, void Function()? onPressed) => Column(
         children: [
           SizedBox(
               width: size.width * 0.9,
@@ -705,17 +695,15 @@ class _DataAddState extends State<DataAdd> {
                                 if (date == null) {
                                   return;
                                 } else {
-                                
-                                    if (date.compareTo(lastdate) > 0) {
-                                      closedate = date;
-                                      _dateCloseController.text =
-                                          " ${closedate.day}/${closedate.month}/${closedate.year}";
-                                      _tableadd.closeDate =
-                                          " ${closedate.day}/${closedate.month}/${closedate.year}";
-                                    } else {
-                                      _dateCloseController.clear();
-                                    }
-                               
+                                  if (date.compareTo(lastdate) > 0) {
+                                    closedate = date;
+                                    _dateCloseController.text =
+                                        " ${closedate.day}/${closedate.month}/${closedate.year}";
+                                    _tableadd.closeDate =
+                                        " ${closedate.day}/${closedate.month}/${closedate.year}";
+                                  } else {
+                                    _dateCloseController.clear();
+                                  }
                                 }
                               },
                               readOnly: true,
@@ -825,7 +813,7 @@ class _DataAddState extends State<DataAdd> {
         ],
       );
 
-  void _new(DataProvider dataProvider) async {
+  void _new(MxTable dataProvider) async {
     if (_key.currentState!.validate()) {
       await dataProvider.onAdd(context, _tableadd);
       _key.currentState!.reset();
@@ -833,13 +821,18 @@ class _DataAddState extends State<DataAdd> {
     }
   }
 
-  void _edit(DataProvider dataProvider) async {
+  void _edit(MxTable dataProvider) async {
     _key.currentState!.save();
+    print(_tableadd);
     await dataProvider.onUpdate(context, _tableadd, widget.map);
     categoryDropdownValue = null;
     genderDropdownValue = null;
     _key.currentState!.reset();
-    Navigator.of(context).pop();
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Responsive(mobile: MobileHome()),
+        ));
   }
 
   Widget header(String title) => Row(
@@ -884,12 +877,12 @@ class _DataAddState extends State<DataAdd> {
               controller: controller,
               error: error,
               name: "Name")
-        ], 
+        ],
       );
 
   Widget radioButton(
     Status _value,
-  ) => 
+  ) =>
       Radio(
         visualDensity: const VisualDensity(
             horizontal: VisualDensity.minimumDensity,
