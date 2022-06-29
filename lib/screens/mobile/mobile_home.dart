@@ -18,7 +18,7 @@ class MobileHome extends StatefulWidget {
 }
 
 class _MobileHomeState extends State<MobileHome> {
-  final _drawer = GlobalKey<ScaffoldState>();
+  final _drawer = GlobalKey<ScaffoldState>(); 
   @override
   void initState() {
     super.initState();
