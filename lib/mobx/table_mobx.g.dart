@@ -1,90 +1,106 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
+// // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'table_mobx.dart';
+// part of 'table_mobx.dart';
 
-// **************************************************************************
-// StoreGenerator
-// **************************************************************************
+// // **************************************************************************
+// // StoreGenerator
+// // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
+// // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$MxTable on MxTablebase, Store {
-  late final _$jobnewAtom = Atom(name: 'MxTablebase.jobnew', context: context);
+// mixin _$MxTable on MxTablebase, Store {
+//   late final _$_itemsAtom = Atom(name: 'MxTablebase._items', context: context);
 
-  @override
-  List<Map<String, dynamic>>? get jobnew {
-    _$jobnewAtom.reportRead();
-    return super.jobnew;
-  }
+//   @override
+//   List<Map<String, dynamic>>? get _items {
+//     _$_itemsAtom.reportRead();
+//     return super._items;
+//   }
 
-  @override
-  set jobnew(List<Map<String, dynamic>>? value) {
-    _$jobnewAtom.reportWrite(value, super.jobnew, () {
-      super.jobnew = value;
-    });
-  }
+//   @override
+//   set _items(List<Map<String, dynamic>>? value) {
+//     _$_itemsAtom.reportWrite(value, super._items, () {
+//       super._items = value;
+//     });
+//   }
 
-  late final _$tableAtom = Atom(name: 'MxTablebase.table', context: context);
+//   late final _$dbHelperAtom =
+//       Atom(name: 'MxTablebase.dbHelper', context: context);
 
-  @override
-  Map<String, dynamic>? get table {
-    _$tableAtom.reportRead();
-    return super.table;
-  }
+//   @override
+//   DatabaseHelper get dbHelper {
+//     _$dbHelperAtom.reportRead();
+//     return super.dbHelper;
+//   }
 
-  @override
-  set table(Map<String, dynamic>? value) {
-    _$tableAtom.reportWrite(value, super.table, () {
-      super.table = value;
-    });
-  }
+//   @override
+//   set dbHelper(DatabaseHelper value) {
+//     _$dbHelperAtom.reportWrite(value, super.dbHelper, () {
+//       super.dbHelper = value;
+//     });
+//   }
 
-  late final _$loadingAtom =
-      Atom(name: 'MxTablebase.loading', context: context);
+//   late final _$jobnewAtom = Atom(name: 'MxTablebase.jobnew', context: context);
 
-  @override
-  bool get loading {
-    _$loadingAtom.reportRead();
-    return super.loading;
-  }
+//   @override
+//   List<Map<String, dynamic>>? get jobnew {
+//     _$jobnewAtom.reportRead();
+//     return super.jobnew;
+//   }
 
-  @override
-  set loading(bool value) {
-    _$loadingAtom.reportWrite(value, super.loading, () {
-      super.loading = value;
-    });
-  }
+//   @override
+//   set jobnew(List<Map<String, dynamic>>? value) {
+//     _$jobnewAtom.reportWrite(value, super.jobnew, () {
+//       super.jobnew = value;
+//     });
+//   }
 
-  late final _$getPostdataAsyncAction =
-      AsyncAction('MxTablebase.getPostdata', context: context);
+//   late final _$tableAtom = Atom(name: 'MxTablebase.table', context: context);
 
-  @override
-  Future getPostdata() {
-    return _$getPostdataAsyncAction.run(() => super.getPostdata());
-  }
+//   @override
+//   Map<String, dynamic>? get table {
+//     _$tableAtom.reportRead();
+//     return super.table;
+//   }
 
-  late final _$onAddAsyncAction =
-      AsyncAction('MxTablebase.onAdd', context: context);
+//   @override
+//   set table(Map<String, dynamic>? value) {
+//     _$tableAtom.reportWrite(value, super.table, () {
+//       super.table = value;
+//     });
+//   }
 
-  @override
-  Future onAdd(dynamic context, Job job) {
-    return _$onAddAsyncAction.run(() => super.onAdd(context, job));
-  }
+//   late final _$loadingAtom =
+//       Atom(name: 'MxTablebase.loading', context: context);
 
-  late final _$onUpdateAsyncAction =
-      AsyncAction('MxTablebase.onUpdate', context: context);
+//   @override
+//   bool get loading {
+//     _$loadingAtom.reportRead();
+//     return super.loading;
+//   }
 
-  @override
-  Future onUpdate(dynamic context, Job job, Map<String, dynamic> map) {
-    return _$onUpdateAsyncAction.run(() => super.onUpdate(context, job, map));
-  }
+//   @override
+//   set loading(bool value) {
+//     _$loadingAtom.reportWrite(value, super.loading, () {
+//       super.loading = value;
+//     });
+//   }
 
-  @override
-  String toString() {
-    return '''
-jobnew: ${jobnew},
-table: ${table},
-loading: ${loading}
-    ''';
-  }
-}
+//   late final _$getPostdataAsyncAction =
+//       AsyncAction('MxTablebase.getPostdata', context: context);
+
+//   @override
+//   Future getPostdata() {
+//     return _$getPostdataAsyncAction.run(() => super.getPostdata());
+//   }
+
+//   @override
+//   String toString() {
+//     return '''
+// dbHelper: ${dbHelper},
+// jobnew: ${jobnew},
+// table: ${table},
+// loading: ${loading}
+//     ''';
+//   }
+// }

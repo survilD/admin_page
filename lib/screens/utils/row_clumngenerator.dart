@@ -141,7 +141,7 @@ class Data {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => DataAddmobx(
+                                        builder: (context) => DataAdd(
                                           map: map,
                                           isEdit: true,
                                         ),

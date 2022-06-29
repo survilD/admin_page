@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
             primaryColor: const Color.fromRGBO(244, 61, 39, 5),
             backgroundColor: Colors.white),
         home: const Responsive(
-          mobile: MobileHomemobx(),
+          mobile: MobileHome(),
           desktop: DesktopHome(),
         )
         

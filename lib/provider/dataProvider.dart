@@ -9,10 +9,10 @@ class DataProvider with ChangeNotifier {
   List<Map<String, dynamic>>? jobnew;
   bool loading = false;
 
-  getPostdata(context) async {
+  getPostdata() async {
     loading = true;
 
-    jobnew = await getDataLocal(context);
+    jobnew = await getDataLocal();
     loading = false;
     notifyListeners();
   }
@@ -22,7 +22,7 @@ class DataProvider with ChangeNotifier {
     Map<String, dynamic> table = job.toMap();
 
     await dbHelper.insert(table);
-    await getPostdata(context);
+    await getPostdata();
   }
 
   onUpdate(context, Job job, Map<String, dynamic> map) async {
@@ -32,10 +32,10 @@ class DataProvider with ChangeNotifier {
 
     await dbHelper.update(table);
 
-    await getPostdata(context);
+    await getPostdata();
   }
 
-  Future<List<Map<String, dynamic>>> getDataLocal(context) async {
+  Future<List<Map<String, dynamic>>> getDataLocal() async {
     List<Map<String, dynamic>>? _items;
     final dbHelper = DatabaseHelper.instance;
 

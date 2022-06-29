@@ -126,7 +126,7 @@ DateTime closedate = DateTime.now();
       MaterialPageRoute(
           builder: (context) => Responsive(
                 context: context,
-                mobile: const DataAddmobx(map: {}, isEdit: false),
+                mobile: const DataAdd(map: {}, isEdit: false),
                 desktop: DesktopDataAdd(
                   model: Model(),
                   isEdit: false,
