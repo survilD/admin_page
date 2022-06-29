@@ -24,6 +24,21 @@ mixin _$MxTable on MxTablebase, Store {
     });
   }
 
+  late final _$tableAtom = Atom(name: 'MxTablebase.table', context: context);
+
+  @override
+  Map<String, dynamic>? get table {
+    _$tableAtom.reportRead();
+    return super.table;
+  }
+
+  @override
+  set table(Map<String, dynamic>? value) {
+    _$tableAtom.reportWrite(value, super.table, () {
+      super.table = value;
+    });
+  }
+
   late final _$loadingAtom =
       Atom(name: 'MxTablebase.loading', context: context);
 
@@ -44,8 +59,8 @@ mixin _$MxTable on MxTablebase, Store {
       AsyncAction('MxTablebase.getPostdata', context: context);
 
   @override
-  Future getPostdata() async{
-    return _$getPostdataAsyncAction.run(() =>  super.getPostdata());
+  Future getPostdata() {
+    return _$getPostdataAsyncAction.run(() => super.getPostdata());
   }
 
   late final _$onAddAsyncAction =
@@ -68,6 +83,7 @@ mixin _$MxTable on MxTablebase, Store {
   String toString() {
     return '''
 jobnew: ${jobnew},
+table: ${table},
 loading: ${loading}
     ''';
   }

@@ -27,6 +27,7 @@ class _MobileHomemobxState extends State<MobileHomemobx> {
   @override
   void initState() {
     super.initState();
+    postMdl.getPostdata();
   }
 
   @override
@@ -168,10 +169,9 @@ class _MobileHomemobxState extends State<MobileHomemobx> {
                           child: SingleChildScrollView(
                               controller: scrollControllertabel,
                               scrollDirection: Axis.horizontal,
-                              child: postMdl.loading
-                                  ? const Center(
-                                      child: CircularProgressIndicator())
-                                  : data(size)),
+                              child:
+                               
+                                   data(size)),
                         )),
                   ),
                 ),
@@ -191,12 +191,9 @@ class _MobileHomemobxState extends State<MobileHomemobx> {
         ],
       );
 
-  Widget data(Size size) => (postMdl.jobnew == null)
-      ? SizedBox(
-          height: MediaQuery.of(context).size.height * 0.6,
-          child: const Center(child: Text("No Data Found")))
-      : Observer(builder: (context) {
-          if (postMdl.jobnew!.isNotEmpty) {
+  Widget data(Size size) =>
+      Observer(builder: (context) {
+          if ((!postMdl.loading)) {
             return Card(
               child: Column(
                 children: [

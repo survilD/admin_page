@@ -1,0 +1,111 @@
+[
+
+    {
+        "No":1,
+        "Position":"Administrative Assistant",
+        "Type":"Full-Time",
+        "Posted Date":"25-01-2021",
+        "Last Date To Apply":"25-01-2021",
+        "Close Date":"25-01-2021",
+        "Status":"Active",
+        "Action":""
+       
+    },
+
+    {
+        "No":2,
+        "Position":"Executive Assistant",
+        "Type":"Full-Time",
+        "Posted Date":"25-01-2021",
+        "Last Date To Apply":"25-01-2021",
+        "Close Date":"25-01-2021",
+        "Status":"Active",
+        "Action":""
+      
+    },
+
+    {
+        "No":3,
+        "Position":"Administrative Assistant",
+        "Type":"Part-Time",
+        "Posted Date":"25-01-2021",
+        "Last Date To Apply":"25-01-2021",
+        "Close Date":"25-01-2021",
+        "Status":"Active",
+        "Action":""
+     
+    },
+
+    {
+        "No":4,
+        "Position":"Administrative Assistant",
+        "Type":"Part-Time",
+        "Posted Date":"25-01-2021",
+        "Last Date To Apply":"25-01-2021",
+        "Close Date":"25-01-2021",
+        "Status":"Active",
+        "Action":""
+       
+    }
+,
+    {
+        "No":5,
+        "Position":"Marketing Assistant",
+        "Type":"Full-Time",
+        "Posted Date":"25-01-2021",
+        "Last Date To Apply":"25-01-2021",
+        "Close Date":"25-01-2021",
+        "Status":"Active",
+        "Action":""
+     
+    },
+
+    {
+        "No":6,
+        "Position":"Customer Service Assistant",
+        "Type":"Part-Time",
+        "Posted Date":"25-01-2021",
+        "Last Date To Apply":"25-01-2021",
+        "Close Date":"25-01-2021",
+        "Status":"Active",
+        "Action":""
+     
+    }
+,
+    {
+        "Id":7,
+        "Position":"Administrative Assistant",
+        "Type":"Part-Time",
+        "Posted Date":"25-01-2021",
+        "Last Date To Apply":"25-01-2021",
+        "Close Date":"25-01-2021",
+        "Status":"Active",
+        "Action":""
+       
+    }
+,
+    {
+        "No":8,
+        "Position":"Software Engineer",
+        "Type":"25-01-2021",
+        "Posted Date":"25-01-2021",
+        "Last Date To Apply":"25-01-2021",
+        "Close Date":"25-01-2021",
+        "Status":"InActive",
+        "Action":""
+        
+    }
+,
+    {
+        "No":9,
+        "Position":"Sales Manager",
+        "Type":"Part-Time",
+        "Posted Date":"25-01-2021",
+        "Last Date To Apply":"25-01-2021",
+        "Close Date":"25-01-2021",
+        "Status":"InActive",
+        "Action":""
+        
+    }
+
+]

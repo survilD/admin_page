@@ -22,7 +22,7 @@ class TableGanrate {
       );
     } else {
       List<Map<String, dynamic>> data = tabledata.jobnew!;
-      print(data);
+   
 
       return 
 

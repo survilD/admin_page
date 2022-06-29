@@ -827,6 +827,7 @@ class _DataAddmobxState extends State<DataAddmobx> {
   void _new( ) async {
     if (_key.currentState!.validate()) {
       await postMdl.onAdd(context, _tableadd);
+     
       
       _key.currentState!.reset();
       Navigator.of(context).pop();
@@ -836,7 +837,7 @@ class _DataAddmobxState extends State<DataAddmobx> {
   void _edit() async {
     _key.currentState!.save();
     await postMdl.onUpdate(context, _tableadd, widget.map);
-   
+        
     categoryDropdownValue = null;
     genderDropdownValue = null;
     _key.currentState!.reset();
