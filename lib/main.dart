@@ -1,8 +1,10 @@
+
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_training_1/model/hive.dart';
+import 'package:flutter_training_1/dbhelper/database/drift_database.dart';
+
 // import 'package:flutter_training_1/dbhelper/database/moor_database.dart';
 
 import 'package:flutter_training_1/responsive.dart';
@@ -20,14 +22,8 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (kIsWeb) {
-    Hive.initFlutter();
 
-    Hive.registerAdapter(ModelAdapter());
-
-    await Hive.openBox<Model>("model");
-  }
-  runApp(const MyApp());
+  runApp(Provider(create: (context) => AppDatabse(),child: MyApp(),) );
 }
 
 class MyApp extends StatelessWidget {

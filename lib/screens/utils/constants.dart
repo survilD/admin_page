@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_training_1/screens/mobile/mobile_mobxadd.dart';
 
 
-import '../../model/hive.dart';
+import '../../dbhelper/database/drift_database.dart';
+
 import '../../responsive.dart';
 import '../desktop/desktop_adddata.dart';
 import '../mobile/mobile_adddata.dart';
@@ -126,10 +127,10 @@ DateTime closedate = DateTime.now();
       MaterialPageRoute(
           builder: (context) => Responsive(
                 context: context,
-                mobile: const DataAdd(map: {}, isEdit: false),
-                desktop: DesktopDataAdd(
-                  model: Model(),
-                  isEdit: false,
-                ),
+                mobile: const DataAdd( isEdit: false,),
+                // desktop: DesktopDataAdd(
+                //   model: Model(),
+                //   isEdit: false,
+                // ),
               )),
     );

@@ -1,7 +1,8 @@
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_training_1/dbhelper/database/drift_database.dart';
 
-import 'package:flutter_training_1/model/tabel_model.dart';
 import 'package:flutter_training_1/provider/dataProvider.dart';
 import 'package:flutter_training_1/screens/mobile/mobile_home.dart';
 
@@ -10,27 +11,33 @@ import 'package:flutter_training_1/screens/utils/widgets.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:provider/provider.dart';
 
-import '../../mobx/table_mobx.dart';
 import '../../responsive.dart';
 import '../utils/enum.dart';
 
 class DataAdd extends StatefulWidget {
-  final Map<String, dynamic> map;
+  final ModelData? modelData;
   final bool isEdit;
-  const DataAdd({Key? key, required this.map, required this.isEdit})
-      : super(key: key);
+  const DataAdd({
+    Key? key,
+    this.modelData,
+    required this.isEdit,
+  }) : super(key: key);
 
   @override
   State<DataAdd> createState() => _DataAddState();
 }
 
 class _DataAddState extends State<DataAdd> {
-  Job _tableadd = Job();
+  // Job _modelData = Job();
+
   Status _status = Status.Active;
 
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final _drawer = GlobalKey<ScaffoldState>();
-  final MxTable mxtable = MxTable();
+  // ignore: prefer_typing_uninitialized_variables
+  late final _modelData;
+
+  // final MxTable mxtable = MxTable();
   final TextEditingController _positioncontroller = TextEditingController();
   final TextEditingController _namecontroller = TextEditingController();
   final TextEditingController _datePostController = TextEditingController();
@@ -43,12 +50,15 @@ class _DataAddState extends State<DataAdd> {
     super.initState();
 
     if (widget.isEdit) {
-      _tableadd = Job.fromMap(widget.map);
+      _modelData = widget.modelData!;
 
-      _namecontroller.text = _tableadd.name.toString().toUpperCase();
-      _positioncontroller.text = _tableadd.position.toString().toUpperCase();
-      categoryDropdownValue = _tableadd.type.toString();
-      genderDropdownValue = _tableadd.gender.toString();
+      print(_modelData);
+      _namecontroller.text = _modelData.name.toString().toUpperCase();
+      _positioncontroller.text = _modelData.position.toString().toUpperCase();
+      categoryDropdownValue = _modelData.type.toString();
+      genderDropdownValue = _modelData.gender.toString();
+    } else {
+      _modelData = const ModelCompanion();
     }
   }
 
@@ -63,171 +73,165 @@ class _DataAddState extends State<DataAdd> {
 
   @override
   Widget build(BuildContext context) {
-    _tableadd.status = _status.name;
+    // _modelData.status = _status.name;
     Size size = MediaQuery.of(context).size;
 
     return SafeArea(
-        child: mxtable.loading
-            ? CircularProgressIndicator()
-            : Scaffold(
-                key: _drawer,
-                drawerEnableOpenDragGesture: false,
-                drawer: Responsive.isMobile(context)
-                    ? CustomWidgets.constDrawer(
-                        size,
-                      )
-                    : null,
-                appBar:
-                    CustomWidgets.customAppBar(_drawer, context, size, false),
-                floatingActionButton: CustomWidgets.flotButton(false),
-                body: Row(
-                  children: [
-                    Visibility(
-                      visible: !Responsive.isMobile(context),
-                      child: Expanded(
-                        flex: 1,
-                        child: Scrollbar(
-                          thickness: 2,
-                          child: SingleChildScrollView(
-                            controller: scrollController,
-                            child: Container(
-                              color: Colors.white,
-                              width: size.width * 0.02,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 8),
-                                child: Column(
-                                  children: [
-                                    FittedBox(
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 15),
-                                        child: CircleAvatar(
-                                          radius: size.width * 0.045,
-                                          backgroundImage: profile,
-                                        ),
-                                      ),
-                                    ),
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
-                                      itemCount: drawer.length,
-                                      itemBuilder: (context, index) {
-                                        return Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 10, bottom: 10),
-                                          child: GestureDetector(
-                                            onTap: () => print(index),
-                                            child: Icon(
-                                              icon[index],
-                                              size: size.width * 0.04,
-                                              color: Colors.grey[500],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
+        child: Scaffold(
+      key: _drawer,
+      drawerEnableOpenDragGesture: false,
+      drawer: Responsive.isMobile(context)
+          ? CustomWidgets.constDrawer(
+              size,
+            )
+          : null,
+      appBar: CustomWidgets.customAppBar(_drawer, context, size, false),
+      floatingActionButton: CustomWidgets.flotButton(false),
+      body: Row(
+        children: [
+          Visibility(
+            visible: !Responsive.isMobile(context),
+            child: Expanded(
+              flex: 1,
+              child: Scrollbar(
+                thickness: 2,
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  child: Container(
+                    color: Colors.white,
+                    width: size.width * 0.02,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Column(
+                        children: [
+                          FittedBox(
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 15),
+                              child: CircleAvatar(
+                                radius: size.width * 0.045,
+                                backgroundImage: profile,
                               ),
                             ),
                           ),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: drawer.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 10, bottom: 10),
+                                child: GestureDetector(
+                                  onTap: () => print(index),
+                                  child: Icon(
+                                    icon[index],
+                                    size: size.width * 0.04,
+                                    color: Colors.grey[500],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 6,
+            child: Scrollbar(
+              controller: verticalscroll,
+              child: SingleChildScrollView(
+                controller: verticalscroll,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: titel2,
+                          ),
+                          Row(
+                            children: [
+                              CustomWidgets.iconButtonC(
+                                  Icons.mail,
+                                  Responsive.isMobile(context)
+                                      ? size.width * 1.1
+                                      : size.width * 0.85,
+                                  kGreen),
+                              sizebox5,
+                              CustomWidgets.iconButtonC(
+                                  Icons.call,
+                                  Responsive.isMobile(context)
+                                      ? size.width * 1.1
+                                      : size.width * 0.85,
+                                  kGreen),
+                              sizebox5,
+                              CustomWidgets.iconButtonC(
+                                  Icons.info,
+                                  Responsive.isMobile(context)
+                                      ? size.width * 1.1
+                                      : size.width * 0.85,
+                                  kPrimaryColor)
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    Form(
+                      key: _key,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Responsive.isMobile(context)
+                                  ? mobileBody(
+                                      _modelData,
+                                      () => (widget.isEdit)
+                                          ? _edit(_modelData)
+                                          : _new(_modelData),
+                                    )
+                                  : otherBody(
+                                      _modelData,
+                                      size,
+                                      () => (widget.isEdit)
+                                          ? _edit(_modelData)
+                                          : _new(_modelData),
+                                    )),
                         ),
                       ),
                     ),
-                    Expanded(
-                      flex: 6,
-                      child: Scrollbar(
-                        controller: verticalscroll,
-                        child: SingleChildScrollView(
-                          controller: verticalscroll,
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 10),
-                                      child: titel2,
-                                    ),
-                                    Row(
-                                      children: [
-                                        CustomWidgets.iconButtonC(
-                                            Icons.mail,
-                                            Responsive.isMobile(context)
-                                                ? size.width * 1.1
-                                                : size.width * 0.85,
-                                            kGreen),
-                                        sizebox5,
-                                        CustomWidgets.iconButtonC(
-                                            Icons.call,
-                                            Responsive.isMobile(context)
-                                                ? size.width * 1.1
-                                                : size.width * 0.85,
-                                            kGreen),
-                                        sizebox5,
-                                        CustomWidgets.iconButtonC(
-                                            Icons.info,
-                                            Responsive.isMobile(context)
-                                                ? size.width * 1.1
-                                                : size.width * 0.85,
-                                            kPrimaryColor)
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Form(
-                                key: _key,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    child: Padding(
-                                        padding: const EdgeInsets.all(15.0),
-                                        child: Responsive.isMobile(context)
-                                            ? mobileBody(
-                                                mxtable,
-                                                () => (widget.isEdit)
-                                                    ? _edit(mxtable)
-                                                    : _new(mxtable),
-                                              )
-                                            : otherBody(
-                                                mxtable,
-                                                size,
-                                                () => (widget.isEdit)
-                                                    ? _edit(mxtable)
-                                                    : _new(mxtable),
-                                              )),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: size.height * 0.07,
-                              ),
-                              Text(
-                                copyright,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              sizebox5,
-                              SizedBox(
-                                height: size.height * 0.02,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                    SizedBox(
+                      height: size.height * 0.07,
+                    ),
+                    Text(
+                      copyright,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    sizebox5,
+                    SizedBox(
+                      height: size.height * 0.02,
                     ),
                   ],
                 ),
-              ));
+              ),
+            ),
+          ),
+        ],
+      ),
+    ));
   }
 
-  mobileBody(MxTable postMdl, void Function()? onPressed) => Column(
+  mobileBody(postMdl, void Function()? onPressed) => Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           header("Company Name"),
@@ -236,7 +240,7 @@ class _DataAddState extends State<DataAdd> {
               name: "Name",
               controller: _namecontroller,
               onSaved: (val) {
-                _tableadd.name = _namecontroller.text;
+                _modelData.name = _namecontroller.text;
               },
               error: error),
           const SizedBox(
@@ -247,7 +251,7 @@ class _DataAddState extends State<DataAdd> {
           CustomWidgets.newformfield(
               name: "Name",
               onSaved: (newValue) =>
-                  _tableadd.position = _positioncontroller.text,
+                  _modelData.position = _positioncontroller.text,
               error: error,
               controller: _positioncontroller),
           const SizedBox(
@@ -279,7 +283,7 @@ class _DataAddState extends State<DataAdd> {
                     );
                   },
                 ).toList(),
-                onChanged: (value) => _tableadd.type = value.toString()),
+                onChanged: (value) => _modelData.type = value.toString()),
           ),
           const SizedBox(
             height: 10,
@@ -310,7 +314,7 @@ class _DataAddState extends State<DataAdd> {
                     );
                   },
                 ).toList(),
-                onChanged: (value) => _tableadd.gender = value.toString()),
+                onChanged: (value) => _modelData.gender = value.toString()),
           ),
           const SizedBox(
             height: 10,
@@ -330,7 +334,7 @@ class _DataAddState extends State<DataAdd> {
                         postedDate = date;
                         _datePostController.text =
                             " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
-                        _tableadd.postedDate =
+                        _modelData.postedDate =
                             " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
                       } else {
                         _datePostController.clear();
@@ -343,7 +347,7 @@ class _DataAddState extends State<DataAdd> {
                       errorText: "Please Select Correct Date"),
                   decoration: CustomWidgets.dateDacarotion(
                     widget.isEdit
-                        ? "${_tableadd.postedDate}"
+                        ? "${_modelData.postedDate}"
                         : "  ${postedDate.day}/${postedDate.month}/${postedDate.year}",
                   ))),
           const SizedBox(
@@ -364,7 +368,7 @@ class _DataAddState extends State<DataAdd> {
                         lastdate = date;
                         _dateLastController.text =
                             " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
-                        _tableadd.lastDateApply =
+                        _modelData.lastDateApply =
                             " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
                       } else {
                         _dateLastController.clear();
@@ -376,7 +380,7 @@ class _DataAddState extends State<DataAdd> {
                   validator: RequiredValidator(
                       errorText: "Please Select Correct Date"),
                   decoration: CustomWidgets.dateDacarotion(widget.isEdit
-                      ? "${_tableadd.lastDateApply}"
+                      ? "${_modelData.lastDateApply}"
                       : "  ${lastdate.day}/${lastdate.month}/${lastdate.year}"))),
           const SizedBox(
             height: 10,
@@ -396,7 +400,7 @@ class _DataAddState extends State<DataAdd> {
                         closedate = date;
                         _dateCloseController.text =
                             " ${closedate.day}/${closedate.month}/${closedate.year}";
-                        _tableadd.closeDate =
+                        _modelData.closeDate =
                             " ${closedate.day}/${closedate.month}/${closedate.year}";
                       } else {
                         _dateCloseController.clear();
@@ -409,7 +413,7 @@ class _DataAddState extends State<DataAdd> {
                       errorText: "Please Select Correct Date"),
                   decoration: CustomWidgets.dateDacarotion(
                     widget.isEdit
-                        ? "${_tableadd.closeDate}"
+                        ? "${_modelData.closeDate}"
                         : "  ${closedate.day}/${closedate.month}/${closedate.year}",
                   ))),
           const SizedBox(
@@ -488,7 +492,7 @@ class _DataAddState extends State<DataAdd> {
         ],
       );
 
-  otherBody(MxTable postMdl, Size size, void Function()? onPressed) => Column(
+  otherBody(postMdl, Size size, void Function()? onPressed) => Column(
         children: [
           SizedBox(
               width: size.width * 0.9,
@@ -501,7 +505,7 @@ class _DataAddState extends State<DataAdd> {
                     title: "Company Name",
                     width: size.width,
                     onSaved: (val) async {
-                      _tableadd.name = _namecontroller.text;
+                      _modelData.name = _namecontroller.text;
                     },
                   )),
                   SizedBox(
@@ -514,7 +518,7 @@ class _DataAddState extends State<DataAdd> {
                       title: "Position",
                       width: size.width,
                       onSaved: (val) async {
-                        _tableadd.position = _positioncontroller.text;
+                        _modelData.position = _positioncontroller.text;
                       },
                     ),
                   )
@@ -556,7 +560,7 @@ class _DataAddState extends State<DataAdd> {
                               },
                             ).toList(),
                             onChanged: (value) =>
-                                _tableadd.type = value.toString()),
+                                _modelData.type = value.toString()),
                       ),
                     ],
                   )),
@@ -594,7 +598,7 @@ class _DataAddState extends State<DataAdd> {
                               },
                             ).toList(),
                             onChanged: (value) =>
-                                _tableadd.gender = value.toString()),
+                                _modelData.gender = value.toString()),
                       ),
                     ],
                   ))
@@ -621,7 +625,7 @@ class _DataAddState extends State<DataAdd> {
                                     postedDate = date;
                                     _datePostController.text =
                                         " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
-                                    _tableadd.postedDate =
+                                    _modelData.postedDate =
                                         " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
                                   } else {
                                     _datePostController.clear();
@@ -634,7 +638,7 @@ class _DataAddState extends State<DataAdd> {
                                   errorText: "Please Select Correct Date"),
                               decoration: CustomWidgets.dateDacarotion(
                                 widget.isEdit
-                                    ? "${_tableadd.postedDate}"
+                                    ? "${_modelData.postedDate}"
                                     : "  ${postedDate.day}/${postedDate.month}/${postedDate.year}",
                               ))),
                     ],
@@ -659,7 +663,7 @@ class _DataAddState extends State<DataAdd> {
                                     lastdate = date;
                                     _dateLastController.text =
                                         " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
-                                    _tableadd.lastDateApply =
+                                    _modelData.lastDateApply =
                                         " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
                                   } else {
                                     _dateLastController.clear();
@@ -672,7 +676,7 @@ class _DataAddState extends State<DataAdd> {
                                   errorText: "Please Select Correct Date"),
                               decoration: CustomWidgets.dateDacarotion(widget
                                       .isEdit
-                                  ? "${_tableadd.lastDateApply}"
+                                  ? "${_modelData.lastDateApply}"
                                   : "  ${lastdate.day}/${lastdate.month}/${lastdate.year}"))),
                     ],
                   ))
@@ -699,7 +703,7 @@ class _DataAddState extends State<DataAdd> {
                                     closedate = date;
                                     _dateCloseController.text =
                                         " ${closedate.day}/${closedate.month}/${closedate.year}";
-                                    _tableadd.closeDate =
+                                    _modelData.closeDate =
                                         " ${closedate.day}/${closedate.month}/${closedate.year}";
                                   } else {
                                     _dateCloseController.clear();
@@ -712,7 +716,7 @@ class _DataAddState extends State<DataAdd> {
                                   errorText: "Please Select Correct Date"),
                               decoration: CustomWidgets.dateDacarotion(
                                 widget.isEdit
-                                    ? "${_tableadd.closeDate}"
+                                    ? "${_modelData.closeDate}"
                                     : "  ${closedate.day}/${closedate.month}/${closedate.year}",
                               )))
                     ],
@@ -783,7 +787,7 @@ class _DataAddState extends State<DataAdd> {
                     onPressed: () {
                       categoryDropdownValue = null;
                       genderDropdownValue = null;
-                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/');
                     },
                     color: kPrimaryColor,
                     borderRadius: BorderRadius.circular(20),
@@ -813,18 +817,26 @@ class _DataAddState extends State<DataAdd> {
         ],
       );
 
-  void _new(MxTable dataProvider) async {
+  void _new(ModelCompanion dataProvider) async {
     if (_key.currentState!.validate()) {
-      await dataProvider.onAdd(context, _tableadd);
-      _key.currentState!.reset();
-      Navigator.of(context).pop();
+      await ModelCompanion(
+        name: drift.Value(_namecontroller.text),
+        // gender: drift.Value()
+      );
+
+      print(dataProvider.id);
+      // await AppDatabse().insert(dataProvider);
+      // // await dataProvider.onAdd(context, _modelData);
+      // _key.currentState!.reset();
+      // Navigator.of(context).pop();
     }
   }
 
-  void _edit(MxTable dataProvider) async {
+  void _edit(ModelData dataProvider) async {
     _key.currentState!.save();
-    print(_tableadd);
-    await dataProvider.onUpdate(context, _tableadd, widget.map);
+    print(_modelData);
+    await AppDatabse().updateTodo(dataProvider);
+    // await dataProvider.onUpdate(context, _modelData, widget.map);
     categoryDropdownValue = null;
     genderDropdownValue = null;
     _key.currentState!.reset();
@@ -893,7 +905,7 @@ class _DataAddState extends State<DataAdd> {
         onChanged: (value) => setState(() {
           _status = _value;
 
-          _tableadd.status = _value.name;
+          // _modelData.status = _value.name;
         }),
       );
 }

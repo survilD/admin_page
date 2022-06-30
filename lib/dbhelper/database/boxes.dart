@@ -1,8 +1,8 @@
-import 'package:hive/hive.dart';
+// import 'package:hive/hive.dart';
 
-import '../../model/hive.dart';
+// import '../../model/hive.dart';
 
 
-class Boxes {
-  static Box<Model> getModel() => Hive.box<Model>("model");
-}
+// class Boxes {
+//   static Box<Model> getModel() => Hive.box<Model>("model");
+// }

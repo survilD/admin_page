@@ -1,13 +1,15 @@
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_training_1/dbhelper/database/drift_database.dart';
 import 'package:flutter_training_1/logicpart/logictable.dart';
+import 'package:flutter_training_1/main.dart';
 
 import 'package:flutter_training_1/responsive.dart';
 import 'package:flutter_training_1/screens/utils/constants.dart';
 import 'package:flutter_training_1/screens/utils/widgets.dart';
 import 'package:provider/provider.dart';
 
-import '../../mobx/table_mobx.dart';
 import '../../provider/dataProvider.dart';
 
 class MobileHome extends StatefulWidget {
@@ -22,15 +24,22 @@ class MobileHome extends StatefulWidget {
 class _MobileHomeState extends State<MobileHome> {
   final _drawer = GlobalKey<ScaffoldState>();
 
-  final MxTable mxtable = MxTable();
+  AppDatabse mxtable = AppDatabse();
+
   @override
   void initState() {
-    getPost();
+    // TODO: implement initState
     super.initState();
   }
 
-  Future<void> getPost() async {
-    await mxtable.getPostdata();
+  @override
+  void dispose() {
+    mxtable.close();
+    super.dispose();
+  }
+
+  Future<List<ModelData>> getData() async {
+    return await mxtable.getdatalist;
   }
 
   @override
@@ -48,9 +57,7 @@ class _MobileHomeState extends State<MobileHome> {
               : null,
           appBar: CustomWidgets.customAppBar(_drawer, context, size, true),
           floatingActionButton: CustomWidgets.flotButton(true),
-          body: mainPage(
-            size,
-          )),
+          body: mainPage(size)),
     );
   }
 
@@ -175,7 +182,7 @@ class _MobileHomeState extends State<MobileHome> {
                           child: SingleChildScrollView(
                               controller: scrollControllertabel,
                               scrollDirection: Axis.horizontal,
-                              child: data(size)),
+                              child: data(size,)),
                         )),
                   ),
                 ),
@@ -195,78 +202,83 @@ class _MobileHomeState extends State<MobileHome> {
         ],
       );
 
-  Widget data(Size size) {
-   
-
-    return Observer(
-      builder: (_) => (!mxtable.loading)
-          ? (mxtable.jobnew.isNotEmpty)
-              ? Card(
-                  child: Column(
+  Widget data(Size size,) {
+    return FutureBuilder<List<ModelData>>(
+      future: getData(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List<ModelData>? list = snapshot.data;
+          if (list != null) {
+            if (list.isEmpty) {
+              return Center(
+                child: Text("No data"),
+              );
+            }
+          }
+          return Card(
+            child: Column(
+              children: [
+                TableGanrate.tableFetchDesktop(list, context, size),
+                const SizedBox(
+                  height: 20,
+                ),
+                // Text("Showing  1 of ${mxtable.jobnew.length}  Entries"),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-          
-                      TableGanrate.tableFetchDesktop(mxtable, context, size),
+                      OutlinedButton(
+                          onPressed: () {},
+                          child: const Text("Previous"),
+                          style: TextButton.styleFrom(
+                              primary: kPrimaryColor,
+                              side: const BorderSide(color: kPrimaryColor),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30)))),
                       const SizedBox(
-                        height: 20,
+                        width: 10,
                       ),
-                      Text("Showing  1 of ${mxtable.jobnew.length}  Entries"),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            OutlinedButton(
-                                onPressed: () {},
-                                child: const Text("Previous"),
-                                style: TextButton.styleFrom(
-                                    primary: kPrimaryColor,
-                                    side:
-                                        const BorderSide(color: kPrimaryColor),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(30)))),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            SizedBox(
-                              width: 50,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    primary: kPrimaryColor,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(30))),
-                                onPressed: () {},
-                                child: const Text(
-                                  "1",
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            OutlinedButton(
-                                onPressed: () {},
-                                child: const Text("Next"),
-                                style: TextButton.styleFrom(
-                                    primary: kPrimaryColor,
-                                    side:
-                                        const BorderSide(color: kPrimaryColor),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(30)))),
-                          ],
+                      SizedBox(
+                        width: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: kPrimaryColor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30))),
+                          onPressed: () {},
+                          child: const Text(
+                            "1",
+                          ),
                         ),
                       ),
-                      sizebox5
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      OutlinedButton(
+                          onPressed: () {},
+                          child: const Text("Next"),
+                          style: TextButton.styleFrom(
+                              primary: kPrimaryColor,
+                              side: const BorderSide(color: kPrimaryColor),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30)))),
                     ],
                   ),
-                )
-              : Center(child: Text("No Data"))
-          : CircularProgressIndicator(),
+                ),
+                sizebox5
+              ],
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Center(child: Text(snapshot.error.toString()));
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
     );
   }
 }

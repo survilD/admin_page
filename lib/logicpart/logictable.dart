@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_training_1/provider/dataProvider.dart';
-import 'package:flutter_training_1/screens/utils/row_clumngenerator.dart';
+import 'package:flutter_training_1/logicpart/row_clumngenerator.dart';
 import 'package:hive/hive.dart';
 
 import '../../../dbhelper/database/boxes.dart';
 
-import '../../../model/hive.dart';
+import '../dbhelper/database/drift_database.dart';
 import '../responsive.dart';
 import '../screens/utils/constants.dart';
 
 class TableGanrate {
   static tableFetchDesktop(tabledata, BuildContext context, Size size) {
     if (Responsive.isDesktop(context)) {
-      final data = tabledata.values.toList().cast<Model>();
+       List<ModelData> data = tabledata;
+      // final data = tabledata.values.toList().cast<AppDatabse>();
       return DataTable(
         columnSpacing: size.width * 0.048,
         dataRowHeight: 70,
         dividerThickness: 1,
         columns: Data.getcolume(data, context),
-        rows: Data.getrow(data, context),
+        rows:[]
+        //  Data.getrow(data, context),
       );
     } else {
-      List<Map<String, dynamic>> data = tabledata.jobnew;
+      List<ModelData> data = tabledata;
    
 
       return 
@@ -34,7 +36,7 @@ class TableGanrate {
         columns: 
         Data.getcolume(data, context),
         rows: 
-        Data.getrow(data, context, postMdl: tabledata),
+        Data.getrow(data, context, ),
       );
     }
   }
@@ -70,22 +72,22 @@ class DatePick {
   }
 }
 
-class ButtonResponce {
-  static void onEdit(
-      Model model, GlobalKey<FormState> _key, BuildContext context) {
-    model.save();
+// class ButtonResponce {
+//   static void onEdit(
+//       Model model, GlobalKey<FormState> _key, BuildContext context) {
+//     model.save();
 
-    _key.currentState!.reset();
-    Navigator.of(context).pop();
-  }
+//     _key.currentState!.reset();
+//     Navigator.of(context).pop();
+//   }
 
-  static void newEntries(
-      Model model, GlobalKey<FormState> _key, BuildContext context) async {
-    if (_key.currentState!.validate()) {
-      final box = Boxes.getModel();
-      await box.add(model);
-      _key.currentState!.reset();
-      Navigator.of(context).pop();
-    }
-  }
-}
+//   static void newEntries(
+//       Model model, GlobalKey<FormState> _key, BuildContext context) async {
+//     if (_key.currentState!.validate()) {
+//       final box = Boxes.getModel();
+//       await box.add(model);
+//       _key.currentState!.reset();
+//       Navigator.of(context).pop();
+//     }
+//   }
+// }
