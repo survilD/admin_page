@@ -1,29 +1,33 @@
-
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_training_1/dbhelper/database/drift_database.dart';
+import 'presentation/desktop/desktop_adddata.dart';
+import 'presentation/mobile/mobile_adddata.dart';
+import 'data/datasource.dart/drift_database.dart';
 
-// import 'package:flutter_training_1/dbhelper/database/moor_database.dart';
+import 'presentation/responsive.dart';
 
-import 'package:flutter_training_1/responsive.dart';
-import 'package:flutter_training_1/screens/desktop/desktop_home.dart';
-import 'package:flutter_training_1/provider/dataProvider.dart';
-import 'package:flutter_training_1/screens/mobile/mobile_home.dart';
+import 'presentation/mobile/mobile_home.dart';
 
-import 'package:flutter_training_1/screens/utils/constants.dart';
-
-import 'package:hive_flutter/hive_flutter.dart';
+import 'data/constants.dart';
 
 import 'package:provider/provider.dart';
 
+import 'data/model/jobmdoel.dart';
+import 'presentation/desktop/desktop_home.dart';
 
+
+late final AppDatabse appDatabse;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(Provider(create: (context) => AppDatabse(),child: MyApp(),) );
+  appDatabse = AppDatabse();
+
+  runApp(Provider(
+    create: (context) => AppDatabse(),
+    child:const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -32,21 +36,36 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-    
-        scrollBehavior: MyCustomScrollBehavior(),
-        debugShowCheckedModeBanner: false,
-        title: "Demo 1",
-        theme: ThemeData(
-            scrollbarTheme: ScrollbarThemeData(
-                thumbColor: MaterialStateProperty.all(kPrimaryColor)),
-            primaryColor: const Color.fromRGBO(244, 61, 39, 5),
-            backgroundColor: Colors.white),
-        home: const Responsive(
-          mobile: MobileHome(),
-          desktop: DesktopHome(),
-        )
-        
-        );
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const Responsive(
+              mobile: MobileHome(),
+              desktop: DesktopHome(),
+            ),
+        '/second': (context) => Responsive(
+              context: context,
+              mobile: const DataAdd(
+                  modelCompanion: ModelCompanion(), isEdit: false),
+              desktop: DesktopDataAdd(
+                model: Model(),
+                isEdit: false,
+              ),
+            )
+      },
+
+      scrollBehavior: MyCustomScrollBehavior(),
+      debugShowCheckedModeBanner: false,
+      title: "Demo 1",
+      theme: ThemeData(
+          scrollbarTheme: ScrollbarThemeData(
+              thumbColor: MaterialStateProperty.all(kPrimaryColor)),
+          primaryColor: const Color.fromRGBO(244, 61, 39, 5),
+          backgroundColor: Colors.white),
+      // home: const Responsive(
+      //   mobile: MobileHome(),
+      //   desktop: DesktopHome(),
+      // )
+    );
   }
 }
 
