@@ -1,33 +1,29 @@
-import 'dart:ui';
-
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'presentation/desktop/desktop_adddata.dart';
-import 'presentation/mobile/mobile_adddata.dart';
-import 'data/datasource.dart/drift_database.dart';
+import 'package:flutter_training_1/presentation/desktop/desktop_adddata.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 
+import 'data/datasource.dart/hive_databse.dart';
+import 'data/model/jobmdoel.dart';
+import 'presentation/mobile/mobile_adddata.dart';
 import 'presentation/responsive.dart';
 
 import 'presentation/mobile/mobile_home.dart';
 
 import 'data/constants.dart';
 
-import 'package:provider/provider.dart';
-
-import 'data/model/jobmdoel.dart';
 import 'presentation/desktop/desktop_home.dart';
 
-
-late final AppDatabse appDatabse;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  appDatabse = AppDatabse();
+await Hive.initFlutter();
+Hive.registerAdapter(ModelAdapter());
+await Hive.openBox<Model>("model");
 
-  runApp(Provider(
-    create: (context) => AppDatabse(),
-    child:const MyApp(),
-  ));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -44,8 +40,8 @@ class MyApp extends StatelessWidget {
             ),
         '/second': (context) => Responsive(
               context: context,
-              mobile: const DataAdd(
-                  modelCompanion: ModelCompanion(), isEdit: false),
+              mobile:  DataAdd(model: Model(),
+                  isEdit: false),
               desktop: DesktopDataAdd(
                 model: Model(),
                 isEdit: false,

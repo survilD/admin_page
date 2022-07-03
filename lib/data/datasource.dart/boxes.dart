@@ -1,8 +1,15 @@
-// import 'package:hive/hive.dart';
+import 'package:flutter_training_1/data/datasource.dart/hive_databse.dart';
+import 'package:hive/hive.dart';
 
-// import '../../model/hive.dart';
 
 
-// class Boxes {
-//   static Box<Model> getModel() => Hive.box<Model>("model");
-// }
+
+class Boxes {
+  
+ final bool isloding=false;
+  static Box<Model> getModel() {
+    
+
+    return Hive.box<Model>("model");
+  }
+}

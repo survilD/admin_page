@@ -1,40 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../data/constants.dart';
-import '../../data/datasource.dart/drift_database.dart';
-import '../../data/model/jobmdoel.dart';
+import '../../data/datasource.dart/boxes.dart';
+import '../../data/datasource.dart/hive_databse.dart';
 import '../../presentation/responsive.dart';
 
 import 'row_clumngenerator.dart';
 
 class TableGanrate {
-  static tableFetch(tabledata, BuildContext context, Size size) {
-    if (Responsive.isDesktop(context)) {
-      List<ModelData> data = tabledata;
-      // final data = tabledata.values.toList().cast<AppDatabse>();
-      return DataTable(
-          columnSpacing: size.width * 0.048,
-          dataRowHeight: 70,
-          dividerThickness: 1,
-          columns: Data.getcolume(data, context),
-          rows: []
-          //  Data.getrow(data, context),
-          );
-    } else {
-      List<ModelData> data = tabledata;
-
-      return DataTable(
-        columnSpacing: size.width * 0.05,
-        // Responsive.isMobile(context) ? size.width * 0.05 : size.width * 0.1,
-        dataRowHeight: 70,
-        dividerThickness: 5,
-        columns: Data.getcolume(data, context),
-        rows: Data.getrow(
-          data,
-          context,
-        ),
-      );
-    }
+  static tableFetch(Box<Model> tabledata, BuildContext context, Size size) {
+    final data = tabledata.values.toList().cast<Model>();
+    return DataTable(
+      columnSpacing: Responsive.isDesktop(context)
+          ? size.width * 0.048
+          : size.width * 0.07,
+      dataRowHeight: 70,
+      dividerThickness: Responsive.isDesktop(context) ? 1 : 5,
+      columns: Data.getcolume(data, context),
+      rows: Data.getrow(data, context),
+    );
   }
 }
 
@@ -68,22 +53,22 @@ class DatePick {
   }
 }
 
-// class ButtonResponce {
-//   static void onEdit(
-//       Model model, GlobalKey<FormState> _key, BuildContext context) {
-//     model.save();
+class ButtonResponce {
+  static void onEdit(
+      Model model, GlobalKey<FormState> _key, BuildContext context) {
+    model.save();
 
-//     _key.currentState!.reset();
-//     Navigator.of(context).pop();
-//   }
+    _key.currentState!.reset();
+    Navigator.of(context).pop();
+  }
 
-//   static void newEntries(
-//       Model model, GlobalKey<FormState> _key, BuildContext context) async {
-//     if (_key.currentState!.validate()) {
-//       final box = Boxes.getModel();
-//       await box.add(model);
-//       _key.currentState!.reset();
-//       Navigator.of(context).pop();
-//     }
-//   }
-// }
+  static void newEntries(
+      Model model, GlobalKey<FormState> _key, BuildContext context) async {
+    if (_key.currentState!.validate()) {
+      final box = Boxes.getModel();
+      await box.add(model);
+      _key.currentState!.reset();
+      Navigator.of(context).pop();
+    }
+  }
+}

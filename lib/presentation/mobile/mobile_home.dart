@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../data/datasource.dart/drift_database.dart';
+import 'package:flutter_training_1/data/datasource.dart/hive_databse.dart';
+import 'package:hive_flutter/adapters.dart';
 
+import '../../data/datasource.dart/boxes.dart';
 import '../../domain/logicpart/logictable.dart';
-import '../../main.dart';
 
 import '../responsive.dart';
 import '../../data/constants.dart';
@@ -20,8 +21,13 @@ class MobileHome extends StatefulWidget {
 class _MobileHomeState extends State<MobileHome> {
   final _drawer = GlobalKey<ScaffoldState>();
 
-  Stream<List<ModelData>> getData() {
-    return appDatabse.getdatalist();
+  // Stream<List<ModelData>> getData() {
+  //   // return appDatabse.getdatalist();
+  // }
+  @override
+  void dispose() {
+    Hive.box("model").close();
+    super.dispose();
   }
 
   @override
@@ -189,26 +195,25 @@ class _MobileHomeState extends State<MobileHome> {
   Widget data(
     Size size,
   ) {
-    return StreamBuilder<List<ModelData>>(
-      stream: getData(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          List<ModelData>? list = snapshot.data;
-          if (list != null) {
-            if (list.isEmpty) {
-              return Center(
-                child: Text("No data"),
-              );
-            }
-          }
+    final boxes = Boxes.getModel().listenable();
+
+    return ValueListenableBuilder<Box<Model>>(
+      valueListenable: boxes,
+      builder: (context, box, _) {
+        if (box.values.isEmpty) {
+          return Center(
+            child: Text("No data"),
+          );
+        } else {
+        
           return Card(
             child: Column(
               children: [
-                TableGanrate.tableFetch(list, context, size),
+                TableGanrate.tableFetch(box, context, size),
                 const SizedBox(
                   height: 20,
                 ),
-                Text("Showing  1 of ${list!.length}  Entries"),
+                Text("Showing  1 of ${box.length}  Entries"),
                 const SizedBox(
                   height: 10,
                 ),
@@ -259,10 +264,6 @@ class _MobileHomeState extends State<MobileHome> {
               ],
             ),
           );
-        } else if (snapshot.hasError) {
-          return Center(child: Text(snapshot.error.toString()));
-        } else {
-          return CircularProgressIndicator();
         }
       },
     );

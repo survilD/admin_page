@@ -1,4 +1,4 @@
-#Fri Jul 01 16:14:09 IST 2022
+#Sun Jul 03 14:06:39 IST 2022
 base.0=C\:\\src\\admin_page\\admin_page\\admin_page\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 renamed.0=classes.dex
 path.0=classes.dex

@@ -2,7 +2,8 @@ import 'package:drift/drift.dart' as d;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../data/datasource.dart/drift_database.dart';
+import '../../data/datasource.dart/boxes.dart';
+import '../../data/datasource.dart/hive_databse.dart';
 import '../widgets.dart';
 import 'mobile_home.dart';
 
@@ -10,16 +11,15 @@ import '../../data/constants.dart';
 
 import 'package:form_field_validator/form_field_validator.dart';
 
-import '../../main.dart';
 import '../../presentation/responsive.dart';
 import '../../domain/enum.dart';
 
 class DataAdd extends StatefulWidget {
-  final ModelCompanion? modelCompanion;
+  Model model;
   final bool isEdit;
-  const DataAdd({
+  DataAdd({
     Key? key,
-    this.modelCompanion,
+    required this.model,
     required this.isEdit,
   }) : super(key: key);
 
@@ -33,7 +33,7 @@ class _DataAddState extends State<DataAdd> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final _drawer = GlobalKey<ScaffoldState>();
 
-  ModelCompanion modelCompanion = const ModelCompanion();
+  Model model = Model();
 
   final TextEditingController _positioncontroller = TextEditingController();
   final TextEditingController _namecontroller = TextEditingController();
@@ -47,12 +47,14 @@ class _DataAddState extends State<DataAdd> {
     super.initState();
 
     if (widget.isEdit) {
-      modelCompanion = widget.modelCompanion!;
+      model = widget.model;
+      print(model);
 
-      _namecontroller.text = modelCompanion.name.value;
-      _positioncontroller.text = modelCompanion.position.value;
-      categoryDropdownValue = modelCompanion.type.value;
-      genderDropdownValue = modelCompanion.gender.value;
+      _namecontroller.text = model.name!;
+      _positioncontroller.text = model.position!;
+      categoryDropdownValue = model.type;
+      genderDropdownValue = model.gender;
+      _status = (model.status == "Active") ? Status.Active : Status.InActive;
     }
   }
 
@@ -67,8 +69,6 @@ class _DataAddState extends State<DataAdd> {
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.isEdit)
-      modelCompanion = modelCompanion.copyWith(Status: d.Value(_status.name));
     Size size = MediaQuery.of(context).size;
 
     return SafeArea(
@@ -229,7 +229,7 @@ class _DataAddState extends State<DataAdd> {
               name: "Name",
               controller: _namecontroller,
               onSaved: (val) {
-                modelCompanion = modelCompanion.copyWith(name: d.Value(val!));
+                model.name = val;
               },
               error: error),
           const SizedBox(
@@ -239,8 +239,7 @@ class _DataAddState extends State<DataAdd> {
           sizebox5,
           CustomWidgets.newformfield(
               name: "Name",
-              onSaved: (val) => modelCompanion =
-                  modelCompanion.copyWith(position: d.Value(val!)),
+              onSaved: (val) => model.position = val,
               error: error,
               controller: _positioncontroller),
           const SizedBox(
@@ -272,8 +271,7 @@ class _DataAddState extends State<DataAdd> {
                     );
                   },
                 ).toList(),
-                onChanged: (value) => modelCompanion =
-                    modelCompanion.copyWith(type: d.Value(value.toString()))),
+                onChanged: (value) => model.type = value.toString()),
           ),
           const SizedBox(
             height: 10,
@@ -304,8 +302,7 @@ class _DataAddState extends State<DataAdd> {
                     );
                   },
                 ).toList(),
-                onChanged: (val) => modelCompanion =
-                    modelCompanion.copyWith(gender: d.Value(val.toString()))),
+                onChanged: (val) => model.gender = val.toString()),
           ),
           const SizedBox(
             height: 10,
@@ -325,9 +322,8 @@ class _DataAddState extends State<DataAdd> {
                         postedDate = date;
                         _datePostController.text =
                             " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
-                        modelCompanion = modelCompanion.copyWith(
-                            postedDate: d.Value(
-                                " ${postedDate.day}/${postedDate.month}/${postedDate.year}"));
+                        model.postedDate =
+                            " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
                       } else {
                         _datePostController.clear();
                       }
@@ -339,7 +335,7 @@ class _DataAddState extends State<DataAdd> {
                       errorText: "Please Select Correct Date"),
                   decoration: CustomWidgets.dateDacarotion(
                     widget.isEdit
-                        ? modelCompanion.postedDate.value
+                        ? model.postedDate
                         : "  ${postedDate.day}/${postedDate.month}/${postedDate.year}",
                   ))),
           const SizedBox(
@@ -360,10 +356,8 @@ class _DataAddState extends State<DataAdd> {
                         lastdate = date;
                         _dateLastController.text =
                             " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
-                        modelCompanion = modelCompanion.copyWith(
-                          lastDateApply: d.Value(
-                              " ${lastdate.day}/${lastdate.month}/${lastdate.year}"),
-                        );
+                        model.lastDateApply =
+                            " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
                       } else {
                         _dateLastController.clear();
                       }
@@ -374,7 +368,7 @@ class _DataAddState extends State<DataAdd> {
                   validator: RequiredValidator(
                       errorText: "Please Select Correct Date"),
                   decoration: CustomWidgets.dateDacarotion(widget.isEdit
-                      ? modelCompanion.lastDateApply.value
+                      ? model.lastDateApply
                       : "  ${lastdate.day}/${lastdate.month}/${lastdate.year}"))),
           const SizedBox(
             height: 10,
@@ -394,10 +388,8 @@ class _DataAddState extends State<DataAdd> {
                         closedate = date;
                         _dateCloseController.text =
                             " ${closedate.day}/${closedate.month}/${closedate.year}";
-                        modelCompanion = modelCompanion.copyWith(
-                          CloseDate: d.Value(
-                              " ${closedate.day}/${closedate.month}/${closedate.year}"),
-                        );
+                        model.closeDate =
+                            " ${closedate.day}/${closedate.month}/${closedate.year}";
                       } else {
                         _dateCloseController.clear();
                       }
@@ -409,7 +401,7 @@ class _DataAddState extends State<DataAdd> {
                       errorText: "Please Select Correct Date"),
                   decoration: CustomWidgets.dateDacarotion(
                     widget.isEdit
-                        ? modelCompanion.CloseDate.value
+                        ? model.closeDate
                         : "  ${closedate.day}/${closedate.month}/${closedate.year}",
                   ))),
           const SizedBox(
@@ -500,8 +492,7 @@ class _DataAddState extends State<DataAdd> {
                     title: "Company Name",
                     width: size.width,
                     onSaved: (val) async {
-                      modelCompanion = modelCompanion.copyWith(
-                          name: d.Value(_namecontroller.text));
+                      model.name = val;
                     },
                   )),
                   SizedBox(
@@ -514,8 +505,7 @@ class _DataAddState extends State<DataAdd> {
                       title: "Position",
                       width: size.width,
                       onSaved: (val) async {
-                        modelCompanion = modelCompanion.copyWith(
-                            position: d.Value(_positioncontroller.text));
+                        model.position = val;
                       },
                     ),
                   )
@@ -533,33 +523,33 @@ class _DataAddState extends State<DataAdd> {
                       Padding(
                         padding: const EdgeInsets.only(top: 5),
                         child: DropdownButtonFormField(
-                            decoration: CustomWidgets.decoration(),
-                            elevation: 0,
-                            hint: Padding(
-                              padding: const EdgeInsets.only(left: 5),
-                              child: Text(
-                                "Select Job Type",
-                              ),
+                          decoration: CustomWidgets.decoration(),
+                          elevation: 0,
+                          hint: Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: Text(
+                              "Select Job Type",
                             ),
-                            iconSize: 0,
-                            validator: (val) =>
-                                val == null ? "Please Select Job Type" : null,
-                            value: categoryDropdownValue,
-                            items: categoryItem.map<DropdownMenuItem<String>>(
-                              (value) {
-                                return DropdownMenuItem<String>(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 5.0),
-                                    child: Text(value),
-                                  ),
-                                  value: value,
-                                );
-                              },
-                            ).toList(),
-                            onChanged: (value) => modelCompanion =
-                                modelCompanion.copyWith(
-                                    type: d.Value(value.toString()))),
-                      ),
+                          ),
+                          iconSize: 0,
+                          validator: (val) =>
+                              val == null ? "Please Select Job Type" : null,
+                          value: categoryDropdownValue,
+                          items: categoryItem.map<DropdownMenuItem<String>>(
+                            (value) {
+                              return DropdownMenuItem<String>(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Text(value),
+                                ),
+                                value: value,
+                              );
+                            },
+                          ).toList(),
+                          onChanged: (value) =>
+                              model.type = genderDropdownValue,
+                        ),
+                      )
                     ],
                   )),
                   SizedBox(
@@ -595,9 +585,8 @@ class _DataAddState extends State<DataAdd> {
                                 );
                               },
                             ).toList(),
-                            onChanged: (value) => modelCompanion =
-                                modelCompanion.copyWith(
-                                    gender: d.Value(value.toString()))),
+                            onChanged: (value) =>
+                                model.gender = genderDropdownValue),
                       ),
                     ],
                   ))
@@ -624,9 +613,8 @@ class _DataAddState extends State<DataAdd> {
                                     postedDate = date;
                                     _datePostController.text =
                                         " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
-                                    modelCompanion = modelCompanion.copyWith(
-                                        postedDate: d.Value(
-                                            " ${postedDate.day}/${postedDate.month}/${postedDate.year}"));
+                                    model.postedDate =
+                                        " ${postedDate.day}/${postedDate.month}/${postedDate.year}";
                                   } else {
                                     _datePostController.clear();
                                   }
@@ -638,7 +626,7 @@ class _DataAddState extends State<DataAdd> {
                                   errorText: "Please Select Correct Date"),
                               decoration: CustomWidgets.dateDacarotion(
                                 widget.isEdit
-                                    ? "${modelCompanion.postedDate}"
+                                    ? "${model.postedDate}"
                                     : "  ${postedDate.day}/${postedDate.month}/${postedDate.year}",
                               ))),
                     ],
@@ -663,9 +651,8 @@ class _DataAddState extends State<DataAdd> {
                                     lastdate = date;
                                     _dateLastController.text =
                                         " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
-                                    modelCompanion = modelCompanion.copyWith(
-                                        lastDateApply: d.Value(
-                                            " ${lastdate.day}/${lastdate.month}/${lastdate.year}"));
+                                    model.lastDateApply =
+                                        " ${lastdate.day}/${lastdate.month}/${lastdate.year}";
                                   } else {
                                     _dateLastController.clear();
                                   }
@@ -677,7 +664,7 @@ class _DataAddState extends State<DataAdd> {
                                   errorText: "Please Select Correct Date"),
                               decoration: CustomWidgets.dateDacarotion(widget
                                       .isEdit
-                                  ? "${modelCompanion.lastDateApply}"
+                                  ? "${model.lastDateApply}"
                                   : "  ${lastdate.day}/${lastdate.month}/${lastdate.year}"))),
                     ],
                   ))
@@ -704,9 +691,8 @@ class _DataAddState extends State<DataAdd> {
                                     closedate = date;
                                     _dateCloseController.text =
                                         " ${closedate.day}/${closedate.month}/${closedate.year}";
-                                    modelCompanion = modelCompanion.copyWith(
-                                        CloseDate: d.Value(
-                                            " ${closedate.day}/${closedate.month}/${closedate.year}"));
+                                    model.closeDate =
+                                        " ${closedate.day}/${closedate.month}/${closedate.year}";
                                   } else {
                                     _dateCloseController.clear();
                                   }
@@ -718,7 +704,7 @@ class _DataAddState extends State<DataAdd> {
                                   errorText: "Please Select Correct Date"),
                               decoration: CustomWidgets.dateDacarotion(
                                 widget.isEdit
-                                    ? "${modelCompanion.CloseDate}"
+                                    ? "${model.closeDate}"
                                     : "  ${closedate.day}/${closedate.month}/${closedate.year}",
                               )))
                     ],
@@ -821,33 +807,21 @@ class _DataAddState extends State<DataAdd> {
 
   void _new() async {
     if (_key.currentState!.validate()) {
-      await appDatabse.insert(modelCompanion);
-
-      categoryDropdownValue = null;
-      genderDropdownValue = null;
-
+      model.status = _status.name;
+      final box = Boxes.getModel();
+      await box.add(model);
       _key.currentState!.reset();
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const Responsive(mobile: MobileHome()),
-          ));
+      Navigator.of(context).pop();
     }
   }
 
   void _edit() async {
     _key.currentState!.save();
 
-    await appDatabse.updateTodo(modelCompanion);
+    model.save();
 
-    categoryDropdownValue = null;
-    genderDropdownValue = null;
     _key.currentState!.reset();
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const Responsive(mobile: MobileHome()),
-        ));
+    Navigator.of(context).pop();
   }
 
   Widget header(String title) => Row(
@@ -908,8 +882,7 @@ class _DataAddState extends State<DataAdd> {
         onChanged: (value) => setState(() {
           _status = _value;
 
-          modelCompanion =
-              modelCompanion.copyWith(Status: d.Value(_value.toString()));
+          model.status = _status.name;
         }),
       );
 }

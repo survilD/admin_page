@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_training_1/presentation/mobile/mobile_adddata.dart';
 
 import '../../data/constants.dart';
-import '../../data/datasource.dart/drift_database.dart';
-import '../../main.dart';
-import '../../presentation/mobile/mobile_adddata.dart';
+import '../../data/datasource.dart/hive_databse.dart';
+
+import '../../presentation/desktop/desktop_adddata.dart';
 import '../../presentation/responsive.dart';
 
 class Data {
   static List<DataColumn> getcolume(
-    List<ModelData> list,
+    List<Model> list,
     BuildContext context,
   ) {
     if (Responsive.isDesktop(context)) {
-      // final box = Boxes.getModel();
-      // List<ModelData>? webclmname = box.values.cast<Model>().toList();
-
       return List.generate(
-          list[0].toJson().keys.toList().length + 2,
+          list[0].toMap().length + 2,
           (index) => DataColumn(
-              label: (list[0].toJson().keys.toList().length + 1 > index)
+              label: (list[0].toMap().length + 1 > index)
                   ? (index == 0)
                       ? const Text(
                           "ID",
@@ -40,16 +38,23 @@ class Data {
           4,
           (index) => DataColumn(
               label: ((3 > index)
-                  ? Text(
-                      list[0].toJson().keys.toList()[index].toUpperCase(),
-                      //  [index] keys.toList()[index],
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
-                      ),
-                    )
+                  ? (index == 0)
+                      ? const Text(
+                          "ID",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                          ),
+                        )
+                      : Text(
+                          list[0].toMap().keys.toList()[index - 1],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17,
+                          ),
+                        )
                   : const Text(
-                      "ACTION",
+                      "Action",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 17,
@@ -58,13 +63,9 @@ class Data {
     }
   }
 
-  static List<DataRow> getrow(List<ModelData> getrow, BuildContext context,
+  static List<DataRow> getrow(List<Model> getrow, BuildContext context,
       {postMdl}) {
     if (Responsive.isDesktop(context)) {
-      // final box = Boxes.getModel();
-
-      // List<Model>? webclmname = getrow.cast<Model>();
-
       return List.generate(
           getrow.length,
           (index1) => DataRow(
@@ -88,13 +89,15 @@ class Data {
   }
 
   static List<DataCell> _createCell(
-      ModelData m, int index1, BuildContext context,
-      {postMdl}) {
+    Model m,
+    int index1,
+    BuildContext context,
+  ) {
     Size size = MediaQuery.of(context).size;
     return List.generate(
         (Responsive.isMobile(context) || Responsive.isTablet(context))
             ? 4
-            : m.toJson().length + 2,
+            : m.toMap().length + 2,
         (index) => (Responsive.isMobile(context) ||
                 Responsive.isTablet(context))
             ? DataCell((3 == index)
@@ -104,22 +107,10 @@ class Data {
                       CircleAvatar(
                           backgroundColor: kpop.withAlpha(30),
                           child: GestureDetector(
-                              onTap: () async {
-                                // List<Map<String, dynamic>> val =
-                                //     postMdl!.jobnew!;
-                                // Map<String, dynamic> map = {};
-
-                                // val.forEach((element) {
-                                //   if (element["Id"] == m["Id"]) {
-                                //     map = element as Map<String, dynamic>;
-                                //   }
-                                // });
-
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        dialog(m.toJson(), size, context));
-                              },
+                              onTap: () => showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      dialog(m.toMap(), size, context)),
                               child: Icon(Icons.remove_red_eye, color: kpop)),
                           radius: 20),
                       SizedBox(
@@ -128,28 +119,7 @@ class Data {
                       CircleAvatar(
                           backgroundColor: kpen,
                           child: GestureDetector(
-                              onTap: () async {
-                                // List<Map<String, dynamic>> val =
-                                //     postMdl!.jobnew!;
-                                // Map<String, dynamic> map = {};
-
-                                // val.forEach((element) {
-                                //   if (element["Id"] == m["Id"]) {
-                                //     map = element;
-
-                                //   }
-                                // }
-                                // );
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => DataAdd(
-                                      modelCompanion: m.toCompanion(true),
-                                      isEdit: true,
-                                    ),
-                                  ),
-                                );
-                              },
+                              onTap: () => onEdit(m, context),
                               child: Icon(Icons.edit_sharp, color: kGreen))),
                       SizedBox(
                         width: 5,
@@ -157,8 +127,7 @@ class Data {
                       CircleAvatar(
                           backgroundColor: kpink.withAlpha(50),
                           child: GestureDetector(
-                            onTap: () async =>
-                                appDatabse.deleteUSer(m.toCompanion(true)),
+                            onTap: () => m.delete(),
                             child: Icon(
                               Icons.delete,
                               color: kpink,
@@ -176,9 +145,9 @@ class Data {
                       )
                     : Text(
                         m
-                            .toJson()
+                            .toMap()
                             .values
-                            .toList()[index]
+                            .toList()[index - 1]
                             .toString()
                             .toUpperCase(),
                         style: TextStyle(
@@ -186,7 +155,7 @@ class Data {
                             fontSize: 15,
                             color: Colors.grey[800]),
                       ))
-            : DataCell((m.toJson().values.toList().length + 1 > index)
+            : DataCell((m.toMap().values.toList().length + 1 > index)
                 ? (index == 0)
                     ? Text(
                         (index1 + 1).toString(),
@@ -196,19 +165,19 @@ class Data {
                         ),
                       )
                     : (m
-                                    .toJson()
+                                    .toMap()
                                     .values
                                     .toList()[index - 1]
                                     .toString()
                                     .toUpperCase() ==
                                 "TRUE" ||
-                            m.toJson().values.toList()[index - 1].toString() ==
+                            m.toMap().values.toList()[index - 1].toString() ==
                                 "FALSE")
                         ? Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: (m
-                                          .toJson()
+                                          .toMap()
                                           .values
                                           .toList()[index - 1]
                                           .toString()
@@ -221,7 +190,7 @@ class Data {
                               padding: const EdgeInsets.all(10.0),
                               child: Text(
                                 (m
-                                            .toJson()
+                                            .toMap()
                                             .values
                                             .toList()[index - 1]
                                             .toString()
@@ -233,7 +202,7 @@ class Data {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                     color: (m
-                                                .toJson()
+                                                .toMap()
                                                 .values
                                                 .toList()[index - 1]
                                                 .toString()
@@ -245,7 +214,7 @@ class Data {
                             ),
                           )
                         : (m
-                                    .toJson()
+                                    .toMap()
                                     .values
                                     .toList()[index - 1]
                                     .toString()
@@ -255,7 +224,7 @@ class Data {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   color: (m
-                                              .toJson()
+                                              .toMap()
                                               .values
                                               .toList()[index - 1]
                                               .toString()
@@ -277,7 +246,7 @@ class Data {
                               )
                             : Text(
                                 m
-                                    .toJson()
+                                    .toMap()
                                     .values
                                     .toList()[index - 1]
                                     .toString()
@@ -296,14 +265,14 @@ class Data {
                               onTap: () => showDialog(
                                   context: context,
                                   builder: (BuildContext context) =>
-                                      dialog(m.toJson(), size, context)),
+                                      dialog(m.toMap(), size, context)),
                               child: Icon(Icons.remove_red_eye, color: kpop)),
                           radius: 20),
                       sizebox5,
                       CircleAvatar(
                           backgroundColor: kpen,
                           child: GestureDetector(
-                              // onTap: () => onEditWeb(m, context),
+                              onTap: () => onEdit(m, context),
                               child: Icon(Icons.edit_sharp, color: kGreen))),
                       SizedBox(
                         width: 5,
@@ -311,9 +280,9 @@ class Data {
                       CircleAvatar(
                           backgroundColor: kpink.withAlpha(50),
                           child: GestureDetector(
-                            // onTap: () async {
-                            //   m.delete();
-                            // },
+                            onTap: () async {
+                              m.delete();
+                            },
                             child: Icon(
                               Icons.delete,
                               color: kpink,
@@ -333,7 +302,7 @@ class Data {
                   shrinkWrap: true,
                   itemCount: Responsive.isDesktop(context)
                       ? map.length
-                      : map.length - 1,
+                      : map.length ,
                   itemBuilder: (context, index) {
                     return Card(
                       elevation: 3,
@@ -344,7 +313,7 @@ class Data {
                           map.keys
                               .toList()[Responsive.isDesktop(context)
                                   ? index
-                                  : index + 1]
+                                  : index ]
                               .toString(),
                           style: const TextStyle(
                               color: kPrimaryColor,
@@ -372,7 +341,7 @@ class Data {
                               : map.values
                                   .toList()[Responsive.isDesktop(context)
                                       ? index
-                                      : index + 1]
+                                      : index ]
                                   .toString()
                                   .toUpperCase(),
                           style: TextStyle(
@@ -388,8 +357,8 @@ class Data {
             : Center(child: CircularProgressIndicator()),
       );
 
-  static heading(ModelData model, int index) {
-    Map map = model.toJson();
+  static heading(Model model, int index) {
+    Map map = model.toMap();
 
     return Text(
       map.keys.toList()[index - 1],
@@ -400,14 +369,19 @@ class Data {
     );
   }
 
-  // static onEditWeb(Model m, BuildContext context) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //         builder: (context) => DesktopDataAdd(
-  //               isEdit: true,
-  //               model: m,
-  //             )),
-  //   );
-  // }
+  static onEdit(Model m, BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => Responsive(
+              mobile: DataAdd(
+                isEdit: true,
+                model: m,
+              ),
+              desktop: DesktopDataAdd(
+                isEdit: true,
+                model: m,
+              ))),
+    );
+  }
 }
