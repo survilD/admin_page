@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_training_1/presentation/mobile/mobile_adddata.dart';
 
 import '../../data/constants.dart';
-import '../../data/datasource.dart/hive_databse.dart';
+import '../../data/model/hive_databse.dart';
 
-import '../../presentation/desktop/desktop_adddata.dart';
 import '../../presentation/responsive.dart';
+import '../../presentation/screen/jobform.dart';
 
 class Data {
   static List<DataColumn> getcolume(
@@ -111,24 +110,24 @@ class Data {
                                   context: context,
                                   builder: (BuildContext context) =>
                                       dialog(m.toMap(), size, context)),
-                              child: Icon(Icons.remove_red_eye, color: kpop)),
+                              child: const Icon(Icons.remove_red_eye, color: kpop)),
                           radius: 20),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       CircleAvatar(
                           backgroundColor: kpen,
                           child: GestureDetector(
                               onTap: () => onEdit(m, context),
-                              child: Icon(Icons.edit_sharp, color: kGreen))),
-                      SizedBox(
+                              child:const  Icon(Icons.edit_sharp, color: kGreen))),
+                    const   SizedBox(
                         width: 5,
                       ),
                       CircleAvatar(
                           backgroundColor: kpink.withAlpha(50),
                           child: GestureDetector(
                             onTap: () => m.delete(),
-                            child: Icon(
+                            child:const  Icon(
                               Icons.delete,
                               color: kpink,
                             ),
@@ -138,7 +137,7 @@ class Data {
                 : (index == 0)
                     ? Text(
                         (index1).toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 17,
                         ),
@@ -159,7 +158,7 @@ class Data {
                 ? (index == 0)
                     ? Text(
                         (index1 + 1).toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 17,
                         ),
@@ -170,9 +169,14 @@ class Data {
                                     .toList()[index - 1]
                                     .toString()
                                     .toUpperCase() ==
-                                "TRUE" ||
-                            m.toMap().values.toList()[index - 1].toString() ==
-                                "FALSE")
+                                "ACTIVE" ||
+                            m
+                                    .toMap()
+                                    .values
+                                    .toList()[index - 1]
+                                    .toString()
+                                    .toUpperCase() ==
+                                "INACTIVE")
                         ? Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
@@ -182,7 +186,7 @@ class Data {
                                           .toList()[index - 1]
                                           .toString()
                                           .toUpperCase() ==
-                                      "TRUE")
+                                      "ACTIVE")
                                   ? kpop.withAlpha(30)
                                   : kpink.withAlpha(30),
                             ),
@@ -195,9 +199,9 @@ class Data {
                                             .toList()[index - 1]
                                             .toString()
                                             .toUpperCase() ==
-                                        "TRUE")
+                                        "ACTIVE")
                                     ? "ACTIVE"
-                                    : "InActive",
+                                    : "INACTIVE",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
@@ -207,74 +211,43 @@ class Data {
                                                 .toList()[index - 1]
                                                 .toString()
                                                 .toUpperCase() ==
-                                            "TRUE")
+                                            "ACTIVE")
                                         ? kpop
                                         : kpink),
                               ),
                             ),
                           )
-                        : (m
-                                    .toMap()
-                                    .values
-                                    .toList()[index - 1]
-                                    .toString()
-                                    .toUpperCase() ==
-                                "FALSE")
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: (m
-                                              .toMap()
-                                              .values
-                                              .toList()[index - 1]
-                                              .toString()
-                                              .toUpperCase() ==
-                                          "FALSE")
-                                      ? kpink.withAlpha(30)
-                                      : kpink.withAlpha(30),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(10.0),
-                                  child: Text(
-                                    "InActive",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                        color: kpink),
-                                  ),
-                                ),
-                              )
-                            : Text(
-                                m
-                                    .toMap()
-                                    .values
-                                    .toList()[index - 1]
-                                    .toString()
-                                    .toUpperCase(),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                    color: Colors.grey[800]),
-                              )
+                        : Text(
+                            m
+                                .toMap()
+                                .values
+                                .toList()[index - 1]
+                                .toString()
+                                .toUpperCase(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Colors.grey[800]),
+                          )
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       CircleAvatar(
                           backgroundColor: kpop.withAlpha(30),
                           child: GestureDetector(
-                              onTap: () => showDialog(
+                              onTap: () =>   showDialog(
                                   context: context,
                                   builder: (BuildContext context) =>
                                       dialog(m.toMap(), size, context)),
-                              child: Icon(Icons.remove_red_eye, color: kpop)),
+                              child:const Icon(Icons.remove_red_eye, color: kpop)),
                           radius: 20),
                       sizebox5,
                       CircleAvatar(
                           backgroundColor: kpen,
                           child: GestureDetector(
                               onTap: () => onEdit(m, context),
-                              child: Icon(Icons.edit_sharp, color: kGreen))),
-                      SizedBox(
+                              child: const Icon(Icons.edit_sharp, color: kGreen))),
+                    const   SizedBox(
                         width: 5,
                       ),
                       CircleAvatar(
@@ -283,7 +256,7 @@ class Data {
                             onTap: () async {
                               m.delete();
                             },
-                            child: Icon(
+                            child: const Icon(
                               Icons.delete,
                               color: kpink,
                             ),
@@ -300,9 +273,8 @@ class Data {
                     : size.width,
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: Responsive.isDesktop(context)
-                      ? map.length
-                      : map.length ,
+                  itemCount:
+                      Responsive.isDesktop(context) ? map.length : map.length,
                   itemBuilder: (context, index) {
                     return Card(
                       elevation: 3,
@@ -311,9 +283,8 @@ class Data {
                         minLeadingWidth: size.width * 0.3,
                         leading: Text(
                           map.keys
-                              .toList()[Responsive.isDesktop(context)
-                                  ? index
-                                  : index ]
+                              .toList()[
+                                  Responsive.isDesktop(context) ? index : index]
                               .toString(),
                           style: const TextStyle(
                               color: kPrimaryColor,
@@ -321,30 +292,14 @@ class Data {
                               fontWeight: FontWeight.bold),
                         ),
                         title: Text(
-                          (map.values
-                                          .toList()[index]
-                                          .toString()
-                                          .toUpperCase() ==
-                                      "TRUE" ||
-                                  map.values
-                                          .toList()[index]
-                                          .toString()
-                                          .toUpperCase() ==
-                                      "FALSE")
-                              ? (map.values
-                                          .toList()[index]
-                                          .toString()
-                                          .toUpperCase() ==
-                                      "TRUE")
-                                  ? "ACTIVE"
-                                  : "InACTIVE"
-                              : map.values
+                         
+                               map.values
                                   .toList()[Responsive.isDesktop(context)
                                       ? index
-                                      : index ]
+                                      : index]
                                   .toString()
                                   .toUpperCase(),
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: kGrey,
                               fontSize: 15,
                               fontWeight: FontWeight.bold),
@@ -354,7 +309,7 @@ class Data {
                   },
                 ),
               )
-            : Center(child: CircularProgressIndicator()),
+            : const Center(child: CircularProgressIndicator()),
       );
 
   static heading(Model model, int index) {
@@ -373,15 +328,10 @@ class Data {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => Responsive(
-              mobile: DataAdd(
+          builder: (context) => DataAdd(
                 isEdit: true,
                 model: m,
-              ),
-              desktop: DesktopDataAdd(
-                isEdit: true,
-                model: m,
-              ))),
+              )),
     );
   }
 }

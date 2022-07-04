@@ -1,19 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_training_1/presentation/desktop/desktop_adddata.dart';
-import 'package:hive/hive.dart';
+import 'presentation/screen/jobform.dart';
+import 'presentation/screen/home.dart';
 import 'package:hive_flutter/adapters.dart';
 
-import 'data/datasource.dart/hive_databse.dart';
-import 'data/model/jobmdoel.dart';
-import 'presentation/mobile/mobile_adddata.dart';
-import 'presentation/responsive.dart';
-
-import 'presentation/mobile/mobile_home.dart';
-
 import 'data/constants.dart';
+import 'data/model/hive_databse.dart';
 
-import 'presentation/desktop/desktop_home.dart';
 
 
 void main() async {
@@ -34,37 +27,25 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/',
       routes: {
-        '/': (context) => const Responsive(
-              mobile: MobileHome(),
-              desktop: DesktopHome(),
-            ),
-        '/second': (context) => Responsive(
-              context: context,
-              mobile:  DataAdd(model: Model(),
+        '/': (context) => const  Home(),
+        '/second': (context) => DataAdd(model: Model(),
                   isEdit: false),
-              desktop: DesktopDataAdd(
-                model: Model(),
-                isEdit: false,
-              ),
-            )
+            
       },
 
       scrollBehavior: MyCustomScrollBehavior(),
       debugShowCheckedModeBanner: false,
-      title: "Demo 1",
+      title: "Admin",
       theme: ThemeData(
           scrollbarTheme: ScrollbarThemeData(
               thumbColor: MaterialStateProperty.all(kPrimaryColor)),
           primaryColor: const Color.fromRGBO(244, 61, 39, 5),
           backgroundColor: Colors.white),
-      // home: const Responsive(
-      //   mobile: MobileHome(),
-      //   desktop: DesktopHome(),
-      // )
+      
     );
   }
 }
-
+// scroll for web horizantal
 class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override

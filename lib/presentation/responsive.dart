@@ -17,8 +17,8 @@ class Responsive extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth <= 1090) {
-        return mobile!;
+      if (constraints.maxWidth>=650 && constraints.maxWidth <= 1090) {
+        return tablet!;
       } else if (constraints.maxWidth > 1090) {
         return desktop!;
       } else {

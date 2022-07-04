@@ -1,8 +1,0 @@
-version: "Apple Swift version 5.6.1 (swiftlang-5.6.0.323.66 clang-1316.0.20.12)"
-options: "c4dfddf03511dd2ad3594563f40db9ba58ab950ec70a68e67e005e4bf7b0b81f"
-build_start_time: [1656065041, 70763111]
-build_end_time: [1656065046, 136114120]
-inputs:
-  "/Users/imac/Documents/survil/Flutter Training/flutter_training_1/macos/Flutter/GeneratedPluginRegistrant.swift": [1656065005, 916883468]
-  "/Users/imac/Documents/survil/Flutter Training/flutter_training_1/macos/Runner/AppDelegate.swift": [1650264730, 0]
-  "/Users/imac/Documents/survil/Flutter Training/flutter_training_1/macos/Runner/MainFlutterWindow.swift": [1650264730, 0]

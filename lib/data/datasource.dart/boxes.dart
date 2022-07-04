@@ -1,5 +1,6 @@
-import 'package:flutter_training_1/data/datasource.dart/hive_databse.dart';
 import 'package:hive/hive.dart';
+
+import '../model/hive_databse.dart';
 
 
 

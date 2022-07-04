@@ -3,18 +3,20 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../data/constants.dart';
 import '../../data/datasource.dart/boxes.dart';
-import '../../data/datasource.dart/hive_databse.dart';
+import '../../data/model/hive_databse.dart';
 import '../../presentation/responsive.dart';
-
 import 'row_clumngenerator.dart';
 
 class TableGanrate {
   static tableFetch(Box<Model> tabledata, BuildContext context, Size size) {
     final data = tabledata.values.toList().cast<Model>();
     return DataTable(
+      
+
+     
       columnSpacing: Responsive.isDesktop(context)
-          ? size.width * 0.048
-          : size.width * 0.07,
+          ? size.width * 0.047
+          : Responsive.isMobile(context)? size.width * 0.07: size.width * 0.15,
       dataRowHeight: 70,
       dividerThickness: Responsive.isDesktop(context) ? 1 : 5,
       columns: Data.getcolume(data, context),

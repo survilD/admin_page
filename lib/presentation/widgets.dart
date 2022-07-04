@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../domain/enum.dart';
 import 'responsive.dart';
 import '../data/constants.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-
-
 
 class CustomWidgets {
   static loginForm({
@@ -131,7 +130,7 @@ class CustomWidgets {
   static customAppBar(GlobalKey<ScaffoldState> _drawer, BuildContext context,
       Size size, bool isFirst) {
     return PreferredSize(
-      preferredSize: const Size.fromHeight(70.0),
+      preferredSize:  Size.fromHeight(size.height * 0.1),
       child: AppBar(
         title: Responsive.isMobile(context)
             ? GestureDetector(
@@ -146,8 +145,8 @@ class CustomWidgets {
                   FittedBox(
                     fit: BoxFit.cover,
                     child: Text(
-                      !isFirst ? "New Job" : "Job List",
-                      style: TextStyle(
+                      isFirst ? "Job List":"New Job" ,
+                      style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 27,
                           color: Colors.black),
@@ -162,8 +161,8 @@ class CustomWidgets {
         leadingWidth: size.width * 0.14,
         leading: Padding(
           padding: Responsive.isMobile(context)
-              ? EdgeInsets.all(10)
-              : EdgeInsets.all(4.0),
+              ?const  EdgeInsets.all(10)
+              : const EdgeInsets.all(4.0),
           child: imageLogo,
         ),
         actionsIconTheme: const IconThemeData(
@@ -252,16 +251,6 @@ class CustomWidgets {
     );
   }
 
-  static flotbutton(
-      {Color? color, IconData? icons, required void Function()? onPressed}) {
-    return FloatingActionButton.small(
-      heroTag: null,
-      backgroundColor: color,
-      onPressed: onPressed,
-      child: Icon(icons),
-    );
-  }
-
   static constDrawer(
     Size size,
   ) {
@@ -275,12 +264,13 @@ class CustomWidgets {
               topRight: Radius.circular(10),
             )),
             child: Scrollbar(
+              
               child: SingleChildScrollView(
                 controller: scrollController,
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(10.0),
+                      padding:const EdgeInsets.all(10.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -322,7 +312,7 @@ class CustomWidgets {
                     ),
                     sizebox5,
                     ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return ListTile(
@@ -381,22 +371,27 @@ class CustomWidgets {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Visibility(
-          visible: isFirst,
-          child: CustomWidgets.flotbutton(
+            visible: isFirst,
+            child: FloatingActionButton.small(
+              heroTag: null,
+              backgroundColor: kPrimaryColor.withAlpha(202),
               onPressed: () {},
-              color: kPrimaryColor.withAlpha(202),
-              icons: Icons.next_plan_sharp),
+              child: const Icon(Icons.next_plan_sharp),
+            )),
+        sizebox5,
+        FloatingActionButton.small(
+          heroTag: null,
+          backgroundColor: const Color.fromRGBO(28, 202, 210, 1),
+          onPressed: () {},
+          child: const Icon(Icons.headset_mic_outlined),
         ),
         sizebox5,
-        CustomWidgets.flotbutton(
-            onPressed: () {},
-            color: Color.fromRGBO(28, 202, 210, 1),
-            icons: Icons.headset_mic),
-        sizebox5,
-        CustomWidgets.flotbutton(
-            onPressed: () {},
-            color: Color.fromRGBO(144, 194, 94, 1),
-            icons: Icons.shopping_cart_outlined),
+        FloatingActionButton.small(
+          heroTag: null,
+          backgroundColor: const Color.fromRGBO(144, 194, 94, 1),
+          onPressed: () {},
+          child: const Icon(Icons.shopping_cart_outlined),
+        ),
       ],
     );
   }
@@ -406,7 +401,7 @@ class CustomWidgets {
   }) =>
       CupertinoButton(
         child: const FittedBox(
-          child: const Text(
+          child: Text(
             '+ Add New Job',
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
           ),
@@ -417,7 +412,7 @@ class CustomWidgets {
         padding: const EdgeInsets.all(10),
       );
 
-  static PreferredSize webAppBar(Size size,bool isFirst) => PreferredSize(
+  static PreferredSize webAppBar(Size size, bool isFirst) => PreferredSize(
         preferredSize: Size.fromHeight(size.height * 0.14),
         child: Container(
             color: Colors.white,
@@ -477,7 +472,7 @@ class CustomWidgets {
                       SizedBox(
                         width: 30,
                       ),
-                      isFirst? webtitel:webtitel2,
+                      isFirst ? webtitel : webtitel2,
                       SizedBox(
                         width: size.width * 0.07,
                       ),
@@ -559,99 +554,119 @@ class CustomWidgets {
             )),
       );
 
-  static Widget webDrower(Size size) => Scrollbar(
+  static Widget webDrower(Size size, BuildContext context) => Scrollbar(
+         controller: verticalcontroller,
         thickness: 2,
         child: SingleChildScrollView(
-          controller: scrollController,
+          controller: verticalcontroller,
           child: Container(
             color: Colors.white,
-            height: size.height,
+            width: Responsive.isDesktop(context) ? null : size.width * 0.02,
+            height: Responsive.isDesktop(context) ? size.height : null,
             child: Padding(
-              padding: const EdgeInsets.only(left: 10),
+              padding: Responsive.isDesktop(context)
+                  ? const EdgeInsets.only(left: 10)
+                  : const EdgeInsets.only(top: 8),
               child: Column(
                 children: [
                   SizedBox(
-                    height: size.height * 0.12,
+                    height: Responsive.isDesktop(context)
+                        ? size.height * 0.12
+                        : null,
                     child: FittedBox(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const CircleAvatar(
-                            radius: 40,
-                            backgroundImage: profile,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 30, left: 5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                      child: !Responsive.isDesktop(context)
+                          ? Padding(
+                              padding: const EdgeInsets.only(bottom: 15),
+                              child: CircleAvatar(
+                                radius: size.width * 0.045,
+                                backgroundImage: profile,
+                              ),
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(
-                                  "Welcome  ",
-                                  style: TextStyle(
-                                      color: Colors.grey[800],
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
+                                const CircleAvatar(
+                                  radius: 40,
+                                  backgroundImage: profile,
                                 ),
-                                Text(
-                                  "Superadmin",
-                                  style: TextStyle(
-                                      color: Colors.grey[800],
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Icon(
-                            Icons.keyboard_arrow_down,
-                            color: Colors.grey[800],
-                            size: 30,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: size.width,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: drawer.length,
-                      itemBuilder: (context, index) {
-                        return FittedBox(
-                          child: GestureDetector(
-                            onTap: () => print(index),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  icon[index],
-                                  color: Colors.grey[500],
-                                ),
-                                SizedBox(
-                                  width: size.width * 0.08,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 15),
-                                    child: Text(
-                                      "${drawer[index]}",
-                                      style: TextStyle(
-                                        fontSize: size.width * 0.01,
-                                        color: Colors.grey[500],
-                                        fontWeight: FontWeight.w800,
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 30, left: 5, bottom: 20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Welcome  ",
+                                        style: TextStyle(
+                                            color: Colors.grey[800],
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                    ),
+                                      Text(
+                                        "Superadmin",
+                                        style: TextStyle(
+                                            color: Colors.grey[800],
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 Icon(
-                                  Icons.arrow_right,
-                                  size: 40,
-                                  color: Colors.grey[400],
-                                ),
+                                  Icons.keyboard_arrow_down,
+                                  color: Colors.grey[800],
+                                  size: 30,
+                                )
                               ],
                             ),
-                          ),
-                        );
-                      },
                     ),
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: drawer.length,
+                    itemBuilder: (context, index) {
+                      return Responsive.isTablet(context)
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10, bottom: 10),
+                              child: Icon(
+                                icon[index],
+                                size: size.width * 0.04,
+                                color: Colors.grey[500],
+                              ),
+                            )
+                          : FittedBox(
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    icon[index],
+                                    color: Colors.grey[500],
+                                  ),
+                                  SizedBox(
+                                    width: size.width * 0.08,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: Text(
+                                        "${drawer[index]}",
+                                        style: TextStyle(
+                                          fontSize: size.width * 0.01,
+                                          color: Colors.grey[500],
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_right,
+                                    size: 40,
+                                    color: Colors.grey[400],
+                                  ),
+                                ],
+                              ),
+                            );
+                    },
                   ),
                 ],
               ),
@@ -660,7 +675,8 @@ class CustomWidgets {
         ),
       );
 
-  static Widget webBar(Size size, bool isFirst, {void Function()? onPressed}) =>
+  static Widget pageHeading(Size size, bool isFirst, BuildContext context,
+          {void Function()? onPressed}) =>
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -671,7 +687,11 @@ class CustomWidgets {
               children: [
                 isFirst
                     ? SizedBox(
-                        width: size.width * 0.1,
+                        width: Responsive.isDesktop(context)
+                            ? size.width * 0.1
+                            : Responsive.isMobile(context)
+                                ? size.width * 0.3
+                                : size.width * 0.14,
                         child: CustomWidgets.addButton(onPressed: onPressed))
                     : sizebox5,
                 const SizedBox(
@@ -679,19 +699,37 @@ class CustomWidgets {
                 ),
                 GestureDetector(
                     child: CustomWidgets.iconButtonC(
-                        Icons.mail, size.width * 0.4, kGreen)),
+                        Icons.mail,
+                        Responsive.isDesktop(context)
+                            ? size.width * 0.4
+                            : Responsive.isMobile(context)
+                                ? size.width * 1
+                                : size.width * 0.6,
+                        kGreen)),
                 const SizedBox(
                   width: 10,
                 ),
                 GestureDetector(
                     child: CustomWidgets.iconButtonC(
-                        Icons.call, size.width * 0.4, kGreen)),
+                        Icons.call,
+                        Responsive.isDesktop(context)
+                            ? size.width * 0.4
+                            : Responsive.isMobile(context)
+                                ? size.width * 1
+                                : size.width * 0.6,
+                        kGreen)),
                 const SizedBox(
                   width: 10,
                 ),
                 GestureDetector(
-                    child: CustomWidgets.iconButtonC(Icons.info,
-                        size.width * 0.4, isFirst ? kGreen : kPrimaryColor))
+                    child: CustomWidgets.iconButtonC(
+                        Icons.info,
+                        Responsive.isDesktop(context)
+                            ? size.width * 0.4
+                            : Responsive.isMobile(context)
+                                ? size.width * 1
+                                : size.width * 0.6,
+                        isFirst ? kGreen : kPrimaryColor))
               ],
             ),
           )
@@ -718,5 +756,20 @@ class CustomWidgets {
           sizebox5,
           widget!,
         ],
+      );
+
+     static  Widget radioButton(
+    Status _value,
+    {required Object? groupValue,required void Function(Object?)? onChanged}
+  ) =>
+      Radio(
+        
+        visualDensity: const VisualDensity(
+            horizontal: VisualDensity.minimumDensity,
+            vertical: VisualDensity.minimumDensity),
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        value: _value,
+        groupValue: groupValue,
+        onChanged: onChanged,
       );
 }

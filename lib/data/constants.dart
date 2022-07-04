@@ -2,8 +2,6 @@
 
 import 'package:flutter/material.dart';
 
-import '../presentation/responsive.dart';
-
 
 // const colors
 
@@ -34,7 +32,7 @@ const imageLogo = CircleAvatar(
 const profile = NetworkImage(
     "https://miro.medium.com/max/554/1*Ld1KM2WSfJ9YQ4oeRf7q4Q.jpeg");
 
-//
+// dropdown menu
 
 String? categoryDropdownValue;
 String? genderDropdownValue;
@@ -43,7 +41,12 @@ List<String> categoryItem = [
   "Full Time",
   "Freelancer",
 ];
+List<String> genderItem = [
+  "Male",
+  "Female",
+];
 
+//drawer list icon
 List<IconData> icon = [
   Icons.dashboard,
   Icons.flag,
@@ -57,6 +60,8 @@ List<IconData> icon = [
   Icons.pages_rounded
 ];
 
+//drawer list name
+
 final List drawer = [
   "Dashboard",
   "Jobs",
@@ -69,17 +74,24 @@ final List drawer = [
   "Table",
   "Pages"
 ];
-
-List<String> genderItem = [
-  "Male",
-  "Female",
-];
+// fix size box
 
 Widget sizebox5 = const SizedBox(
   width: 5,
   height: 5,
 );
 
+Widget sizebox10 = const SizedBox(
+  width: 10,
+  height: 10,
+);
+
+Widget sizebox20 = const SizedBox(
+  width: 20,
+  height: 20,
+);
+
+//const titel mobile
 Widget titel = const Text(
   "Job List",
   style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
@@ -88,7 +100,7 @@ Widget titel2 = const Text(
   "New Job",
   style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
 );
-
+//const titel mobile web
 Widget webtitel = const FittedBox(
   fit: BoxFit.cover,
   child:  Text(
@@ -103,29 +115,18 @@ Widget webtitel2 = const FittedBox(
     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
   ),
 );
-// controller
 
+//conroller for  scroll
 final scrollController = ScrollController(initialScrollOffset: 5);
 final verticalscroll = ScrollController(initialScrollOffset: 5);
 
 final scrollControllertabel = ScrollController(initialScrollOffset: 5);
-ScrollController verticalcontroller = ScrollController(initialScrollOffset: 5);
-
+final verticalcontroller = ScrollController(initialScrollOffset: 5);
+//datetime const 
 DateTime postedDate = DateTime.now();
 DateTime lastdate = DateTime.now();
 DateTime closedate = DateTime.now();
 
-// Navigation const
 
-//  addDetailpageRoute(BuildContext context) => Navigator.pushReplacement(
-//       context,
-//       MaterialPageRoute(
-//           builder: (context) => Responsive(
-//                 context: context,
-//                 mobile: const DataAdd( isEdit: false,),
-//                 // desktop: DesktopDataAdd(
-//                 //   model: Model(),
-//                 //   isEdit: false,
-//                 // ),
-//               )),
-//     );
+
+
