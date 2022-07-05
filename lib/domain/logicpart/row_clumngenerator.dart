@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../data/datasource.dart/boxes.dart';
+import 'package:provider/provider.dart';
 
 import '../../data/constants.dart';
 import '../../data/model/hive_databse.dart';
@@ -126,7 +128,7 @@ class Data {
                       CircleAvatar(
                           backgroundColor: kpink.withAlpha(50),
                           child: GestureDetector(
-                            onTap: () => m.delete(),
+                            onTap: () async => await Provider.of<Boxes>(context,listen:false).deletemodel(m),
                             child:const  Icon(
                               Icons.delete,
                               color: kpink,
@@ -253,9 +255,9 @@ class Data {
                       CircleAvatar(
                           backgroundColor: kpink.withAlpha(50),
                           child: GestureDetector(
-                            onTap: () async {
-                              m.delete();
-                            },
+                            onTap: () async =>
+                            await Provider.of<Boxes>(context,listen:false).deletemodel(m)
+                            ,
                             child: const Icon(
                               Icons.delete,
                               color: kpink,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../data/model/hive_databse.dart';
+import 'package:provider/provider.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../../data/datasource.dart/boxes.dart';
@@ -21,11 +21,19 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final _drawer = GlobalKey<ScaffoldState>();
 
+
+  @override
+  void initState() {
+    super.initState();
+  Boxes  userbox = Provider.of<Boxes>(context, listen: false);
+    userbox.getBoxList();
+  }
+
 // close box when state dispose
   @override
   void dispose() {
-    Hive.box("model").close();
     super.dispose();
+    Hive.box("model").close();
   }
 
   @override
@@ -42,8 +50,8 @@ class _HomeState extends State<Home> {
                 )
               : null,
           appBar: Responsive.isDesktop(context)
-              ? CustomWidgets.webAppBar(size, true):CustomWidgets.customAppBar(_drawer, context, size, true) ,
-              
+              ? CustomWidgets.webAppBar(size, true)
+              : CustomWidgets.customAppBar(_drawer, context, size, true),
           floatingActionButton: CustomWidgets.flotButton(true),
           body: mainPage(size)),
     );
@@ -58,9 +66,7 @@ class _HomeState extends State<Home> {
           Visibility(
             visible: !Responsive.isMobile(context),
             child: Expanded(
-                flex: 1, child: CustomWidgets.webDrower(size, context)
-
-                ),
+                flex: 1, child: CustomWidgets.webDrower(size, context)),
           ),
           Expanded(
             flex: 6,
@@ -75,7 +81,6 @@ class _HomeState extends State<Home> {
                     onPressed: () => Navigator.pushNamed(context, "/second"),
                   ),
                 ),
-               
                 const SizedBox(
                   height: 10,
                 ),
@@ -117,27 +122,22 @@ class _HomeState extends State<Home> {
   Widget tableview(
     Size size,
   ) {
-    final boxes = Boxes.getModel().listenable();
-
-    return ValueListenableBuilder<Box<Model>>(
-      valueListenable: boxes,
+    return Consumer<Boxes>(
       builder: (context, box, _) {
-        if (box.values.isEmpty) {
-          return const Center(
-            child: Text("No data"),
-          );
-        } else {
-          return Card(
+
+
+    
+        if (box.data.isNotEmpty) {
+          return (box.isloding)?const CircularProgressIndicator(): Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             child: Column(
-        
               children: [
-                TableGanrate.tableFetch(box, context, size),
+                TableGanrate.tableFetch(box.data, context, size),
                 const SizedBox(
                   height: 20,
                 ),
-                Text("Showing  1 of ${box.length}  Entries"),
+                Text("Showing  1 of ${box.data.length}  Entries"),
                 const SizedBox(
                   height: 10,
                 ),
@@ -184,6 +184,10 @@ class _HomeState extends State<Home> {
                 sizebox5
               ],
             ),
+          );
+        } else {
+          return Center(
+            child: Container(child: Text("NO Data")),
           );
         }
       },

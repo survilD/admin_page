@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 
 import '../../data/constants.dart';
 import '../../data/datasource.dart/boxes.dart';
@@ -8,19 +9,17 @@ import '../../presentation/responsive.dart';
 import 'row_clumngenerator.dart';
 
 class TableGanrate {
-  static tableFetch(Box<Model> tabledata, BuildContext context, Size size) {
-    final data = tabledata.values.toList().cast<Model>();
+  static tableFetch(List<Model> tabledata, BuildContext context, Size size) {
     return DataTable(
-      
-
-     
       columnSpacing: Responsive.isDesktop(context)
           ? size.width * 0.047
-          : Responsive.isMobile(context)? size.width * 0.07: size.width * 0.15,
+          : Responsive.isMobile(context)
+              ? size.width * 0.07
+              : size.width * 0.15,
       dataRowHeight: 70,
       dividerThickness: Responsive.isDesktop(context) ? 1 : 5,
-      columns: Data.getcolume(data, context),
-      rows: Data.getrow(data, context),
+      columns: Data.getcolume(tabledata, context),
+      rows: Data.getrow(tabledata, context),
     );
   }
 }
@@ -57,20 +56,21 @@ class DatePick {
 
 class ButtonResponce {
   static void onEdit(
-      Model model, GlobalKey<FormState> _key, BuildContext context) {
-    model.save();
-
+      Model model, GlobalKey<FormState> _key, BuildContext context) async {
+    await model.save();
+  
     _key.currentState!.reset();
-    Navigator.of(context).pop();
+     categoryDropdownValue = null;
+    genderDropdownValue = null;
+    Navigator.pushNamed(context, '/');
   }
 
   static void newEntries(
       Model model, GlobalKey<FormState> _key, BuildContext context) async {
     if (_key.currentState!.validate()) {
-      final box = Boxes.getModel();
-      await box.add(model);
+      await Provider.of<Boxes>(context, listen: false).addmodel(model);
       _key.currentState!.reset();
-      Navigator.of(context).pop();
+         Navigator.pushNamed(context, '/');
     }
   }
 }

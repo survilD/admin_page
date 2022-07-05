@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'data/datasource.dart/boxes.dart';
+import 'package:provider/provider.dart';
 import 'presentation/screen/jobform.dart';
 import 'presentation/screen/home.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -15,7 +17,9 @@ void main() async {
 await Hive.initFlutter();
 Hive.registerAdapter(ModelAdapter());
 await Hive.openBox<Model>("model");
-
+  Provider.debugCheckInvalidValueType = null;
+  // Hive.box("model").close();
+  
   runApp(const MyApp());
 }
 
@@ -24,24 +28,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const  Home(),
-        '/second': (context) => DataAdd(model: Model(),
-                  isEdit: false),
-            
-      },
-
-      scrollBehavior: MyCustomScrollBehavior(),
-      debugShowCheckedModeBanner: false,
-      title: "Admin",
-      theme: ThemeData(
-          scrollbarTheme: ScrollbarThemeData(
-              thumbColor: MaterialStateProperty.all(kPrimaryColor)),
-          primaryColor: const Color.fromRGBO(244, 61, 39, 5),
-          backgroundColor: Colors.white),
-      
+    return ChangeNotifierProvider<Boxes>(
+      create: (_) => Boxes(),
+      child: MaterialApp(
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const  Home(),
+          '/second': (context) => DataAdd(model: Model(),
+                    isEdit: false),
+              
+        },
+    
+        scrollBehavior: MyCustomScrollBehavior(),
+        debugShowCheckedModeBanner: false,
+        title: "Admin",
+        theme: ThemeData(
+            scrollbarTheme: ScrollbarThemeData(
+                thumbColor: MaterialStateProperty.all(kPrimaryColor)),
+            primaryColor: const Color.fromRGBO(244, 61, 39, 5),
+            backgroundColor: Colors.white),
+        
+      ),
     );
   }
 }

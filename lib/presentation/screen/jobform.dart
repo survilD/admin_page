@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import '../../data/model/hive_databse.dart';
 import '../../domain/logicpart/logictable.dart';
@@ -27,6 +28,8 @@ class DataAdd extends StatefulWidget {
 }
 
 class _DataAddState extends State<DataAdd> {
+
+  
   Status _status = Status.Active;
 
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
@@ -59,6 +62,7 @@ class _DataAddState extends State<DataAdd> {
       model.status = "Active";
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
