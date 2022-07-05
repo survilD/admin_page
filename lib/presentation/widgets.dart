@@ -130,7 +130,7 @@ class CustomWidgets {
   static customAppBar(GlobalKey<ScaffoldState> _drawer, BuildContext context,
       Size size, bool isFirst) {
     return PreferredSize(
-      preferredSize:  Size.fromHeight(size.height * 0.1),
+      preferredSize: Size.fromHeight(size.height * 0.1),
       child: AppBar(
         title: Responsive.isMobile(context)
             ? GestureDetector(
@@ -145,7 +145,7 @@ class CustomWidgets {
                   FittedBox(
                     fit: BoxFit.cover,
                     child: Text(
-                      isFirst ? "Job List":"New Job" ,
+                      isFirst ? "Job List" : "New Job",
                       style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 27,
@@ -161,7 +161,7 @@ class CustomWidgets {
         leadingWidth: size.width * 0.14,
         leading: Padding(
           padding: Responsive.isMobile(context)
-              ?const  EdgeInsets.all(10)
+              ? const EdgeInsets.all(10)
               : const EdgeInsets.all(4.0),
           child: imageLogo,
         ),
@@ -264,13 +264,12 @@ class CustomWidgets {
               topRight: Radius.circular(10),
             )),
             child: Scrollbar(
-              
               child: SingleChildScrollView(
                 controller: scrollController,
                 child: Column(
                   children: [
                     Padding(
-                      padding:const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -555,7 +554,7 @@ class CustomWidgets {
       );
 
   static Widget webDrower(Size size, BuildContext context) => Scrollbar(
-         controller: verticalcontroller,
+        controller: verticalcontroller,
         thickness: 2,
         child: SingleChildScrollView(
           controller: verticalcontroller,
@@ -758,12 +757,10 @@ class CustomWidgets {
         ],
       );
 
-     static  Widget radioButton(
-    Status _value,
-    {required Object? groupValue,required void Function(Object?)? onChanged}
-  ) =>
+  static Widget radioButton(Status _value,
+          {required Object? groupValue,
+          required void Function(Object?)? onChanged}) =>
       Radio(
-        
         visualDensity: const VisualDensity(
             horizontal: VisualDensity.minimumDensity,
             vertical: VisualDensity.minimumDensity),

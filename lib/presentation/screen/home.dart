@@ -21,11 +21,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final _drawer = GlobalKey<ScaffoldState>();
 
-
   @override
   void initState() {
     super.initState();
-  Boxes  userbox = Provider.of<Boxes>(context, listen: false);
+    Boxes userbox = Provider.of<Boxes>(context, listen: false);
     userbox.getBoxList();
   }
 
@@ -124,67 +123,68 @@ class _HomeState extends State<Home> {
   ) {
     return Consumer<Boxes>(
       builder: (context, box, _) {
-
-
-    
         if (box.data.isNotEmpty) {
-          return (box.isloding)?const CircularProgressIndicator(): Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            child: Column(
-              children: [
-                TableGanrate.tableFetch(box.data, context, size),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text("Showing  1 of ${box.data.length}  Entries"),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    OutlinedButton(
-                        onPressed: () {},
-                        child: const Text("Previous"),
-                        style: TextButton.styleFrom(
-                            primary: kPrimaryColor,
-                            side: const BorderSide(color: kPrimaryColor),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)))),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    SizedBox(
-                      width: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: kPrimaryColor,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30))),
-                        onPressed: () {},
-                        child: const Text(
-                          "1",
-                        ),
+          return (box.isloding)
+              ? const CircularProgressIndicator()
+              : Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Column(
+                    children: [
+                      TableGanrate.tableFetch(box.data, context, size),
+                      const SizedBox(
+                        height: 20,
                       ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    OutlinedButton(
-                        onPressed: () {},
-                        child: const Text("Next"),
-                        style: TextButton.styleFrom(
-                            primary: kPrimaryColor,
-                            side: const BorderSide(color: kPrimaryColor),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)))),
-                  ],
-                ),
-                sizebox5
-              ],
-            ),
-          );
+                      Text("Showing  1 of ${box.data.length}  Entries"),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          OutlinedButton(
+                              onPressed: () {},
+                              child: const Text("Previous"),
+                              style: TextButton.styleFrom(
+                                  primary: kPrimaryColor,
+                                  side: const BorderSide(color: kPrimaryColor),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(30)))),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          SizedBox(
+                            width: 50,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: kPrimaryColor,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30))),
+                              onPressed: () {},
+                              child: const Text(
+                                "1",
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          OutlinedButton(
+                              onPressed: () {},
+                              child: const Text("Next"),
+                              style: TextButton.styleFrom(
+                                  primary: kPrimaryColor,
+                                  side: const BorderSide(color: kPrimaryColor),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(30)))),
+                        ],
+                      ),
+                      sizebox5
+                    ],
+                  ),
+                );
         } else {
           return Center(
             child: Container(child: Text("NO Data")),

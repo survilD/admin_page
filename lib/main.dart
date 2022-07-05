@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'data/datasource.dart/boxes.dart';
 import 'package:provider/provider.dart';
 import 'presentation/screen/jobform.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<Boxes>(
-      create: (_) => Boxes(),
+      create: (context) => Boxes(),
       child: MaterialApp(
         initialRoute: '/',
         routes: {
@@ -37,12 +38,25 @@ class MyApp extends StatelessWidget {
           '/second': (context) => DataAdd(model: Model(),
                     isEdit: false),
               
+
+
+
+
+
+
+
+
+
+
         },
     
         scrollBehavior: MyCustomScrollBehavior(),
         debugShowCheckedModeBanner: false,
         title: "Admin",
         theme: ThemeData(
+          fontFamily: "Google font",
+        
+          
             scrollbarTheme: ScrollbarThemeData(
                 thumbColor: MaterialStateProperty.all(kPrimaryColor)),
             primaryColor: const Color.fromRGBO(244, 61, 39, 5),

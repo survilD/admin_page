@@ -58,9 +58,9 @@ class ButtonResponce {
   static void onEdit(
       Model model, GlobalKey<FormState> _key, BuildContext context) async {
     await model.save();
-  
+
     _key.currentState!.reset();
-     categoryDropdownValue = null;
+    categoryDropdownValue = null;
     genderDropdownValue = null;
     Navigator.pushNamed(context, '/');
   }
@@ -70,7 +70,7 @@ class ButtonResponce {
     if (_key.currentState!.validate()) {
       await Provider.of<Boxes>(context, listen: false).addmodel(model);
       _key.currentState!.reset();
-         Navigator.pushNamed(context, '/');
+      Navigator.pushNamed(context, '/');
     }
   }
 }
