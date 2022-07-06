@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/adapters.dart';
+
+import 'widgets/flotButton.dart';
+import 'widgets/mobileAppBar.dart';
+import 'widgets/pageheading.dart';
+
+import 'home.dart';
+
 
 import '../../data/model/hive_databse.dart';
 import '../../domain/logicpart/logictable.dart';
-import '../widgets.dart';
+import 'widgets/widgets.dart';
 
 import '../../data/constants.dart';
 
@@ -13,23 +19,27 @@ import 'package:form_field_validator/form_field_validator.dart';
 import '../../presentation/responsive.dart';
 import '../../domain/enum.dart';
 
+
+import 'widgets/desktopAppbar.dart';
+import 'widgets/webDrawer.dart';
+
 // ignore: must_be_immutable
 class DataAdd extends StatefulWidget {
+  final VoidCallback? onFlip;
   Model model;
   final bool isEdit;
   DataAdd({
     Key? key,
     required this.model,
     required this.isEdit,
+    this.onFlip,
   }) : super(key: key);
 
   @override
   State<DataAdd> createState() => _DataAddState();
 }
 
-class _DataAddState extends State<DataAdd> {
-
-  
+class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
   Status _status = Status.Active;
 
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
@@ -46,9 +56,21 @@ class _DataAddState extends State<DataAdd> {
   final TextEditingController _dateCloseController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
+  late final AnimationController _animationcontroller;
+  late Animation<double> animation;
+
   @override
   void initState() {
     super.initState();
+    _animationcontroller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds:500));
+    animation = Tween<double>(begin: 0.0, end: 1.0).animate(_animationcontroller);
+        animation.addListener(() {
+      setState(() {
+        print(animation.value.toString());
+      });
+    });  
+    _animationcontroller.forward();
 
     if (widget.isEdit) {
       model = widget.model;
@@ -63,88 +85,110 @@ class _DataAddState extends State<DataAdd> {
     }
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _animationcontroller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
     return SafeArea(
-        child: Scaffold(
-      key: _drawer,
-      drawerEnableOpenDragGesture: false,
-      drawer: Responsive.isMobile(context)
-          ? CustomWidgets.constDrawer(
-              size,
-            )
-          : null,
-      appBar: Responsive.isDesktop(context)
-          ? CustomWidgets.webAppBar(size, false)
-          : CustomWidgets.customAppBar(_drawer, context, size, false),
-      floatingActionButton: CustomWidgets.flotButton(false),
-      body: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Visibility(
-            visible: !Responsive.isMobile(context),
-            child: Expanded(
-                flex: 1, child: CustomWidgets.webDrower(size, context)),
-          ),
-          Expanded(
-            flex: 6,
-            child: Scrollbar(
-              controller: verticalscroll,
-              child: SingleChildScrollView(
+        child: FadeTransition(
+
+      opacity: animation,
+      child: Scaffold(
+        key: _drawer,
+        drawerEnableOpenDragGesture: false,
+        drawer: Responsive.isMobile(context)
+            ?  CostomeDrawer()
+            : null,
+        appBar: Responsive.isDesktop(context)
+            ?  PreferredSize(
+                preferredSize: Size.fromHeight(size.height * 0.14),
+                child:  DesktopAppBar(isFirst: false))
+            : PreferredSize(
+                child: MobileAppBar(
+                  drawer: _drawer,
+                  isFirst: false,
+                ),
+                preferredSize: Size.fromHeight(size.height * 0.1),
+              ),
+        floatingActionButton: const CustomeFlotButton(isFirst: false),
+        body: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Visibility(
+              visible: !Responsive.isMobile(context),
+              child: Expanded(
+                  flex: 1, child: WEbDrawer()),
+            ),
+            Expanded(
+              flex: 6,
+              child: Scrollbar(
                 controller: verticalscroll,
-                child: Column(
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CustomWidgets.pageHeading(size, false, context)),
-                    Form(
-                      key: _key,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Responsive.isMobile(context)
-                                  ? mobileBody(
-                                      () => (widget.isEdit)
-                                          ? ButtonResponce.onEdit(
-                                              model, _key, context)
-                                          : ButtonResponce.newEntries(
-                                              model, _key, context),
-                                    )
-                                  : otherBody(
-                                      size,
-                                      () => (widget.isEdit)
-                                          ? ButtonResponce.onEdit(
-                                              model, _key, context)
-                                          : ButtonResponce.newEntries(
-                                              model, _key, context),
-                                    )),
+                child: SingleChildScrollView(
+                  controller: verticalscroll,
+                  child: Column(
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child:
+                              PageHeading(
+                          isFirst: false,
+                          onPressed: () =>
+                              Navigator.pushNamed(context, "/second"),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: size.height * 0.07,
-                    ),
-                    const Text(
-                      copyright,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    sizebox5,
-                    SizedBox(
-                      height: size.height * 0.02,
-                    ),
-                  ],
+                      Form(
+                        key: _key,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Responsive.isMobile(context)
+                                    ? mobileBody(
+                                        () => (widget.isEdit)
+                                            ? ButtonResponce.onEdit(
+                                                model, _key, context)
+                                            : ButtonResponce.newEntries(
+                                                model, _key, context),
+                                      )
+                                    : otherBody(
+                                        size,
+                                        () => (widget.isEdit)
+                                            ? ButtonResponce.onEdit(
+                                                model, _key, context)
+                                            : ButtonResponce.newEntries(
+                                                model, _key, context),
+                                      )),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: size.height * 0.07,
+                      ),
+                      const Text(
+                        copyright,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      sizebox5,
+                      SizedBox(
+                        height: size.height * 0.02,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     ));
   }
@@ -296,10 +340,9 @@ class _DataAddState extends State<DataAdd> {
                         fontWeight: FontWeight.bold, color: Colors.grey[700])),
                 sizebox5,
                 CustomWidgets.radioButton(Status.Active, onChanged: ((val) {
-                 setState(() {
+                  setState(() {
                     _status = Status.Active;
-                 });
-    
+                  });
 
                   model.status = _status.name;
                 }), groupValue: _status),
@@ -309,10 +352,9 @@ class _DataAddState extends State<DataAdd> {
                         fontWeight: FontWeight.bold, color: Colors.grey[700])),
                 sizebox5,
                 CustomWidgets.radioButton(Status.InActive, onChanged: ((val) {
-                 setState(() {
+                  setState(() {
                     _status = Status.InActive;
-                 });
-      
+                  });
 
                   model.status = _status.name;
                 }), groupValue: _status),
@@ -343,6 +385,7 @@ class _DataAddState extends State<DataAdd> {
                     categoryDropdownValue = null;
 
                     _key.currentState!.reset();
+                   
                     Navigator.pushNamed(context, "/");
                   },
                   color: kPrimaryColor,
@@ -562,7 +605,7 @@ class _DataAddState extends State<DataAdd> {
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.grey[700])),
               sizebox5,
-               CustomWidgets.radioButton(Status.Active, onChanged: ((val) {
+              CustomWidgets.radioButton(Status.Active, onChanged: ((val) {
                 setState(() {
                   _status = Status.Active;
                 });
@@ -574,7 +617,7 @@ class _DataAddState extends State<DataAdd> {
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.grey[700])),
               sizebox5,
-               CustomWidgets.radioButton(Status.InActive, onChanged: ((val) {
+              CustomWidgets.radioButton(Status.InActive, onChanged: ((val) {
                 setState(() {
                   _status = Status.InActive;
                 });
@@ -612,7 +655,7 @@ class _DataAddState extends State<DataAdd> {
                     padding: const EdgeInsets.all(10),
                   ),
                 ),
-               const SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 SizedBox(
@@ -624,7 +667,7 @@ class _DataAddState extends State<DataAdd> {
                           TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     ),
                     onPressed: onPressed,
-                    color: kGreen,
+                    color: kGreen,          
                     borderRadius: BorderRadius.circular(20),
                     padding: const EdgeInsets.all(10),
                   ),
@@ -634,6 +677,4 @@ class _DataAddState extends State<DataAdd> {
           )
         ],
       );
-
-  
 }

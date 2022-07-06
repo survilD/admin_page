@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../data/datasource.dart/boxes.dart';
 import 'package:provider/provider.dart';
 
@@ -6,7 +7,8 @@ import '../../data/constants.dart';
 import '../../data/model/hive_databse.dart';
 
 import '../../presentation/responsive.dart';
-import '../../presentation/screen/jobform.dart';
+import '../../presentation/screen/datadd.dart';
+
 
 class Data {
   static List<DataColumn> getcolume(
@@ -19,17 +21,17 @@ class Data {
           (index) => DataColumn(
               label: (list[0].toMap().length + 1 > index)
                   ? (index == 0)
-                      ? const Text(
+                      ?  Text(
                           "ID",
-                          style: TextStyle(
+                          style: GoogleFonts.montserrat() .copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 17,
                           ),
                         )
                       : heading(list[0], index)
-                  : const Text(
+                  :  Text(
                       "Action",
-                      style: TextStyle(
+                      style:  GoogleFonts.montserrat().copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 17,
                       ),
@@ -40,23 +42,23 @@ class Data {
           (index) => DataColumn(
               label: ((3 > index)
                   ? (index == 0)
-                      ? const Text(
+                      ?  Text(
                           "ID",
-                          style: TextStyle(
+                          style:  GoogleFonts.montserrat().copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 17,
                           ),
                         )
                       : Text(
                           list[0].toMap().keys.toList()[index - 1],
-                          style: const TextStyle(
+                          style:   GoogleFonts.montserrat().copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 17,
                           ),
                         )
-                  : const Text(
+                  :  Text(
                       "Action",
-                      style: TextStyle(
+                      style:  GoogleFonts.montserrat().copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 17,
                       ),
@@ -108,11 +110,12 @@ class Data {
                       CircleAvatar(
                           backgroundColor: kpop.withAlpha(30),
                           child: GestureDetector(
-                              onTap: () => showDialog(
+                            onTap: () => showDialog(
                                   context: context,
                                   builder: (BuildContext context) =>
                                       dialog(m.toMap(), size, context)),
-                              child: const Icon(Icons.remove_red_eye, color: kpop)),
+                            child: const Icon(Icons.remove_red_eye, color: kpop),
+                          ),
                           radius: 20),
                       const SizedBox(
                         width: 5,
@@ -139,7 +142,7 @@ class Data {
                 : (index == 0)
                     ? Text(
                         (index1).toString(),
-                        style: const TextStyle(
+                        style: GoogleFonts.montserrat().copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 17,
                         ),
@@ -151,7 +154,7 @@ class Data {
                             .toList()[index - 1]
                             .toString()
                             .toUpperCase(),
-                        style: TextStyle(
+                        style:  GoogleFonts.montserrat().copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             color: Colors.grey[800]),
@@ -160,7 +163,7 @@ class Data {
                 ? (index == 0)
                     ? Text(
                         (index1 + 1).toString(),
-                        style: const TextStyle(
+                        style:  GoogleFonts.montserrat().copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 17,
                         ),
@@ -204,7 +207,7 @@ class Data {
                                         "ACTIVE")
                                     ? "ACTIVE"
                                     : "INACTIVE",
-                                style: TextStyle(
+                                style:  GoogleFonts.montserrat().copyWith(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                     color: (m
@@ -226,7 +229,7 @@ class Data {
                                 .toList()[index - 1]
                                 .toString()
                                 .toUpperCase(),
-                            style: TextStyle(
+                            style: GoogleFonts.montserrat().copyWith(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
                                 color: Colors.grey[800]),
@@ -241,7 +244,7 @@ class Data {
                                   context: context,
                                   builder: (BuildContext context) =>
                                       dialog(m.toMap(), size, context)),
-                              child:const Icon(Icons.remove_red_eye, color: kpop)),
+                              child:Hero( tag: "hero", child: const Icon(Icons.remove_red_eye, color: kpop))),
                           radius: 20),
                       sizebox5,
                       CircleAvatar(
@@ -288,7 +291,7 @@ class Data {
                               .toList()[
                                   Responsive.isDesktop(context) ? index : index]
                               .toString(),
-                          style: const TextStyle(
+                          style:  GoogleFonts.montserrat().copyWith(
                               color: kPrimaryColor,
                               fontSize: 18,
                               fontWeight: FontWeight.bold),
@@ -301,7 +304,7 @@ class Data {
                                       : index]
                                   .toString()
                                   .toUpperCase(),
-                          style: const TextStyle(
+                          style:  GoogleFonts.montserrat().copyWith(
                               color: kGrey,
                               fontSize: 15,
                               fontWeight: FontWeight.bold),
@@ -319,7 +322,7 @@ class Data {
 
     return Text(
       map.keys.toList()[index - 1],
-      style: const TextStyle(
+      style: GoogleFonts.montserrat().copyWith(
         fontWeight: FontWeight.bold,
         fontSize: 17,
       ),
