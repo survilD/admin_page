@@ -1,37 +1,36 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../data/datasource.dart/boxes.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../data/constants.dart';
-import '../../data/model/hive_databse.dart';
 
+import '../../data/model/drift_databse.dart';
 import '../../presentation/responsive.dart';
 import '../../presentation/screen/datadd.dart';
 
-
 class Data {
   static List<DataColumn> getcolume(
-    List<Model> list,
+    List<UserTableData> list,
     BuildContext context,
   ) {
     if (Responsive.isDesktop(context)) {
       return List.generate(
-          list[0].toMap().length + 2,
+          list[0].toJson().length + 2,
           (index) => DataColumn(
-              label: (list[0].toMap().length + 1 > index)
+              label: (list[0].toJson().length + 1 > index)
                   ? (index == 0)
-                      ?  Text(
+                      ? Text(
                           "ID",
-                          style: GoogleFonts.montserrat() .copyWith(
+                          style: GoogleFonts.montserrat().copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 17,
                           ),
                         )
                       : heading(list[0], index)
-                  :  Text(
+                  : Text(
                       "Action",
-                      style:  GoogleFonts.montserrat().copyWith(
+                      style: GoogleFonts.montserrat().copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 17,
                       ),
@@ -42,23 +41,23 @@ class Data {
           (index) => DataColumn(
               label: ((3 > index)
                   ? (index == 0)
-                      ?  Text(
+                      ? Text(
                           "ID",
-                          style:  GoogleFonts.montserrat().copyWith(
+                          style: GoogleFonts.montserrat().copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 17,
                           ),
                         )
                       : Text(
-                          list[0].toMap().keys.toList()[index - 1],
-                          style:  GoogleFonts .montserrat().copyWith(
+                          list[0].toJson().keys.toList()[index - 1],
+                          style: GoogleFonts.montserrat().copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 17,
                           ),
                         )
-                  :  Text(
+                  : Text(
                       "Action",
-                      style:  GoogleFonts.montserrat().copyWith(
+                      style: GoogleFonts.montserrat().copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 17,
                       ),
@@ -66,7 +65,7 @@ class Data {
     }
   }
 
-  static List<DataRow> getrow(List<Model> getrow, BuildContext context,
+  static List<DataRow> getrow(List<UserTableData> getrow, BuildContext context,
       {postMdl}) {
     if (Responsive.isDesktop(context)) {
       return List.generate(
@@ -92,7 +91,7 @@ class Data {
   }
 
   static List<DataCell> _createCell(
-    Model m,
+    UserTableData m,
     int index1,
     BuildContext context,
   ) {
@@ -100,7 +99,7 @@ class Data {
     return List.generate(
         (Responsive.isMobile(context) || Responsive.isTablet(context))
             ? 4
-            : m.toMap().length + 2,
+            : m.toJson().length + 2,
         (index) => (Responsive.isMobile(context) ||
                 Responsive.isTablet(context))
             ? DataCell((3 == index)
@@ -111,10 +110,11 @@ class Data {
                           backgroundColor: kpop.withAlpha(30),
                           child: GestureDetector(
                             onTap: () => showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      dialog(m.toMap(), size, context)),
-                            child: const Icon(Icons.remove_red_eye, color: kpop),
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    dialog(m.toJson(), size, context)),
+                            child:
+                                const Icon(Icons.remove_red_eye, color: kpop),
                           ),
                           radius: 20),
                       const SizedBox(
@@ -123,16 +123,21 @@ class Data {
                       CircleAvatar(
                           backgroundColor: kpen,
                           child: GestureDetector(
-                              onTap: () => onEdit(m, context),
-                              child:const  Icon(Icons.edit_sharp, color: kGreen))),
-                    const   SizedBox(
+                              onTap: () => onEdit(m.toCompanion(true), context),
+                              child:
+                                  const Icon(Icons.edit_sharp, color: kGreen))),
+                      const SizedBox(
                         width: 5,
                       ),
                       CircleAvatar(
                           backgroundColor: kpink.withAlpha(50),
                           child: GestureDetector(
-                            onTap: () async => await Provider.of<Boxes>(context,listen:false).deletemodel(m),
-                            child:const  Icon(
+                            onTap: () async => await Provider.of<AppDataBase>(
+                                    context,
+                                    listen: false)
+                                .deleteData(m.id),
+                            // .deleteUserTableCompanion(m),
+                            child: const Icon(
                               Icons.delete,
                               color: kpink,
                             ),
@@ -149,34 +154,34 @@ class Data {
                       )
                     : Text(
                         m
-                            .toMap()
+                            .toJson()
                             .values
                             .toList()[index - 1]
                             .toString()
                             .toUpperCase(),
-                        style:  GoogleFonts.montserrat().copyWith(
+                        style: GoogleFonts.montserrat().copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             color: Colors.grey[800]),
                       ))
-            : DataCell((m.toMap().values.toList().length + 1 > index)
+            : DataCell((m.toJson().values.toList().length + 1 > index)
                 ? (index == 0)
                     ? Text(
                         (index1 + 1).toString(),
-                        style:  GoogleFonts.montserrat().copyWith(
+                        style: GoogleFonts.montserrat().copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 17,
                         ),
                       )
                     : (m
-                                    .toMap()
+                                    .toJson()
                                     .values
                                     .toList()[index - 1]
                                     .toString()
                                     .toUpperCase() ==
                                 "ACTIVE" ||
                             m
-                                    .toMap()
+                                    .toJson()
                                     .values
                                     .toList()[index - 1]
                                     .toString()
@@ -186,7 +191,7 @@ class Data {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: (m
-                                          .toMap()
+                                          .toJson()
                                           .values
                                           .toList()[index - 1]
                                           .toString()
@@ -199,7 +204,7 @@ class Data {
                               padding: const EdgeInsets.all(10.0),
                               child: Text(
                                 (m
-                                            .toMap()
+                                            .toJson()
                                             .values
                                             .toList()[index - 1]
                                             .toString()
@@ -207,11 +212,11 @@ class Data {
                                         "ACTIVE")
                                     ? "ACTIVE"
                                     : "INACTIVE",
-                                style:  GoogleFonts.montserrat().copyWith(
+                                style: GoogleFonts.montserrat().copyWith(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                     color: (m
-                                                .toMap()
+                                                .toJson()
                                                 .values
                                                 .toList()[index - 1]
                                                 .toString()
@@ -224,7 +229,7 @@ class Data {
                           )
                         : Text(
                             m
-                                .toMap()
+                                .toJson()
                                 .values
                                 .toList()[index - 1]
                                 .toString()
@@ -240,27 +245,32 @@ class Data {
                       CircleAvatar(
                           backgroundColor: kpop.withAlpha(30),
                           child: GestureDetector(
-                              onTap: () =>   showDialog(
+                              onTap: () => showDialog(
                                   context: context,
                                   builder: (BuildContext context) =>
-                                      dialog(m.toMap(), size, context)),
-                              child:Hero( tag: "hero", child: const Icon(Icons.remove_red_eye, color: kpop))),
+                                      dialog(m.toJson(), size, context)),
+                              child: const Hero(
+                                  tag: "hero",
+                                  child:
+                                      Icon(Icons.remove_red_eye, color: kpop))),
                           radius: 20),
                       sizebox5,
                       CircleAvatar(
                           backgroundColor: kpen,
                           child: GestureDetector(
-                              onTap: () => onEdit(m, context),
-                              child: const Icon(Icons.edit_sharp, color: kGreen))),
-                    const   SizedBox(
+                              onTap: () => onEdit(m.toCompanion(true), context),
+                              child:
+                                  const Icon(Icons.edit_sharp, color: kGreen))),
+                      const SizedBox(
                         width: 5,
                       ),
                       CircleAvatar(
                           backgroundColor: kpink.withAlpha(50),
                           child: GestureDetector(
-                            onTap: () async =>
-                            await Provider.of<Boxes>(context,listen:false).deletemodel(m)
-                            ,
+                            onTap: () async => await Provider.of<AppDataBase>(
+                                    context,
+                                    listen: false)
+                                .deleteData(m.id),
                             child: const Icon(
                               Icons.delete,
                               color: kpink,
@@ -291,20 +301,18 @@ class Data {
                               .toList()[
                                   Responsive.isDesktop(context) ? index : index]
                               .toString(),
-                          style:  GoogleFonts.montserrat().copyWith(
+                          style: GoogleFonts.montserrat().copyWith(
                               color: kPrimaryColor,
                               fontSize: 18,
                               fontWeight: FontWeight.bold),
                         ),
                         title: Text(
-                         
-                               map.values
-                                  .toList()[Responsive.isDesktop(context)
-                                      ? index
-                                      : index]
-                                  .toString()
-                                  .toUpperCase(),
-                          style:  GoogleFonts.montserrat().copyWith(
+                          map.values
+                              .toList()[
+                                  Responsive.isDesktop(context) ? index : index]
+                              .toString()
+                              .toUpperCase(),
+                          style: GoogleFonts.montserrat().copyWith(
                               color: kGrey,
                               fontSize: 15,
                               fontWeight: FontWeight.bold),
@@ -317,8 +325,8 @@ class Data {
             : const Center(child: CircularProgressIndicator()),
       );
 
-  static heading(Model model, int index) {
-    Map map = model.toMap();
+  static heading(UserTableData UserTableCompanion, int index) {
+    Map map = UserTableCompanion.toJson();
 
     return Text(
       map.keys.toList()[index - 1],
@@ -329,7 +337,7 @@ class Data {
     );
   }
 
-  static onEdit(Model m, BuildContext context) {
+  static onEdit(UserTableCompanion m, BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(

@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/constants.dart';
-import '../../data/datasource.dart/boxes.dart';
-import '../../data/model/hive_databse.dart';
+import '../../data/model/drift_databse.dart';
 import '../../presentation/responsive.dart';
 import 'row_clumngenerator.dart';
 
 class TableGanrate {
-  static tableFetch(List<Model> tabledata, BuildContext context, Size size) {
+  static tableFetch( List< UserTableData >tabledata, BuildContext context, Size size) {
     return DataTable(
       columnSpacing: Responsive.isDesktop(context)
           ? size.width * 0.047
@@ -25,7 +24,7 @@ class TableGanrate {
 
 class DatePick {
   static date(BuildContext buildContext, TextEditingController controller,
-      Model model, DateTime dateTime) async {
+      UserTableCompanion model, DateTime dateTime) async {
     final date = await showDatePicker(
         builder: (BuildContext context, child) {
           return Theme(
@@ -54,10 +53,11 @@ class DatePick {
 }
 
 class ButtonResponce {
+  
   static void onEdit(
-      Model model, GlobalKey<FormState> _key, BuildContext context) async {
-    await model.save();
-
+      UserTableCompanion model, GlobalKey<FormState> _key, BuildContext context) async {
+    // await model.save();
+await Provider.of<AppDataBase>(context, listen: false).updateData(model);
     _key.currentState!.reset();
     categoryDropdownValue = null;
     genderDropdownValue = null;
@@ -65,9 +65,9 @@ class ButtonResponce {
   }
 
   static void newEntries(
-      Model model, GlobalKey<FormState> _key, BuildContext context) async {
+      UserTableCompanion model, GlobalKey<FormState> _key, BuildContext context) async {
     if (_key.currentState!.validate()) {
-      await Provider.of<Boxes>(context, listen: false).addmodel(model);
+      await Provider.of<AppDataBase>(context, listen: false).insertData(model);
       _key.currentState!.reset();
       Navigator.pushNamed(context, '/');
     }

@@ -1,11 +1,8 @@
-
-
-
 import 'package:flutter/material.dart';
+import '../../../data/model/drift_databse.dart';
 import 'package:provider/provider.dart';
 
 import '../../../data/constants.dart';
-import '../../../data/datasource.dart/boxes.dart';
 import '../../../domain/logicpart/logictable.dart';
 
 class TableView extends StatelessWidget {
@@ -14,22 +11,26 @@ class TableView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final userlist = Provider.of<AppDataBase>(context, listen: false);
 
-    return Consumer<Boxes>(
-      builder: (context, box, _) {
-        if (box.data.isNotEmpty) {
-          return (box.isloding)
-              ? const CircularProgressIndicator()
+    return FutureBuilder<List<UserTableData>>(
+      future: userlist.getuserlist(),
+      builder: (context, snapshot) {
+        if (!userlist.loading) {
+          return (userlist.data.isEmpty)
+              ? const Center(
+                  child: Text("NO Data"),
+                )
               : Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   child: Column(
                     children: [
-                      TableGanrate.tableFetch(box.data, context, size),
+                      TableGanrate.tableFetch(userlist.data, context, size),
                       const SizedBox(
                         height: 20,
                       ),
-                      Text("Showing  1 of ${box.data.length}  Entries"),
+                      Text("Showing  1 of ${userlist.data.length}  Entries"),
                       const SizedBox(
                         height: 10,
                       ),
@@ -80,9 +81,7 @@ class TableView extends StatelessWidget {
                   ),
                 );
         } else {
-          return const Center(
-            child: Text("NO Data"),
-          );
+          return const CircularProgressIndicator();
         }
       },
     );

@@ -1,5 +1,7 @@
+import 'package:drift/drift.dart' as d;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../data/model/drift_databse.dart';
 
 import 'widgets/flotButton.dart';
 import 'widgets/mobileAppBar.dart';
@@ -7,8 +9,6 @@ import 'widgets/pageheading.dart';
 
 import 'home.dart';
 
-
-import '../../data/model/hive_databse.dart';
 import '../../domain/logicpart/logictable.dart';
 import 'widgets/widgets.dart';
 
@@ -19,16 +19,15 @@ import 'package:form_field_validator/form_field_validator.dart';
 import '../../presentation/responsive.dart';
 import '../../domain/enum.dart';
 
-
 import 'widgets/desktopAppbar.dart';
 import 'widgets/webDrawer.dart';
 
 // ignore: must_be_immutable
 class DataAdd extends StatefulWidget {
   final VoidCallback? onFlip;
-  Model model;
+  final UserTableCompanion model;
   final bool isEdit;
-  DataAdd({
+  const DataAdd({
     Key? key,
     required this.model,
     required this.isEdit,
@@ -45,7 +44,7 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final _drawer = GlobalKey<ScaffoldState>();
 
-  Model model = Model();
+  UserTableCompanion model = const UserTableCompanion();
 
   // textediting controller
 
@@ -63,25 +62,26 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _animationcontroller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds:500));
-    animation = Tween<double>(begin: 0.0, end: 1.0).animate(_animationcontroller);
-        animation.addListener(() {
+        vsync: this, duration: const Duration(milliseconds: 500));
+    animation =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_animationcontroller);
+    animation.addListener(() {
       setState(() {
         print(animation.value.toString());
       });
-    });  
+    });
     _animationcontroller.forward();
 
     if (widget.isEdit) {
       model = widget.model;
-      _namecontroller.text = model.name.toString();
-      _positioncontroller.text = model.position.toString();
-      categoryDropdownValue = model.type;
-      genderDropdownValue = model.gender;
+      _namecontroller.text = model.name.value;
+      _positioncontroller.text = model.position.value;
+      categoryDropdownValue = model.type.value;
+      genderDropdownValue = model.gender.value;
 
       _status = (model.status == "Active") ? Status.Active : Status.InActive;
     } else {
-      model.status = "Active";
+      model.copyWith(status: const d.Value("Active"));
     }
   }
 
@@ -94,22 +94,22 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    if (!widget.isEdit) {
+      model = model.copyWith(status: d.Value(_status.name));
+    }
     Size size = MediaQuery.of(context).size;
 
     return SafeArea(
         child: FadeTransition(
-
       opacity: animation,
       child: Scaffold(
         key: _drawer,
         drawerEnableOpenDragGesture: false,
-        drawer: Responsive.isMobile(context)
-            ?  CostomeDrawer()
-            : null,
+        drawer: Responsive.isMobile(context) ? CostomeDrawer() : null,
         appBar: Responsive.isDesktop(context)
-            ?  PreferredSize(
+            ? PreferredSize(
                 preferredSize: Size.fromHeight(size.height * 0.14),
-                child:  DesktopAppBar(isFirst: false))
+                child: const DesktopAppBar(isFirst: false))
             : PreferredSize(
                 child: MobileAppBar(
                   drawer: _drawer,
@@ -123,8 +123,7 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
           children: [
             Visibility(
               visible: !Responsive.isMobile(context),
-              child: Expanded(
-                  flex: 1, child: WEbDrawer()),
+              child: const Expanded(flex: 1, child: WEbDrawer()),
             ),
             Expanded(
               flex: 6,
@@ -135,9 +134,8 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                   child: Column(
                     children: [
                       Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child:
-                              PageHeading(
+                        padding: const EdgeInsets.all(8.0),
+                        child: PageHeading(
                           isFirst: false,
                           onPressed: () =>
                               Navigator.pushNamed(context, "/second"),
@@ -199,7 +197,7 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
           CustomWidgets.box(
               title: "Company Name",
               widget: CustomWidgets.newformfield(
-                  onSaved: (val) => model.name = _namecontroller.text,
+                  onSaved: (val) => model = model.copyWith(name: d.Value(val!)),
                   controller: _namecontroller,
                   error: error,
                   name: "Name")),
@@ -208,7 +206,8 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
           ),
           CustomWidgets.box(
             widget: CustomWidgets.newformfield(
-                onSaved: (val) => model.position = _positioncontroller.text,
+                onSaved: (val) =>
+                    model = model.copyWith(position: d.Value(val!)),
                 controller: _positioncontroller,
                 error: error,
                 name: "Name"),
@@ -245,7 +244,8 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                     );
                   },
                 ).toList(),
-                onChanged: (value) => model.type = value.toString()),
+                onChanged: (value) =>
+                    model = model.copyWith(type: d.Value(value.toString()))),
           ),
           const SizedBox(
             height: 10,
@@ -274,9 +274,8 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                     );
                   },
                 ).toList(),
-                onChanged: (value) async {
-                  model.gender = value.toString();
-                }),
+                onChanged: (value) async =>
+                    model = model.copyWith(gender: d.Value(value.toString()))),
           ),
           const SizedBox(
             height: 10,
@@ -284,15 +283,17 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
           CustomWidgets.box(
               title: "Posted Date",
               widget: TextFormField(
-                  onTap: () async => model.postedDate = await DatePick.date(
-                      context, _datePostController, model, postedDate),
+                  onTap: () async => model = model.copyWith(
+                        postedDate: d.Value(await DatePick.date(
+                            context, _datePostController, model, postedDate)),
+                      ),
                   readOnly: true,
                   controller: _datePostController,
                   validator: RequiredValidator(
                       errorText: "Please Select Correct Date"),
                   decoration: CustomWidgets.dateDacarotion(
                     widget.isEdit
-                        ? model.postedDate
+                        ? model.postedDate.value
                         : "${postedDate.day}/${postedDate.month}/${postedDate.year}",
                   ))),
           const SizedBox(
@@ -301,14 +302,16 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
           CustomWidgets.box(
               title: "Last Date To Apply",
               widget: TextFormField(
-                  onTap: () async => model.lastDateApply = await DatePick.date(
-                      context, _dateLastController, model, lastdate),
+                  onTap: () async => model = model.copyWith(
+                        lastDateApply: d.Value(await DatePick.date(
+                            context, _dateLastController, model, lastdate)),
+                      ),
                   readOnly: true,
                   controller: _dateLastController,
                   validator: RequiredValidator(
                       errorText: "Please Select Correct Date"),
                   decoration: CustomWidgets.dateDacarotion(widget.isEdit
-                      ? model.lastDateApply
+                      ? model.lastDateApply.value
                       : "${lastdate.day}/${lastdate.month}/${lastdate.year}"))),
           const SizedBox(
             height: 10,
@@ -316,15 +319,17 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
           CustomWidgets.box(
               title: "Close Date",
               widget: TextFormField(
-                  onTap: () async => model.closeDate = await DatePick.date(
-                      context, _dateCloseController, model, closedate),
+                  onTap: () async => model = model.copyWith(
+                        closeDate: d.Value(await DatePick.date(
+                            context, _dateCloseController, model, closedate)),
+                      ),
                   readOnly: true,
                   controller: _dateCloseController,
                   validator: RequiredValidator(
                       errorText: "Please Select Correct Date"),
                   decoration: CustomWidgets.dateDacarotion(
                     widget.isEdit
-                        ? model.closeDate
+                        ? model.closeDate.value
                         : "${closedate.day}/${closedate.month}/${closedate.year}",
                   ))),
           const SizedBox(
@@ -344,7 +349,7 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                     _status = Status.Active;
                   });
 
-                  model.status = _status.name;
+                  model = model.copyWith(status: d.Value(_status.name));
                 }), groupValue: _status),
                 sizebox5,
                 Text("Active",
@@ -356,7 +361,7 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                     _status = Status.InActive;
                   });
 
-                  model.status = _status.name;
+                  model = model.copyWith(status: d.Value(_status.name));
                 }), groupValue: _status),
                 sizebox5,
                 Text(
@@ -385,7 +390,7 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                     categoryDropdownValue = null;
 
                     _key.currentState!.reset();
-                   
+
                     Navigator.pushNamed(context, "/");
                   },
                   color: kPrimaryColor,
@@ -426,8 +431,8 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                       child: CustomWidgets.box(
                           title: "Company Name",
                           widget: CustomWidgets.newformfield(
-                              onSaved: (val) =>
-                                  model.name = _namecontroller.text,
+                              onSaved: (val) => model=model.copyWith(
+                                  name: d.Value(_namecontroller.text)),
                               controller: _namecontroller,
                               error: error,
                               name: "Name"))),
@@ -437,8 +442,8 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                   Expanded(
                     child: CustomWidgets.box(
                       widget: CustomWidgets.newformfield(
-                          onSaved: (val) =>
-                              model.position = _positioncontroller.text,
+                          onSaved: (val) => model = model.copyWith(
+                              position: d.Value(_positioncontroller.text)),
                           controller: _positioncontroller,
                           error: error,
                           name: "Name"),
@@ -481,7 +486,8 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                             );
                           },
                         ).toList(),
-                        onChanged: (value) => model.type = value.toString()),
+                        onChanged: (value) => model =
+                            model.copyWith(type: d.Value(value.toString()))),
                   )),
                   SizedBox(
                     width: size.width * 0.02,
@@ -512,7 +518,7 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                           },
                         ).toList(),
                         onChanged: (value) async {
-                          model.gender = value.toString();
+                        model =  model.copyWith(gender: d.Value(value.toString()));
                         }),
                   ))
                 ],
@@ -526,16 +532,18 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                       child: CustomWidgets.box(
                           title: "Posted Date",
                           widget: TextFormField(
-                              onTap: () async => model.postedDate =
-                                  await DatePick.date(context,
-                                      _datePostController, model, postedDate),
+                              onTap: () async => model= model.copyWith(
+                                      postedDate: d.Value(
+                                    await DatePick.date(context,
+                                        _datePostController, model, postedDate),
+                                  )),
                               readOnly: true,
                               controller: _datePostController,
                               validator: RequiredValidator(
                                   errorText: "Please Select Correct Date"),
                               decoration: CustomWidgets.dateDacarotion(
                                 widget.isEdit
-                                    ? model.postedDate
+                                    ? model.postedDate.value
                                     : "${postedDate.day}/${postedDate.month}/${postedDate.year}",
                               )))),
                   SizedBox(
@@ -545,16 +553,19 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                       child: CustomWidgets.box(
                           title: "Last Date To Apply",
                           widget: TextFormField(
-                              onTap: () async => model.lastDateApply =
-                                  await DatePick.date(context,
-                                      _dateLastController, model, lastdate),
+                              onTap: () async => model = model.copyWith(
+                                  lastDateApply: d.Value(await DatePick.date(
+                                      context,
+                                      _dateLastController,
+                                      model,
+                                      lastdate))),
                               readOnly: true,
                               controller: _dateLastController,
                               validator: RequiredValidator(
                                   errorText: "Please Select Correct Date"),
                               decoration: CustomWidgets.dateDacarotion(widget
                                       .isEdit
-                                  ? model.lastDateApply
+                                  ? model.lastDateApply.value
                                   : "${lastdate.day}/${lastdate.month}/${lastdate.year}"))))
                 ],
               )),
@@ -567,16 +578,18 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                       child: CustomWidgets.box(
                           title: "Close Date",
                           widget: TextFormField(
-                              onTap: () async => model.closeDate =
-                                  await DatePick.date(context,
-                                      _dateCloseController, model, closedate),
+                              onTap: () async => model = model.copyWith(
+                                      closeDate: d.Value(
+                                    await DatePick.date(context,
+                                        _dateCloseController, model, closedate),
+                                  )),
                               readOnly: true,
                               controller: _dateCloseController,
                               validator: RequiredValidator(
                                   errorText: "Please Select Correct Date"),
                               decoration: CustomWidgets.dateDacarotion(
                                 widget.isEdit
-                                    ? model.closeDate
+                                    ? model.closeDate.value
                                     : "${closedate.day}/${closedate.month}/${closedate.year}",
                               )))),
                   SizedBox(
@@ -610,7 +623,7 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                   _status = Status.Active;
                 });
 
-                model.status = _status.name;
+              model =  model.copyWith(status: d.Value(_status.name));
               }), groupValue: _status),
               sizebox5,
               Text("Active",
@@ -621,8 +634,7 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                 setState(() {
                   _status = Status.InActive;
                 });
-
-                model.status = _status.name;
+               model= model.copyWith(status: d.Value(_status.name));
               }), groupValue: _status),
               sizebox5,
               Text(
@@ -667,7 +679,7 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                           TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     ),
                     onPressed: onPressed,
-                    color: kGreen,          
+                    color: kGreen,
                     borderRadius: BorderRadius.circular(20),
                     padding: const EdgeInsets.all(10),
                   ),

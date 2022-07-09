@@ -1,21 +1,16 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_training_1/data/model/drift_databse.dart';
 import 'package:flutter_training_1/presentation/screen/widgets/desktopAppbar.dart';
 import 'package:flutter_training_1/presentation/screen/widgets/flotButton.dart';
 import 'package:flutter_training_1/presentation/screen/widgets/mobileAppBar.dart';
 import 'package:flutter_training_1/presentation/screen/widgets/pageheading.dart';
-
 import 'package:flutter_training_1/presentation/screen/widgets/tableview.dart';
 import 'package:flutter_training_1/presentation/screen/widgets/webDrawer.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/constants.dart';
-import '../../data/datasource.dart/boxes.dart';
-
 import '../responsive.dart';
-
-
 
 class Home extends StatefulWidget {
   const Home({
@@ -32,16 +27,19 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    Boxes userbox = Provider.of<Boxes>(context, listen: false);
-    userbox.getBoxList();
+
+    final userlist = Provider.of<AppDataBase>(context, listen: false);
+    print(userlist);
+    // Boxes userbox = Provider.of<Boxes>(context, listen: false);
+    // userbox.getBoxList();
   }
 
 // close box when state dispose
-  @override
-  void dispose() {
-    super.dispose();
-    Hive.box("model").close();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   Hive.box("model").close();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -69,21 +67,6 @@ class _HomeState extends State<Home> {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class MainHomePageBody extends StatelessWidget {
   const MainHomePageBody({Key? key}) : super(key: key);
 
@@ -104,9 +87,7 @@ class MainHomePageBody extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: PageHeading(
-         
-              isFirst:  true,
-            
+                  isFirst: true,
                   onPressed: () => Navigator.pushNamed(context, "/second"),
                 ),
               ),
@@ -126,7 +107,7 @@ class MainHomePageBody extends StatelessWidget {
                         child: SingleChildScrollView(
                             controller: scrollControllertabel,
                             scrollDirection: Axis.horizontal,
-                            child: TableView()),
+                            child: const TableView()),
                       )),
                 ),
               ),
@@ -219,7 +200,8 @@ class CostomeDrawer extends StatelessWidget {
                       itemBuilder: (context, index, animation) {
                         return SlideTransition(
                           position: Tween<Offset>(
-                                  begin: Offset(-1, 0), end: Offset(0, 0))
+                                  begin: const Offset(-1, 0),
+                                  end: const Offset(0, 0))
                               .animate(animation),
                           child: ListTile(
                             onTap: () {},
