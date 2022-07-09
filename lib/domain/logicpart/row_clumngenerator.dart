@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 import 'package:google_fonts/google_fonts.dart';
 import '../../data/datasource.dart/boxes.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +51,7 @@ class Data {
                         )
                       : Text(
                           list[0].toMap().keys.toList()[index - 1],
-                          style:   GoogleFonts.montserrat().copyWith(
+                          style:  GoogleFonts .montserrat().copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 17,
                           ),
