@@ -17,18 +17,10 @@ class Data {
   ) {
     if (Responsive.isDesktop(context)) {
       return List.generate(
-          list[0].toJson().length + 2,
+          list[0].toJson().length + 1,
           (index) => DataColumn(
-              label: (list[0].toJson().length + 1 > index)
-                  ? (index == 0)
-                      ? Text(
-                          "ID",
-                          style: GoogleFonts.montserrat().copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17,
-                          ),
-                        )
-                      : heading(list[0], index)
+              label: (list[0].toJson().length  > index)
+                  ? heading(list[0], index)
                   : Text(
                       "Action",
                       style: GoogleFonts.montserrat().copyWith(
@@ -100,7 +92,7 @@ class Data {
     return List.generate(
         (Responsive.isMobile(context) || Responsive.isTablet(context))
             ? 4
-            : m.toJson().length + 2,
+            : m.toJson().length + 1,
         (index) => (Responsive.isMobile(context) ||
                 Responsive.isTablet(context))
             ? DataCell((3 == index)
@@ -165,7 +157,7 @@ class Data {
                             fontSize: 15,
                             color: Colors.grey[800]),
                       ))
-            : DataCell((m.toJson().values.toList().length + 1 > index)
+            : DataCell((m.toJson().values.toList().length  > index)
                 ? (index == 0)
                     ? Text(
                         (index1 + 1).toString(),
@@ -177,14 +169,14 @@ class Data {
                     : (m
                                     .toJson()
                                     .values
-                                    .toList()[index - 1]
+                                    .toList()[index ]
                                     .toString()
                                     .toUpperCase() ==
                                 "ACTIVE" ||
                             m
                                     .toJson()
                                     .values
-                                    .toList()[index - 1]
+                                    .toList()[index ]
                                     .toString()
                                     .toUpperCase() ==
                                 "INACTIVE")
@@ -194,7 +186,7 @@ class Data {
                               color: (m
                                           .toJson()
                                           .values
-                                          .toList()[index - 1]
+                                          .toList()[index ]
                                           .toString()
                                           .toUpperCase() ==
                                       "ACTIVE")
@@ -207,7 +199,7 @@ class Data {
                                 (m
                                             .toJson()
                                             .values
-                                            .toList()[index - 1]
+                                            .toList()[index ]
                                             .toString()
                                             .toUpperCase() ==
                                         "ACTIVE")
@@ -219,7 +211,7 @@ class Data {
                                     color: (m
                                                 .toJson()
                                                 .values
-                                                .toList()[index - 1]
+                                                .toList()[index ]
                                                 .toString()
                                                 .toUpperCase() ==
                                             "ACTIVE")
@@ -232,7 +224,7 @@ class Data {
                             m
                                 .toJson()
                                 .values
-                                .toList()[index - 1]
+                                .toList()[index ]
                                 .toString()
                                 .toUpperCase(),
                             style: GoogleFonts.montserrat().copyWith(
@@ -330,7 +322,7 @@ class Data {
     Map map = UserTableCompanion.toJson();
 
     return Text(
-      map.keys.toList()[index - 1],
+      map.keys. toList()[index ].toString().toUpperCase(),
       style: GoogleFonts.montserrat().copyWith(
         fontWeight: FontWeight.bold,
         fontSize: 17,

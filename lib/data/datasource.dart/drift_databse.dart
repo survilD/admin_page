@@ -11,6 +11,7 @@ class AppDataBase extends _$AppDataBase {
   @override
   int get schemaVersion => 1;
 
+
   Future<List<UserTableData>> get getuserlist async =>
       await select(userTable).get();
 

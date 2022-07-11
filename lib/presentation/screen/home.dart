@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter_training_1/data/datasource.dart/drift_databse.dart';
 import 'package:flutter_training_1/presentation/provider/driftprovider.dart';
 import 'package:flutter_training_1/presentation/screen/widgets/desktopAppbar.dart';
 import 'package:flutter_training_1/presentation/screen/widgets/flotButton.dart';

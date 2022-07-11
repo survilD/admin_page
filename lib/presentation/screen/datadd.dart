@@ -79,7 +79,8 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
       categoryDropdownValue = model.type.value;
       genderDropdownValue = model.gender.value;
 
-      _status = (model.status == "Active") ? Status.Active : Status.InActive;
+      _status =
+          (model.status.value == "Active") ? Status.Active : Status.InActive;
     } else {
       model.copyWith(status: const d.Value("Active"));
     }
@@ -431,7 +432,7 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                       child: CustomWidgets.box(
                           title: "Company Name",
                           widget: CustomWidgets.newformfield(
-                              onSaved: (val) => model=model.copyWith(
+                              onSaved: (val) => model = model.copyWith(
                                   name: d.Value(_namecontroller.text)),
                               controller: _namecontroller,
                               error: error,
@@ -518,7 +519,8 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                           },
                         ).toList(),
                         onChanged: (value) async {
-                        model =  model.copyWith(gender: d.Value(value.toString()));
+                          model =
+                              model.copyWith(gender: d.Value(value.toString()));
                         }),
                   ))
                 ],
@@ -532,7 +534,7 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                       child: CustomWidgets.box(
                           title: "Posted Date",
                           widget: TextFormField(
-                              onTap: () async => model= model.copyWith(
+                              onTap: () async => model = model.copyWith(
                                       postedDate: d.Value(
                                     await DatePick.date(context,
                                         _datePostController, model, postedDate),
@@ -623,7 +625,7 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                   _status = Status.Active;
                 });
 
-              model =  model.copyWith(status: d.Value(_status.name));
+                model = model.copyWith(status: d.Value(_status.name));
               }), groupValue: _status),
               sizebox5,
               Text("Active",
@@ -634,7 +636,7 @@ class _DataAddState extends State<DataAdd> with SingleTickerProviderStateMixin {
                 setState(() {
                   _status = Status.InActive;
                 });
-               model= model.copyWith(status: d.Value(_status.name));
+                model = model.copyWith(status: d.Value(_status.name));
               }), groupValue: _status),
               sizebox5,
               Text(
