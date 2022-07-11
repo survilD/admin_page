@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter_training_1/data/model/drift_databse.dart';
+import 'package:flutter_training_1/data/datasource.dart/drift_databse.dart';
+import 'package:flutter_training_1/presentation/provider/driftprovider.dart';
 import 'package:flutter_training_1/presentation/screen/widgets/desktopAppbar.dart';
 import 'package:flutter_training_1/presentation/screen/widgets/flotButton.dart';
 import 'package:flutter_training_1/presentation/screen/widgets/mobileAppBar.dart';
@@ -27,19 +28,9 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-
-    final userlist = Provider.of<AppDataBase>(context, listen: false);
-    print(userlist);
-    // Boxes userbox = Provider.of<Boxes>(context, listen: false);
-    // userbox.getBoxList();
+    DataProvider userbox = Provider.of<DataProvider>(context, listen: false);
+    userbox.getUserFuture();
   }
-
-// close box when state dispose
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   Hive.box("model").close();
-  // }
 
   @override
   Widget build(BuildContext context) {

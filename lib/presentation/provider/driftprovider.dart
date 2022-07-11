@@ -1,41 +1,36 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_training_1/data/model/drift_databse.dart';
 
-// class DataProvider with ChangeNotifier{
+import 'package:flutter/cupertino.dart';
+
+import '../../data/datasource.dart/drift_databse.dart';
+import 'package:flutter_training_1/roots/shared.dart';
+
+class DataProvider with ChangeNotifier
+{
+  AppDataBase appDataBase =constructDb();
+  List<UserTableData> listDataUser = [] ;
 
 
+  bool loading = false;
+   getUserFuture() {
+     loading = true;
+     appDataBase.getuserlist.then((value) {
+       listDataUser = value;
+       loading = false;
+       notifyListeners();
+     });
+   }
 
 
-//    bool isloding = false;
-//   List<UserTableData> data = [];
+     insertUser(UserTableCompanion userTableCompanion) async {
+       await appDataBase.insertData(userTableCompanion).whenComplete(() => getUserFuture());
+     }
 
-//   List<Model> getBoxList() {
-//     data = Hive.box<Model>("model").values.toList().cast<Model>();
+     updateData(UserTableCompanion tableCompanion) {
+       appDataBase.updateData(tableCompanion).whenComplete(() => getUserFuture());
+     }
 
-//     return data;
-//   }
+     deleteData(int id) {
+       appDataBase.deleteData(id).whenComplete(() => getUserFuture());
+     }
+   }
 
-//   addmodel(
-//     Model model,
-//   ) async {
-//     isloding = true;
-//     final box = Hive.box<Model>("model");
-//     await box.add(model);
-
-//     data = getBoxList();
-//     notifyListeners();
-//     isloding = false;
-//   }
-
-//   deletemodel(
-//     Model m,
-//   ) async {
-//     isloding = true;
-//     await m.delete();
-//     data = getBoxList();
-
-//     notifyListeners();
-
-//     isloding = false;
-//   }
-// }

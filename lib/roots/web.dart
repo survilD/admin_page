@@ -1,6 +1,6 @@
 import 'package:drift/web.dart';
 
-import '../data/model/drift_databse.dart';
+import '../data/datasource.dart/drift_databse.dart';
 
 
 

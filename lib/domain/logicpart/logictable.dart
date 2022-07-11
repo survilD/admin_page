@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_training_1/presentation/provider/driftprovider.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/constants.dart';
-import '../../data/model/drift_databse.dart';
+import '../../data/datasource.dart/drift_databse.dart';
 import '../../presentation/responsive.dart';
 import 'row_clumngenerator.dart';
 
@@ -29,7 +30,7 @@ class DatePick {
         builder: (BuildContext context, child) {
           return Theme(
               data: ThemeData.dark().copyWith(
-                primaryColor: Color(0xFFFF3661),
+                primaryColor: const Color(0xFFFF3661),
               ),
               child: child!);
         },
@@ -57,19 +58,20 @@ class ButtonResponce {
   static void onEdit(
       UserTableCompanion model, GlobalKey<FormState> _key, BuildContext context) async {
     // await model.save();
-await Provider.of<AppDataBase>(context, listen: false).updateData(model);
+await Provider.of<DataProvider>(context, listen: false).updateData(model);
     _key.currentState!.reset();
     categoryDropdownValue = null;
     genderDropdownValue = null;
-    Navigator.pushNamed(context, '/');
+
+    Navigator.pop(context);
   }
 
   static void newEntries(
       UserTableCompanion model, GlobalKey<FormState> _key, BuildContext context) async {
     if (_key.currentState!.validate()) {
-      await Provider.of<AppDataBase>(context, listen: false).insertData(model);
+      await Provider.of<DataProvider>(context, listen: false).insertUser(model);
       _key.currentState!.reset();
-      Navigator.pushNamed(context, '/');
+      Navigator.pop(context);
     }
   }
 }

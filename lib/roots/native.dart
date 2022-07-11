@@ -6,7 +6,7 @@ import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
-import '../data/model/drift_databse.dart';
+import '../data/datasource.dart/drift_databse.dart';
 
 
 

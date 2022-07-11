@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' as d;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../data/model/drift_databse.dart';
+import '../../data/datasource.dart/drift_databse.dart';
 
 import 'widgets/flotButton.dart';
 import 'widgets/mobileAppBar.dart';

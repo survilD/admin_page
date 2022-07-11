@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_training_1/presentation/provider/driftprovider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:provider/provider.dart';
 
 import '../../data/constants.dart';
 
-import '../../data/model/drift_databse.dart';
+import '../../data/datasource.dart/drift_databse.dart';
 import '../../presentation/responsive.dart';
 import '../../presentation/screen/datadd.dart';
 
@@ -49,7 +50,7 @@ class Data {
                           ),
                         )
                       : Text(
-                          list[0].toJson().keys.toList()[index - 1],
+                          list[0].toJson().keys.toList()[index ],
                           style: GoogleFonts.montserrat().copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 17,
@@ -132,11 +133,11 @@ class Data {
                       CircleAvatar(
                           backgroundColor: kpink.withAlpha(50),
                           child: GestureDetector(
-                            onTap: () async => await Provider.of<AppDataBase>(
+                            onTap: () async => await Provider.of<DataProvider>(
                                     context,
                                     listen: false)
                                 .deleteData(m.id),
-                            // .deleteUserTableCompanion(m),
+
                             child: const Icon(
                               Icons.delete,
                               color: kpink,
@@ -156,7 +157,7 @@ class Data {
                         m
                             .toJson()
                             .values
-                            .toList()[index - 1]
+                            .toList()[index ]
                             .toString()
                             .toUpperCase(),
                         style: GoogleFonts.montserrat().copyWith(
@@ -267,7 +268,7 @@ class Data {
                       CircleAvatar(
                           backgroundColor: kpink.withAlpha(50),
                           child: GestureDetector(
-                            onTap: () async => await Provider.of<AppDataBase>(
+                            onTap: () async => await Provider.of<DataProvider>(
                                     context,
                                     listen: false)
                                 .deleteData(m.id),
@@ -289,7 +290,7 @@ class Data {
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount:
-                      Responsive.isDesktop(context) ? map.length : map.length,
+                      Responsive.isDesktop(context) ? map.length : map.length-1,
                   itemBuilder: (context, index) {
                     return Card(
                       elevation: 3,
@@ -299,7 +300,7 @@ class Data {
                         leading: Text(
                           map.keys
                               .toList()[
-                                  Responsive.isDesktop(context) ? index : index]
+                                  Responsive.isDesktop(context) ? index : index+1]
                               .toString(),
                           style: GoogleFonts.montserrat().copyWith(
                               color: kPrimaryColor,
@@ -309,7 +310,7 @@ class Data {
                         title: Text(
                           map.values
                               .toList()[
-                                  Responsive.isDesktop(context) ? index : index]
+                                  Responsive.isDesktop(context) ? index : index+1]
                               .toString()
                               .toUpperCase(),
                           style: GoogleFonts.montserrat().copyWith(
