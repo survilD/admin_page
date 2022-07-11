@@ -2,7 +2,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../data/datasource.dart/drift_databse.dart';
-import 'package:flutter_training_1/roots/shared.dart';
+import '../../roots/shared.dart';
 
 class DataProvider with ChangeNotifier
 {

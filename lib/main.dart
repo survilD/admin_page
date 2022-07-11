@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_training_1/data/constants.dart';
-import 'package:flutter_training_1/presentation/provider/driftprovider.dart';
-import 'package:flutter_training_1/presentation/screen/datadd.dart';
-import 'package:flutter_training_1/presentation/screen/home.dart';
-import 'package:flutter_training_1/roots/shared.dart';
+import 'data/constants.dart';
+import 'presentation/provider/driftprovider.dart';
+import 'presentation/screen/datadd.dart';
+import 'presentation/screen/home.dart';
+import 'roots/shared.dart';
 
 import 'package:provider/provider.dart';
 
